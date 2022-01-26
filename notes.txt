@@ -1,6 +1,5 @@
 Need to do:
 -fix the drag drop specific to turn order after clicking undo 
--sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
 -capture functionality
 -Implement En passant
 -Implement Castling
@@ -28,3 +27,4 @@ for the sliding pieces
 
 -initiate snapshot of fen for undo button
 
+-sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
