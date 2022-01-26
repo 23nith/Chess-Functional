@@ -1,7 +1,7 @@
 Need to do:
 -fix the drag drop specific to turn order after clicking undo 
--change pawn's highlighted valid moves when it can capture enemy piece
--capture functionality
+-let undo track when pieces were captured
+-sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
 -Implement En passant
 -Implement Castling
 -Add timer
@@ -28,5 +28,4 @@ for the sliding pieces
 
 -initiate snapshot of fen for undo button
 
--sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
-
+-capture functionality
