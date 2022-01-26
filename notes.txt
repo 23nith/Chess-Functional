@@ -1,5 +1,6 @@
 Need to do:
 -fix the drag drop specific to turn order after clicking undo 
+-change pawn's highlighted valid moves when it can capture enemy piece
 -capture functionality
 -Implement En passant
 -Implement Castling
