@@ -1,6 +1,6 @@
 Need to do:
 -fix the drag drop specific to turn order after clicking undo 
--sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
+-change pawn's highlighted valid moves when it can capture enemy piece
 -capture functionality
 -Implement En passant
 -Implement Castling
@@ -27,4 +27,6 @@ for the sliding pieces
 -disable ability to place piece inside <i> element
 
 -initiate snapshot of fen for undo button
+
+-sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
 
