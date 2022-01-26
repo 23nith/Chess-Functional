@@ -521,6 +521,19 @@ async function drop(e) {
     e.preventDefault();
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
+
+    if(e.target.children[1]){
+        console.log("capture");
+        let container = document.createElement("div");
+        if(e.target.children[0].classList.contains("lightPiece")){
+            container.appendChild(e.target.children[0]);
+            document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+        }else{
+            container.appendChild(e.target.children[0]);
+            document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+        }
+        // e.target.children[0].remove();
+    }
     
     if(homeTile){
         console.log(`${pieceColor} ${piece} moved`);
