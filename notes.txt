@@ -4,7 +4,7 @@ Need to do:
 -capture functionality
 -Implement En passant
 -Implement Castling
-
+-Add timer
 
 
 
