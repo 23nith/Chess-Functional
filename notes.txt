@@ -1,0 +1,30 @@
+Need to do:
+-fix the drag drop specific to turn order after clicking undo 
+-sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
+-capture functionality
+-Implement En passant
+-Implement Castling
+
+
+
+
+Things already done:
+already fixed validmovements exceeding the edge of the board when piece is one tile away from edge
+
+for the pawns
+-if p/P piece index is == pawnStartingPosition, highlight +2 also
+-push the index out of the array after pawn's initial move
+
+for the sliding pieces
+-get piece index add continuously to index until edge of board is reached
+
+-figure out how to remove the changing of homeTile value when dragging pieces
+
+-figure out how to disable allow drop for tile illegal moves
+
+-avoid ending color's turn when piece is returned to homeTile
+
+-disable ability to place piece inside <i> element
+
+-initiate snapshot of fen for undo button
+
