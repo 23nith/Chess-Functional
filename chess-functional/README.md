@@ -1,4 +1,4 @@
-# Foront-End Activity ##: Chess Functional
+# Front-End Activity #: Chess Functional
 
 ---
 The purpose...
