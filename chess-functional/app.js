@@ -227,6 +227,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
     let exemption = []
     let exemptedTiles = [];
     let pieceMovement = movement;
+    let pawnCaptureMovement = false;
     // check color piece
     let lightPiece = piece == piece.toUpperCase();
     
@@ -256,6 +257,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 let captureTile2 = parseInt(_homeTile) - 9;
                 if(tiles[captureTile1].children[0] || tiles[captureTile2].children[0]){
                     pieceMovement = pieceClass.generatePiece(piece).captureMovement;
+                    pawnCaptureMovement = true;
                 }
                 
                 // initial behavior
@@ -268,6 +270,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 let captureTile2 = parseInt(_homeTile) + 9;
                 if(tiles[captureTile1].children[0] || tiles[captureTile2].children[0]){
                     pieceMovement = pieceClass.generatePiece(piece).captureMovement;
+                    pawnCaptureMovement = true;
                 }
 
                 // initial behavior
@@ -330,6 +333,11 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     if(lightPiece){
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
                             console.log("enemy piece");
+                            // if ememy piece is in front of pawn
+                            if(piece == "P" && pieceMovement[j] == -8){
+                                continue;
+                            }
+                            
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             // continue;
                         }
@@ -341,6 +349,9 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     }else{
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
                             console.log("enemy piece");
+                            if(piece == "p" && pieceMovement[j] == 8){
+                                continue;
+                            }
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
