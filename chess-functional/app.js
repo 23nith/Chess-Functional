@@ -75,15 +75,17 @@ async function drawGrid(col, row, _fen){
                     grid[gridCounter].children[0].classList.add("darkPiece")
                 }
 
+                // limit loop only on length of piece object
                 let lightPieces = document.querySelectorAll(".lightPiece");
                 let darkPieces = document.querySelectorAll(".darkPiece");
 
+                let lightPieceIconCounter = 15;
                 lightPieces.forEach((lightPiece, i) => {
-                    let strClassPiece = `${piece.generatePiece(fenArr[i]).icon}`;
+                    let strClassPiece = `${piece.generatePiece(fenArr[lightPieceIconCounter]).icon}`;
                     const splitClass = strClassPiece.split(" ");
                     lightPiece.classList.add(splitClass[0]);
                     lightPiece.classList.add(splitClass[1]);
-
+                    lightPieceIconCounter--;
                 })
 
                 darkPieces.forEach((darkPiece, i) => {
@@ -91,8 +93,8 @@ async function drawGrid(col, row, _fen){
                     const splitClass = strClassPiece.split(" ");
                     darkPiece.classList.add(splitClass[0]);
                     darkPiece.classList.add(splitClass[1]);
-
                 })
+                // piece loop limit end
             }
             gridCounter += 1;
         }
