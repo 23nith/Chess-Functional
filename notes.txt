@@ -1,8 +1,10 @@
 Need to do:
 
+
 high prio
 
 User stories
+
 -Implement En passant
 -Implement Castling
 
@@ -42,6 +44,7 @@ for the sliding pieces
 
 -initiate snapshot of fen for undo button
 
--capture functionality
 
--sliding pieces must recognize valid movements only up to a certain point where another piece is blocking
+-sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
+
+
