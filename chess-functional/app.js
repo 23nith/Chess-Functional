@@ -40,8 +40,8 @@ async function drawGrid(col, row, _fen){
                 // gridBox.innerHTML = 64 - counter; //-reverse
                 gridBox.classList.add("tile");
                 gridBox.setAttribute("ondrop", "drop(event)");
-                gridBox.setAttribute("ondragover", "dropAllow(event)"); 
-                gridBox.setAttribute("data-tilenumber", `${counter}`); 
+                gridBox.setAttribute("ondragover", "dropAllow(event)");
+                gridBox.setAttribute("data-tilenumber", `${counter}`);
                 gridBox.id = counter;
                 gridBox.style.backgroundColor = isLightSquare ? "#A0785A" : "brown" ;
                 gridBox.classList.add(isLightSquare? "lightTiles": "darkTiles");
@@ -56,28 +56,30 @@ async function drawGrid(col, row, _fen){
 
     // PLACE PIECES ON THE BOARD
 
-        let grid = document.querySelectorAll(".container div");
+       let grid = document.querySelectorAll(".container div");
         let piece = new Piece();
         let gridCounter = 0;
-        for(i = 0; i < 64; i++){
+
+        for(i = 0; i < 36; i++){
             if(parseInt(fenArr[i])){
                 gridCounter += (parseInt(fenArr[i]) - 1);
             }else{
                 let character = fenArr[i];
                 let capital = character == character.toUpperCase();
+
                 grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}"></i>`;
                 if (character == character.toUpperCase()){
                     grid[gridCounter].children[0].classList.add("lightPiece")
                 }else{
                     grid[gridCounter].children[0].classList.add("darkPiece")
                 }
-            }   
+            }
             gridCounter += 1;
         }
 
     // - END
 
-    
+
 }
 
 async function formatFen(_FEN){
@@ -114,18 +116,18 @@ async function undo(){
     //     if(turn == "White"){
     //         lightPieces = document.querySelectorAll(".lightPiece");
     //         removeDragFeatureLight(lightPieces);
-    
+
     //         darkPieces = document.querySelectorAll(".darkPiece");
     //         addDragFeatureDark(darkPieces)
-            
-                
+
+
     //     }else{
     //         darkPieces = document.querySelectorAll(".darkPiece");
     //         removeDragFeatureDark(darkPieces)
-    
+
     //         lightPieces = document.querySelectorAll(".lightPiece");
     //         addDragFeatureLight(lightPieces)
-    
+
     //     }
     // }
 }
@@ -149,8 +151,8 @@ function getFEN(){
                 if(space != 0){
                     row+=space;
                     space = 0;
-                } 
-               row+=fenArr[i][j]; 
+                }
+               row+=fenArr[i][j];
             }
             if(fenArr[i][j] == "empty space"){
                 space+=1;
@@ -161,20 +163,20 @@ function getFEN(){
                     space = 0;
                 }
             }
-            
+
         }
         i == 7 ? fenFormattedArr+=row : fenFormattedArr+=row+"/";
         row="";
     }
     console.log("fenArray: ", fenArray);
     return fenFormattedArr;
-} 
+}
 
 function displayFEN(){
     document.querySelector("p").innerHTML = `Current FEN: <br>${fenArray[fenArray.length-1]}`;
 }
 
-// Initiate default chessboard 
+// Initiate default chessboard
 drawGrid(8,8, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 
 // FEN feature
@@ -229,7 +231,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
     let pieceMovement = movement;
     // check color piece
     let lightPiece = piece == piece.toUpperCase();
-    
+
     let topEdge = [0, 4, 5];
     let rightEdge = [2, 4, 6, 8];
     let bottomEdge = [1, 6, 7];
@@ -260,7 +262,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
             }
         }
 
-        //if k/K/n/N piece is on edge of board 
+        //if k/K/n/N piece is on edge of board
         if(boardEdges.includes(parseInt(_homeTile))){
             if(boardTopEdge.includes(parseInt(_homeTile))){
                 exemption.push(...topEdge);
@@ -282,7 +284,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 exemption.push(...topEdge);
             }
             if(boardRightEdge.includes(parseInt(_homeTile)+1)){
-                exemption.push(2, 8);                
+                exemption.push(2, 8);
             }
             if(boardBottomEdge.includes(parseInt(_homeTile)+8)){
                 exemption.push(...bottomEdge);
@@ -291,7 +293,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 exemption.push(3, 9);
             }
         }
-        
+
         for(j = 0; j < pieceMovement.length; j++){
             if(exemption.includes(j)){
                 continue;
@@ -305,7 +307,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
             if(pieceMovement[j] == ""){
                 continue;
             }
-    
+
             if(validMove < 64){
                 if(tiles[validMove].children[0]){
                     console.log("child");
@@ -319,7 +321,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
                             console.log("friendly piece");
                             continue;
-                        }   
+                        }
 
                     }else{
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
@@ -341,21 +343,21 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
 
     }else{
-        
+
         for(j = 0; j < pieceMovement.length; j++){
             let direction = pieceMovement[j];
             if(direction == ""){
                 continue;
             }else{
                 let desc = descending.includes(j);
-                
+
                 loop1:
                 for(desc? tile = 63: tile = 0;  desc? tile >= 0: tile < 64;  desc? tile-- : tile++){
                     let currentTile = tiles[tile];
-    
+
                     if(!exemptedTiles.includes(currentTile.id)){
                         currentTile.setAttribute("ondragover", "removeDrop(event)")
-                    } 
+                    }
                     for(n = 0; n < 64; n++){
                         tileNumber = parseInt(currentTile.id);
                         directionLine = (direction * n) + parseInt(_homeTile);
@@ -363,7 +365,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         if(tileNumber == 0 && directionLine == 0){
                             console.log("zero");
                         }
-                        
+
                         if(tileNumber == directionLine){
 
                             if(currentTile.children[0]){
@@ -374,48 +376,62 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                         console.log("enemy piece");
                                         currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                         // continue;
+                                        currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                        exemptedTiles.push(currentTile.id);
+                                        currentTile.style.backgroundColor = "#F91F15";
+                                        break loop1;
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         console.log("friendly piece");
+                                        if(tileNumber != parseInt(_homeTile)){
+                                            break loop1;
+                                        }
                                         // continue;
-                                    }   
-            
+                                    }
+
                                 }else{
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                         console.log("enemy piece");
+                                        currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                        exemptedTiles.push(currentTile.id);
+                                        currentTile.style.backgroundColor = "#F91F15";
+                                        break loop1;
                                         // continue;
                                     }
                                     if(currentTile.children[0].classList.contains("darkPiece")){
                                         console.log("friendly piece");
+                                        if(tileNumber != parseInt(_homeTile)){
+                                            break loop1;
+                                        }
                                         // continue;
                                     }
-            
+
                                 }
                             }
 
                             currentTile.setAttribute("ondragover", "dropAllow(event)");
                             exemptedTiles.push(currentTile.id);
                             currentTile.style.backgroundColor = "#F91F15";
-    
+
                             if(topEdge.includes(j)){
                                 if(boardTopEdge.includes(tileNumber)){
                                     break loop1;
                                 }
                             }
-    
+
                             if(rightEdge.includes(j)){
                                 if(boardRightEdge.includes(tileNumber)){
                                     break loop1;
                                 }
                             }
-    
+
                             if(bottomEdge.includes(j)){
                                 if(boardBottomEdge.includes(tileNumber)){
                                     break loop1;
                                 }
                             }
-    
+
                             if(leftEdge.includes(j)){
                                 if(boardLeftEdge.includes(tileNumber)){
                                     break loop1;
@@ -428,7 +444,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         }
     }
 
-    
+
 }
 
 function removeDrop(e){
@@ -488,11 +504,11 @@ async function dropAllow(e) {
     // console.log(tiles);
     lightTiles = document.querySelectorAll(".lightTiles");
     darkTiles = document.querySelectorAll(".darkTiles");
-    
+
     // console.log("dropAllow", e.target); //Information on the piece lifted
-    // console.log("parent: ", e.target.parentElement.getAttribute("data-tilenumber")); //Information on the home tile of the piece being lifted 
+    // console.log("parent: ", e.target.parentElement.getAttribute("data-tilenumber")); //Information on the home tile of the piece being lifted
     // homeTile = e.target.parentElement.getAttribute("data-tilenumber") ? e.target.parentElement.getAttribute("data-tilenumber") : homeTile;
-    
+
     lifted = e.target.parentElement.getAttribute("data-tilenumber");
     if(lifted){
         homeTile.push(lifted);
@@ -501,14 +517,14 @@ async function dropAllow(e) {
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
-        
+
     }
 
 }
 
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
-    
+
     piece = e.target.id[0]
     if(e.target.classList.contains("lightPiece")){
         pieceColor = "White";
@@ -524,6 +540,7 @@ async function drop(e) {
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
 
+
     if(e.target.children[1]){
         console.log("capture");
         let container = document.createElement("div");
@@ -537,17 +554,18 @@ async function drop(e) {
         // e.target.children[0].remove();
     }
     
+
     if(homeTile){
         console.log(`${pieceColor} ${piece} moved`);
-        
+
         if(pieceColor == "White"){
             lightPieces = document.querySelectorAll(".lightPiece");
             removeDragFeatureLight(lightPieces);
 
             darkPieces = document.querySelectorAll(".darkPiece");
             addDragFeatureDark(darkPieces)
-            
-                
+
+
         }else{
             darkPieces = document.querySelectorAll(".darkPiece");
             removeDragFeatureDark(darkPieces)
@@ -559,7 +577,7 @@ async function drop(e) {
         changeTurn()
         returnTileColors()
         returnDrop();
-        
+
     }
 
     landed = e.target;
