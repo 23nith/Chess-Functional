@@ -93,7 +93,6 @@ async function drawGrid(col, row, _fen){
                     darkPiece.classList.add(splitClass[1]);
 
                 })
-
             }
             gridCounter += 1;
         }
