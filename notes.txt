@@ -1,7 +1,9 @@
 Need to do:
+
 -fix uncaught errors that might affecting the flow of the code
 -fix the drag drop specific to turn order after clicking undo
 -let undo track when pieces were captured
+
 -Implement En passant
 -Implement Castling
 -Add timer
@@ -29,11 +31,6 @@ for the sliding pieces
 -initiate snapshot of fen for undo button
 
 
--capture functionality
-
-<<<<<<< HEAD
--sliding pieces must recognize valid movements only up to a certain point where another piece is blocking
-=======
 -sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
 
->>>>>>> 276751f013103475ca491c2790939f7390f1fe4c
+

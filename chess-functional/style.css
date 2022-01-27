@@ -8,7 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     user-select: none;
-
+    background-color: grey;
 }
 
 .container {
@@ -56,5 +56,15 @@ body {
 p {
     user-select: text;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: grey;
+    color: #232222;
+}
+
+.black-captured, .white-captured {
+    display: flex;
+    flex-direction: row;
+    margin: 15px;
+}
+
+.black-captured div, .white-captured div{
+    margin-left: 15px;
 }
