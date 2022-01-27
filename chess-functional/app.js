@@ -11,14 +11,14 @@ class Piece {
             b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
             q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
             k : {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "k", sliding: false},
-            p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16], captureMovement: [7,8,9]},
+            p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
 
             R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
             N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
             B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
             Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
             K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "K", sliding: false},
-            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16], captureMovement: [-9, -8, -7]},
+            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16]},
         }
         return pieces[_fenLetter];
     }
@@ -255,8 +255,11 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 // capture behavior
                 let captureTile1 = parseInt(_homeTile) - 7;
                 let captureTile2 = parseInt(_homeTile) - 9;
-                if(tiles[captureTile1].children[0] || tiles[captureTile2].children[0]){
-                    pieceMovement = pieceClass.generatePiece(piece).captureMovement;
+                if(tiles[captureTile1].children[0]){
+                    pieceMovement.push(-7)
+                    pawnCaptureMovement = true;
+                }else if(tiles[captureTile2].children[0]){
+                    pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
                 
@@ -268,8 +271,11 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 // capture behavior
                 let captureTile1 = parseInt(_homeTile) + 7;
                 let captureTile2 = parseInt(_homeTile) + 9;
-                if(tiles[captureTile1].children[0] || tiles[captureTile2].children[0]){
-                    pieceMovement = pieceClass.generatePiece(piece).captureMovement;
+                if(tiles[captureTile1].children[0]){
+                    pieceMovement.push(7)
+                    pawnCaptureMovement = true;
+                }else if(tiles[captureTile2].children[0]){
+                    pieceMovement.push(9)
                     pawnCaptureMovement = true;
                 }
 
