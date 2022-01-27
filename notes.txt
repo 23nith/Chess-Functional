@@ -1,16 +1,30 @@
 Need to do:
 
--fix uncaught errors that might affecting the flow of the code
--fix the drag drop specific to turn order after clicking undo
--let undo track when pieces were captured
+
+high prio
+
+User stories
 
 -Implement En passant
 -Implement Castling
+
+
+
+normal prio
+-fix the drag drop specific to turn order after clicking undo
+-let undo track when pieces were captured
+-fix can't change piece to move once click piece, sometimes you can change a piece but it uses the previous piece move behavior
+
+less prio
 -Add timer
 
 
-
 Things already done:
+
+
+for function errors
+-fix uncaught promises errors that might affecting the flow of the code on drawgrid
+
 already fixed validmovements exceeding the edge of the board when piece is one tile away from edge
 
 for the pawns
