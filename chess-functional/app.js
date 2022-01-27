@@ -56,45 +56,23 @@ async function drawGrid(col, row, _fen){
 
     // PLACE PIECES ON THE BOARD
 
-        let grid = document.querySelectorAll(".container div");
+       let grid = document.querySelectorAll(".container div");
         let piece = new Piece();
         let gridCounter = 0;
-        for(i = 0; i < 64 - 1; i++){
+
+        for(i = 0; i < 36; i++){
             if(parseInt(fenArr[i])){
                 gridCounter += (parseInt(fenArr[i]) - 1);
             }else{
                 let character = fenArr[i];
-                let strCharacter = `${character}`;
-                let capital = character == strCharacter.toUpperCase();
+                let capital = character == character.toUpperCase();
 
-
-                grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} " id="${piece.generatePiece(fenArr[i]).code}-${i}"></i>`;
-                if (character == character.toUpperCase()) {
+                grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}"></i>`;
+                if (character == character.toUpperCase()){
                     grid[gridCounter].children[0].classList.add("lightPiece")
-                } else {
+                }else{
                     grid[gridCounter].children[0].classList.add("darkPiece")
                 }
-
-                // limit loop only on length of piece object
-                let lightPieces = document.querySelectorAll(".lightPiece");
-                let darkPieces = document.querySelectorAll(".darkPiece");
-
-                let lightPieceIconCounter = 15;
-                lightPieces.forEach((lightPiece, i) => {
-                    let strClassPiece = `${piece.generatePiece(fenArr[lightPieceIconCounter]).icon}`;
-                    const splitClass = strClassPiece.split(" ");
-                    lightPiece.classList.add(splitClass[0]);
-                    lightPiece.classList.add(splitClass[1]);
-                    lightPieceIconCounter--;
-                })
-
-                darkPieces.forEach((darkPiece, i) => {
-                    let strClassPiece = `${piece.generatePiece(fenArr[i]).icon}`;
-                    const splitClass = strClassPiece.split(" ");
-                    darkPiece.classList.add(splitClass[0]);
-                    darkPiece.classList.add(splitClass[1]);
-                })
-                // piece loop limit end
             }
             gridCounter += 1;
         }
