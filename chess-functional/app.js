@@ -60,7 +60,7 @@ async function drawGrid(col, row, _fen){
         let piece = new Piece();
         let gridCounter = 0;
 
-        for(i = 0; i < 36; i++){
+        for(i = 0; i < fenArr.length; i++){
             if(parseInt(fenArr[i])){
                 gridCounter += (parseInt(fenArr[i]) - 1);
             }else{
@@ -553,7 +553,7 @@ async function drop(e) {
         }
         // e.target.children[0].remove();
     }
-    
+
 
     if(homeTile){
         console.log(`${pieceColor} ${piece} moved`);
