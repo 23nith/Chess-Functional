@@ -372,6 +372,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                 if(lightPiece){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
                                         console.log("enemy piece");
+                                        currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                         // continue;
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
@@ -381,6 +382,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
             
                                 }else{
                                     if(currentTile.children[0].classList.contains("lightPiece")){
+                                        currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                         console.log("enemy piece");
                                         // continue;
                                     }
