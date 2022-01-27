@@ -229,6 +229,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
     let exemption = []
     let exemptedTiles = [];
     let pieceMovement = movement;
+    let pawnCaptureMovement = false;
     // check color piece
     let lightPiece = piece == piece.toUpperCase();
 
@@ -247,15 +248,40 @@ function highlightTiles(_homeTile, movement, sliding, piece){
             tiles[i].setAttribute("ondragover", "removeDrop(event)");
         }
 
+        // Pawn pieces variouss behavior
         if(piece == "P" || piece == "p"){
             let pieceClass = new Piece();
 
             // check piece color
             if(piece == "P"){
+                // capture behavior
+                let captureTile1 = parseInt(_homeTile) - 7;
+                let captureTile2 = parseInt(_homeTile) - 9;
+                if(tiles[captureTile1].children[0]){
+                    pieceMovement.push(-7)
+                    pawnCaptureMovement = true;
+                }else if(tiles[captureTile2].children[0]){
+                    pieceMovement.push(-9)
+                    pawnCaptureMovement = true;
+                }
+                
+                // initial behavior
                 if(pawnStartingPositionWhite.includes(parseInt(_homeTile))){
                     pieceMovement = pieceClass.generatePiece(piece).initialMovement;
                 }
             }else{
+                // capture behavior
+                let captureTile1 = parseInt(_homeTile) + 7;
+                let captureTile2 = parseInt(_homeTile) + 9;
+                if(tiles[captureTile1].children[0]){
+                    pieceMovement.push(7)
+                    pawnCaptureMovement = true;
+                }else if(tiles[captureTile2].children[0]){
+                    pieceMovement.push(9)
+                    pawnCaptureMovement = true;
+                }
+
+                // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
                     pieceMovement = pieceClass.generatePiece(piece).initialMovement;
                 }
@@ -315,6 +341,11 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     if(lightPiece){
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
                             console.log("enemy piece");
+                            // if ememy piece is in front of pawn
+                            if(piece == "P" && pieceMovement[j] == -8){
+                                continue;
+                            }
+                            
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             // continue;
                         }
@@ -326,6 +357,9 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     }else{
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
                             console.log("enemy piece");
+                            if(piece == "p" && pieceMovement[j] == 8){
+                                continue;
+                            }
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
