@@ -375,19 +375,33 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
                                         console.log("enemy piece");
                                         // continue;
+                                        currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                        exemptedTiles.push(currentTile.id);
+                                        currentTile.style.backgroundColor = "#F91F15";
+                                        break loop1;
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         console.log("friendly piece");
+                                        if(tileNumber != parseInt(_homeTile)){
+                                            break loop1;
+                                        }
                                         // continue;
                                     }
 
                                 }else{
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         console.log("enemy piece");
+                                        currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                        exemptedTiles.push(currentTile.id);
+                                        currentTile.style.backgroundColor = "#F91F15";
+                                        break loop1;
                                         // continue;
                                     }
                                     if(currentTile.children[0].classList.contains("darkPiece")){
                                         console.log("friendly piece");
+                                        if(tileNumber != parseInt(_homeTile)){
+                                            break loop1;
+                                        }
                                         // continue;
                                     }
 
