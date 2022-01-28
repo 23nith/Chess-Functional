@@ -254,6 +254,10 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
             // check piece color
             if(piece == "P"){
+                // initial behavior
+                if(pawnStartingPositionWhite.includes(parseInt(_homeTile))){
+                    pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                }
                 // capture behavior
                 let captureTile1 = parseInt(_homeTile) - 7;
                 let captureTile2 = parseInt(_homeTile) - 9;
@@ -265,11 +269,11 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pawnCaptureMovement = true;
                 }
                 
+            }else{
                 // initial behavior
-                if(pawnStartingPositionWhite.includes(parseInt(_homeTile))){
+                if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
                     pieceMovement = pieceClass.generatePiece(piece).initialMovement;
                 }
-            }else{
                 // capture behavior
                 let captureTile1 = parseInt(_homeTile) + 7;
                 let captureTile2 = parseInt(_homeTile) + 9;
@@ -281,10 +285,6 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pawnCaptureMovement = true;
                 }
 
-                // initial behavior
-                if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
-                    pieceMovement = pieceClass.generatePiece(piece).initialMovement;
-                }
             }
         }
 
