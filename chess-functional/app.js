@@ -336,8 +336,8 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 }
                 // catle behavior
 
-                // console.log("White rook right", tiles[parseInt(_homeTile) + 3].children[0].id);
-                // console.log("White rook left", tiles[parseInt(_homeTile) + 3].children[0].id);
+                 console.log("Black rook right", tiles[parseInt(_homeTile) + 3].children[0].id);
+                 console.log("Black rook left", tiles[parseInt(_homeTile) - 4].children[0].id);
             }
         }
 
