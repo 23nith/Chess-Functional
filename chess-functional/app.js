@@ -218,12 +218,32 @@ const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
 const kingStartingPositionWhite = 60;
 const kingStartingPositionBlack = 4;
 
+
+// ************************************************************ Utility functions ***********************************************************
+
+
+// for castling to get rookID on king's initial position
+function getRookID(sign, _tile_to_add, _homeTile) {
+    switch (sign) {
+        case "+":
+            return tiles[parseInt(_homeTile) + _tile_to_add].children[0].id;
+        case "-":
+            return tiles[parseInt(_homeTile) - _tile_to_add].children[0].id;
+        default:
+            throw new Error("Invalid sign");
+    }
+}
+
+
+
+
 // ************************************************** Functions called by drag drop events **************************************************
 
 function changeTurn(){
     turn = turn == "White" ? "Black": "White";
     document.querySelector(".turn").innerHTML = `${turn}'s turn`;
 }
+
 
 function highlightTiles(_homeTile, movement, sliding, piece){
 
@@ -316,9 +336,14 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 }
 
                 // catle behavior
+                const rightRookId = getRookID("+", 3, _homeTile);
+                const leftRookId  = getRookID("-", 4, _homeTile);
+                const rookCode    = new Piece().generatePiece(piece);
 
-                console.log("White rook right", tiles[parseInt(_homeTile) + 3].children[0].id);
-                console.log("White rook left", tiles[parseInt(_homeTile) - 4].children[0].id);
+                console.log("White rook right", rightRookId);
+                console.log("White rook left",  leftRookId);
+                console.log("Black rook code", rookCode);
+
 
 
             }
@@ -327,17 +352,21 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 // Use initialMovement
                 if(kingStartingPositionBlack === parseInt(_homeTile)){
 
-                    console.log(true, `in starting position black`);
-                    console.log("Setting piece movement into initialMovement");
-                    pieceMovement = pieceClass.generatePiece(piece).initialMovement;
-                    console.log(pieceMovement);
+                console.log(true, `in starting position black`);
+                console.log("Setting piece movement into initialMovement");
+                pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
 
                 }
                 // catle behavior
+                const rightRookId = getRookID("+", 3, _homeTile);
+                const leftRookId  = getRookID("-", 4, _homeTile);
+                const rookCode    = new Piece().generatePiece(piece);
 
-                 console.log("Black rook right", tiles[parseInt(_homeTile) + 3].children[0].id);
-                 console.log("Black rook left", tiles[parseInt(_homeTile) - 4].children[0].id);
+                console.log("Black rook right", rightRookId);
+                console.log("Black rook left",  leftRookId);
+                console.log("Black rook code", rookCode);
+
             }
         }
 
