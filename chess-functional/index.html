@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible"
+        content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
+        rel="stylesheet">
 </head>
+
 <body>
     <div class="info">
         <div class="turn">White's turn</div>
-        
+
     </div>
     <div>
         <p>Sample FEN: 4k2r/6r1/8/8/8/8/3R4/R3K3</p>
-        <input placeholder="Enter FEN here" type="text" name="" id="fen">
-        <button type="submit" onclick="submitFEN()">Submit</button>
+        <div>
+            <span>Sample FEN for castling Demo</span>
+            <p>with rook: r3k2r/8/8/8/8/8/8/R3K2R</p>
+            <p>without rook: 4k3/8/8/8/8/8/8/4K3 </p>
+        </div>
+        <input placeholder="Enter FEN here"
+            type="text"
+            name=""
+            id="fen">
+        <button type="submit"
+            onclick="submitFEN()">Submit</button>
     </div>
-    
-    
+
+
     <div class="black-captured">
 
     </div>
@@ -27,12 +42,16 @@
     </div>
 
     <div class="white-captured">
-        
+
     </div>
 
     <div>
-        <button type="submit" onclick="undo()" id="reset">undo</button>
-        <button type="submit" onclick="reset()" id="reset">reset</button>
+        <button type="submit"
+            onclick="undo()"
+            id="reset">undo</button>
+        <button type="submit"
+            onclick="reset()"
+            id="reset">reset</button>
         <!-- <button type="submit" onclick="displayFEN()" id="getFen">get FEN</button> -->
     </div>
 
@@ -44,4 +63,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
