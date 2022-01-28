@@ -106,8 +106,9 @@ async function undo(){
     // fenArray[fenArray.length-1]
     drawGrid(8,8, submittedFen);
     fenArray.pop(fenArray.length -1);
-    console.log(fenArray);
+    // console.log(fenArray);
     changeTurn();
+    // 
     // let checkBoardDisplay = await document.querySelector(".container").children[63];
 
     // console.log("test");
@@ -130,10 +131,11 @@ async function undo(){
 
     //     }
     // }
+    // 
 }
 
 function getFEN(){
-    console.log("triggered");
+    // console.log("triggered");
     let counter = 0;
     let fenArr = new Array(8).fill(0).map(() => new Array(8).fill(0));
     for(i = 0; i < 8; i++){
@@ -168,7 +170,7 @@ function getFEN(){
         i == 7 ? fenFormattedArr+=row : fenFormattedArr+=row+"/";
         row="";
     }
-    console.log("fenArray: ", fenArray);
+    // console.log("fenArray: ", fenArray);
     return fenFormattedArr;
 }
 
@@ -199,7 +201,7 @@ function reset(){
 let tiles;
 let lifted;
 let piece;
-let landed;
+let landed = "hello";
 let homeTile = []; //If piece was lifted but still remained to its home tile, this value will be null
 let pieceColor;
 let lightPieces;
@@ -207,6 +209,9 @@ let darkPieces;
 let lightTiles;
 let darkTiles;
 let turn = "White";
+let enPassantPiecesWhite = [];
+let enPassantPiecesBlack = [];
+
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -215,6 +220,8 @@ const surroundingTiles = [8, -8, 7, -7, 9, -9, 1, -1];
 const boardEdges = [0, 1, 2, 3, 4 , 5, 6, 7, 15, 23, 31, 39, 47, 55, 63, 56, 57, 58, 59, 60, 61, 62, 8, 16, 24, 32, 40, 48];
 const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
+const pawnEnPassantWhite = [32, 33, 34, 35, 36, 37, 38, 39];
+const pawnEnPassantBlack = [24, 25, 26, 27, 28, 29, 30, 31];
 
 // ************************************************** Functions called by drag drop events **************************************************
 
@@ -252,6 +259,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         if(piece == "P" || piece == "p"){
             let pieceClass = new Piece();
 
+            
             // check piece color
             if(piece == "P"){
                 // initial behavior
@@ -267,6 +275,14 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 }else if(tiles[captureTile2].children[0]){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
+                }
+
+                // En Passant 
+                if(enPassantPiecesBlack.includes(captureTile1)){
+                    pieceMovement.push(-7)
+                }
+                if(enPassantPiecesBlack.includes(captureTile2)){
+                    pieceMovement.push(-9)
                 }
                 
             }else{
@@ -284,6 +300,14 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(9)
                     pawnCaptureMovement = true;
                 }
+                // En Passant 
+                if(enPassantPiecesWhite.includes(captureTile1)){
+                    pieceMovement.push(7)
+                }
+                if(enPassantPiecesWhite.includes(captureTile2)){
+                    pieceMovement.push(9)
+                }
+
 
             }
         }
@@ -336,11 +360,11 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
             if(validMove < 64){
                 if(tiles[validMove].children[0]){
-                    console.log("child");
+                    // console.log("child");
 
                     if(lightPiece){
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
-                            console.log("enemy piece");
+                            // console.log("enemy piece");
                             // if ememy piece is in front of pawn
                             if(piece == "P" && pieceMovement[j] == -8){
                                 continue;
@@ -350,20 +374,20 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                             // continue;
                         }
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
-                            console.log("friendly piece");
+                            // console.log("friendly piece");
                             continue;
                         }
 
                     }else{
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
-                            console.log("enemy piece");
+                            // console.log("enemy piece");
                             if(piece == "p" && pieceMovement[j] == 8){
                                 continue;
                             }
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
-                            console.log("friendly piece");
+                            // console.log("friendly piece");
                             continue;
                         }
 
@@ -397,17 +421,17 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         directionLine = (direction * n) + parseInt(_homeTile);
 
                         if(tileNumber == 0 && directionLine == 0){
-                            console.log("zero");
+                            // console.log("zero");
                         }
 
                         if(tileNumber == directionLine){
 
                             if(currentTile.children[0]){
-                                console.log("has piece");
+                                // console.log("has piece");
 
                                 if(lightPiece){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
-                                        console.log("enemy piece");
+                                        // console.log("enemy piece");
                                         currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                         // continue;
                                         currentTile.setAttribute("ondragover", "dropAllow(event)");
@@ -416,7 +440,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                         break loop1;
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
-                                        console.log("friendly piece");
+                                        // console.log("friendly piece");
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
@@ -426,7 +450,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                 }else{
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
-                                        console.log("enemy piece");
+                                        // console.log("enemy piece");
                                         currentTile.setAttribute("ondragover", "dropAllow(event)");
                                         exemptedTiles.push(currentTile.id);
                                         currentTile.style.backgroundColor = "#F91F15";
@@ -434,7 +458,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                         // continue;
                                     }
                                     if(currentTile.children[0].classList.contains("darkPiece")){
-                                        console.log("friendly piece");
+                                        // console.log("friendly piece");
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
@@ -546,7 +570,7 @@ async function dropAllow(e) {
     lifted = e.target.parentElement.getAttribute("data-tilenumber");
     if(lifted){
         homeTile.push(lifted);
-        console.log("homeTile: ", homeTile[0])
+        // console.log("homeTile: ", homeTile[0])
         let pieceClass = new Piece();
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
@@ -574,9 +598,9 @@ async function drop(e) {
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
 
-
+    // Capture pieces
     if(e.target.children[1]){
-        console.log("capture");
+        // console.log("capture");
         let container = document.createElement("div");
         if(e.target.children[0].classList.contains("lightPiece")){
             container.appendChild(e.target.children[0]);
@@ -590,7 +614,7 @@ async function drop(e) {
 
 
     if(homeTile){
-        console.log(`${pieceColor} ${piece} moved`);
+        // console.log(`${pieceColor} ${piece} moved`);
 
         if(pieceColor == "White"){
             lightPieces = document.querySelectorAll(".lightPiece");
@@ -614,7 +638,46 @@ async function drop(e) {
 
     }
 
-    landed = e.target;
+    // Detect pawn pieces vulnerable to En Passant
+    landed = e.target.id;
+
+    let container1 = document.createElement("div");
+
+    if(piece == "P"){
+        // record pawn pieces vulnerable to En Passant
+        if(pawnEnPassantWhite.includes(parseInt(landed))){
+            console.log("piece: ", piece);
+            enPassantPiecesWhite.push(parseInt(homeTile[0])-8);
+        }
+        // capture by en passant
+        if(enPassantPiecesBlack.includes(parseInt(landed))){
+            console.log("tile of capture: ", tiles[parseInt(landed)+8]);
+            if(tiles[parseInt(landed)+8].children[0].id[0] == "p"){
+                container1.appendChild(tiles[parseInt(landed)+8].children[0]);
+                document.querySelector(".white-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            }
+
+        }
+
+    }
+    
+    if(piece == "p"){
+        // record pawn pieces vulnerable to En Passant
+        if(pawnEnPassantBlack.includes(parseInt(landed))){
+            console.log("piece: ", piece);
+            enPassantPiecesBlack.push(parseInt(homeTile[0])+8);
+        } 
+        // capture by en passant
+        if(enPassantPiecesWhite.includes(parseInt(landed))){
+            console.log("tile of capture: ", tiles[parseInt(landed)-8]);
+            if(tiles[parseInt(landed)-8].children[0].id[0] == "P"){
+                container1.appendChild(tiles[parseInt(landed)-8].children[0]);
+                document.querySelector(".black-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            }
+        }
+    }
+
+    //
 
     homeTile = [];
     // console.log("tiles: ", tiles);
