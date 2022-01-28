@@ -5,7 +5,9 @@ high prio
 
 User stories
 
--Implement Castling
+-Implement Checking
+-Implement Checkmate
+-Implement pawn promotion
 
 
 
@@ -13,6 +15,7 @@ normal prio
 -fix the drag drop specific to turn order after clicking undo
 -let undo track when pieces were captured
 -fix can't change piece to move once click piece, sometimes you can change a piece but it uses the previous piece move behavior
+-fix can castling even there are pieces between
 
 less prio
 -Add timer
@@ -47,3 +50,4 @@ for the sliding pieces
 -sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
 
 -Implement En passant
+-Implement Castling
