@@ -332,12 +332,15 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
                 console.log("White king")
 
+
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
                     console.log(true, `in starting position White`);
                     console.log("Setting piece movement into initialMovement");
-                    pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    if (whiteKingCastlingLimit === 1) {
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    }
                 }
 
             }
@@ -349,7 +352,9 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
                     console.log(true, `in starting position black`);
                     console.log("Setting piece movement into initialMovement");
-                    pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    if (blackKingCastlingLimit === 1) {
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    }
 
                 }
             }
