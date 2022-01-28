@@ -207,6 +207,8 @@ let darkPieces;
 let lightTiles;
 let darkTiles;
 let turn = "White";
+let whiteKingCastlingLimit = 1;
+let blackKingCastlingLimit = 1;
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -217,6 +219,7 @@ const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
 const kingStartingPositionWhite = 60;
 const kingStartingPositionBlack = 4;
+
 
 
 // ************************************************************ Utility functions ***********************************************************
@@ -320,6 +323,8 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         // king and rook for castle test
         // r3k2r/8/8/8/8/8/8/R3K2R
 
+
+        // King's highlight for castling
         if (piece === "K" || piece === "k") {
             const pieceClass = new Piece();
 
@@ -646,30 +651,38 @@ async function drop(e) {
             const rightRook = getRook("+", 3, homeTile[0]);
             const leftRook  = getRook("-", 4, homeTile[0]);
 
-            if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
-                e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+            if (whiteKingCastlingLimit === 1) {
+                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+                    whiteKingCastlingLimit--;
+                }
+                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+                    whiteKingCastlingLimit--;
+                }
             }
-            else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
-                e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
-            }
+            whiteKingCastlingLimit--;
         }
         else {
             // Black's castling
             const rightRook = getRook("+", 3, homeTile[0]);
             const leftRook  = getRook("-", 4, homeTile[0]);
 
-            if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
-                e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+            if (blackKingCastlingLimit === 1) {
+                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+                    blackKingCastlingLimit--;
+                }
+                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+                    blackKingCastlingLimit--;
+                }
             }
-            else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
-                e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
-            }
+            blackKingCastlingLimit--;
         }
+
+
     }
-
-
-
-
 
     if(e.target.children[1]){
         console.log("capture");
