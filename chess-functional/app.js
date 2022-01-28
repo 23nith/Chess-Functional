@@ -326,36 +326,30 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
         // King's highlight for castling
         if (piece === "K" || piece === "k") {
+
             const pieceClass = new Piece();
 
             if (piece === "K") {
-
-                console.log("White king")
-
-
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
-                    console.log(true, `in starting position White`);
-                    console.log("Setting piece movement into initialMovement");
                     if (whiteKingCastlingLimit === 1) {
+
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
                     }
                 }
 
             }
             else {
-                console.log("Black king")
 
-                // Use initialMovement
                 if(kingStartingPositionBlack === parseInt(_homeTile)){
 
-                    console.log(true, `in starting position black`);
-                    console.log("Setting piece movement into initialMovement");
                     if (blackKingCastlingLimit === 1) {
-                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
-                    }
 
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    }
                 }
             }
         }
@@ -659,14 +653,21 @@ async function drop(e) {
             if (whiteKingCastlingLimit === 1) {
                 if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+
+                    // remove castling ability
                     whiteKingCastlingLimit--;
                 }
                 else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+
+                    // remove castling ability
                     whiteKingCastlingLimit--;
                 }
             }
+
+            // remove castling ability
             whiteKingCastlingLimit--;
+
         }
         else {
             // Black's castling
@@ -676,17 +677,22 @@ async function drop(e) {
             if (blackKingCastlingLimit === 1) {
                 if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+
+                    // remove castling ability
                     blackKingCastlingLimit--;
                 }
                 else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+
+                    // remove castling ability
                     blackKingCastlingLimit--;
                 }
             }
+
+            // remove castling ability
             blackKingCastlingLimit--;
+
         }
-
-
     }
 
     if(e.target.children[1]){
