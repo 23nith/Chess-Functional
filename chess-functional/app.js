@@ -338,13 +338,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 // catle behavior
                 const rightRookId = getRookID("+", 3, _homeTile);
                 const leftRookId  = getRookID("-", 4, _homeTile);
-                const rookCode    = new Piece().generatePiece(piece);
-
-                console.log("White rook right", rightRookId);
-                console.log("White rook left",  leftRookId);
-                console.log("Black rook code", rookCode);
-
-
+                const rookCode    = new Piece().generatePiece("R").code;
 
             }
             else {
@@ -361,11 +355,8 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 // catle behavior
                 const rightRookId = getRookID("+", 3, _homeTile);
                 const leftRookId  = getRookID("-", 4, _homeTile);
-                const rookCode    = new Piece().generatePiece(piece);
+                const rookCode    = new Piece().generatePiece("r").code;
 
-                console.log("Black rook right", rightRookId);
-                console.log("Black rook left",  leftRookId);
-                console.log("Black rook code", rookCode);
 
             }
         }
