@@ -27,7 +27,7 @@ Things already done:
 for function errors
 -fix uncaught promises errors that might affecting the flow of the code on drawgrid
 
-already fixed validmovements exceeding the edge of the board when piece is one tile away from edge
+-already fixed valid movements exceeding the edge of the board when piece is one tile away from edge
 
 for the pawns
 -if p/P piece index is == pawnStartingPosition, highlight +2 also
@@ -46,8 +46,8 @@ for the sliding pieces
 
 -initiate snapshot of fen for undo button
 
-
 -sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
 
 -Implement En passant
+
 -Implement Castling
