@@ -10,14 +10,14 @@ class Piece {
             n : {name: "black-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "n", sliding: false},
             b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
             q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
-            k : {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "k", sliding: false},
+            k : {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
             p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
 
             R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
             N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
             B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
             Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
-            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "K", sliding: false},
+            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
             P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16]},
         }
         return pieces[_fenLetter];
@@ -209,8 +209,11 @@ let darkPieces;
 let lightTiles;
 let darkTiles;
 let turn = "White";
+let whiteKingCastlingLimit = 1;
+let blackKingCastlingLimit = 1;
 let enPassantPiecesWhite = [];
 let enPassantPiecesBlack = [];
+
 
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
@@ -222,6 +225,26 @@ const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
 const pawnEnPassantWhite = [32, 33, 34, 35, 36, 37, 38, 39];
 const pawnEnPassantBlack = [24, 25, 26, 27, 28, 29, 30, 31];
+const kingStartingPositionWhite = 60;
+const kingStartingPositionBlack = 4;
+
+
+
+// ************************************************************ Utility functions ***********************************************************
+
+
+// for castling
+// get rook' id relative to king's initial position
+function getRook(sign, _tile_to_add, _homeTile) {
+    switch (sign) {
+        case "+":
+            return tiles[parseInt(_homeTile) + _tile_to_add].children[0];
+        case "-":
+            return tiles[parseInt(_homeTile) - _tile_to_add].children[0];
+        default:
+            throw new Error("Invalid sign");
+    }
+}
 
 // ************************************************** Functions called by drag drop events **************************************************
 
@@ -230,7 +253,10 @@ function changeTurn(){
     document.querySelector(".turn").innerHTML = `${turn}'s turn`;
 }
 
+
 function highlightTiles(_homeTile, movement, sliding, piece){
+
+
 
     // check if piece is near edge
     let exemption = []
@@ -245,7 +271,6 @@ function highlightTiles(_homeTile, movement, sliding, piece){
     let bottomEdge = [1, 6, 7];
     let leftEdge = [3, 5, 7, 9];
     let descending = [0,3,5,4];
-
 
     // highlight legal moves
     if(!sliding){
@@ -276,7 +301,6 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
-
                 // En Passant 
                 if(enPassantPiecesBlack.includes(captureTile1)){
                     pieceMovement.push(-7)
@@ -284,7 +308,6 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(enPassantPiecesBlack.includes(captureTile2)){
                     pieceMovement.push(-9)
                 }
-                
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -309,6 +332,45 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 }
 
 
+            }
+        }
+
+        // King Castling
+
+        // king test for castle test
+        // 4k3/8/8/8/8/8/8/4K3
+
+        // king and rook for castle test
+        // r3k2r/8/8/8/8/8/8/R3K2R
+
+
+        // King's highlight for castling
+        if (piece === "K" || piece === "k") {
+
+            const pieceClass = new Piece();
+
+            if (piece === "K") {
+                // Use initialMovement
+                if(kingStartingPositionWhite === parseInt(_homeTile)){
+
+                    if (whiteKingCastlingLimit === 1) {
+
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    }
+                }
+
+            }
+            else {
+
+                if(kingStartingPositionBlack === parseInt(_homeTile)){
+
+                    if (blackKingCastlingLimit === 1) {
+
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    }
+                }
             }
         }
 
@@ -369,7 +431,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                             if(piece == "P" && pieceMovement[j] == -8){
                                 continue;
                             }
-                            
+
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             // continue;
                         }
@@ -598,6 +660,60 @@ async function drop(e) {
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
 
+
+    // King's castling
+    if (piece === "K" || piece === "k") {
+
+        // White's castling
+        if (piece === "K") {
+
+            const rightRook = getRook("+", 3, homeTile[0]);
+            const leftRook  = getRook("-", 4, homeTile[0]);
+
+            if (whiteKingCastlingLimit === 1) {
+                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+
+                    // remove castling ability
+                    whiteKingCastlingLimit--;
+                }
+                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+
+                    // remove castling ability
+                    whiteKingCastlingLimit--;
+                }
+            }
+
+            // remove castling ability
+            whiteKingCastlingLimit--;
+
+        }
+        else {
+            // Black's castling
+            const rightRook = getRook("+", 3, homeTile[0]);
+            const leftRook  = getRook("-", 4, homeTile[0]);
+
+            if (blackKingCastlingLimit === 1) {
+                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+
+                    // remove castling ability
+                    blackKingCastlingLimit--;
+                }
+                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+
+                    // remove castling ability
+                    blackKingCastlingLimit--;
+                }
+            }
+
+            // remove castling ability
+            blackKingCastlingLimit--;
+
+        }
+    }
     // Capture pieces
     if(e.target.children[1]){
         // console.log("capture");

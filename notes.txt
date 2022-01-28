@@ -10,7 +10,6 @@ User stories
 -Implement pawn promotion
 
 
-
 normal prio
 -fix the drag drop specific to turn order after clicking undo
 -let undo track when pieces were captured
