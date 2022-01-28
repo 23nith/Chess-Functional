@@ -655,6 +655,15 @@ async function drop(e) {
         }
         else {
             // Black's castling
+            const rightRook = getRook("+", 3, homeTile[0]);
+            const leftRook  = getRook("-", 4, homeTile[0]);
+
+            if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+            }
+            else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+            }
         }
     }
 
