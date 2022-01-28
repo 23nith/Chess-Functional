@@ -654,8 +654,10 @@ async function drop(e) {
         // capture by en passant
         if(enPassantPiecesBlack.includes(parseInt(landed))){
             console.log("tile of capture: ", tiles[parseInt(landed)+8]);
-            container1.appendChild(tiles[parseInt(landed)+8].children[0]);
-            document.querySelector(".white-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            if(tiles[parseInt(landed)+8].children[0].id[0] == "p"){
+                container1.appendChild(tiles[parseInt(landed)+8].children[0]);
+                document.querySelector(".white-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            }
 
         }
 
@@ -670,9 +672,10 @@ async function drop(e) {
         // capture by en passant
         if(enPassantPiecesWhite.includes(parseInt(landed))){
             console.log("tile of capture: ", tiles[parseInt(landed)-8]);
-            container1.appendChild(tiles[parseInt(landed)-8].children[0]);
-            document.querySelector(".black-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
-
+            if(tiles[parseInt(landed)-8].children[0].id[0] == "P"){
+                container1.appendChild(tiles[parseInt(landed)-8].children[0]);
+                document.querySelector(".black-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            }
         }
     }
 
