@@ -5,6 +5,8 @@ high prio
 
 User stories
 
+-Implement checking
+-Implement checkmate
 -Implement En passant
 -Implement Castling
 
