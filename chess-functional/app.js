@@ -292,10 +292,20 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         }
 
         // King Castling
+
+        // king test for castle test
+        // 4k3/8/8/8/8/8/8/4K3
+
+        // king and rook for castle test
+        // r3k2r/8/8/8/8/8/8/R3K2R
+
         if (piece === "K" || piece === "k") {
             const pieceClass = new Piece();
+
             if (piece === "K") {
+
                 console.log("White king")
+
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
@@ -304,6 +314,13 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                 }
+
+                // catle behavior
+
+                console.log("White rook right", tiles[parseInt(_homeTile) + 3].children[0].id);
+                console.log("White rook left", tiles[parseInt(_homeTile) - 4].children[0].id);
+
+
             }
             else {
                 console.log("Black king")
@@ -314,7 +331,13 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     console.log("Setting piece movement into initialMovement");
                     pieceMovement = pieceClass.generatePiece(piece).initialMovement;
                     console.log(pieceMovement);
+
+
                 }
+                // catle behavior
+
+                // console.log("White rook right", tiles[parseInt(_homeTile) + 3].children[0].id);
+                // console.log("White rook left", tiles[parseInt(_homeTile) + 3].children[0].id);
             }
         }
 
