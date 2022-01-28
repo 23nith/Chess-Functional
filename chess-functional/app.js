@@ -215,6 +215,8 @@ const surroundingTiles = [8, -8, 7, -7, 9, -9, 1, -1];
 const boardEdges = [0, 1, 2, 3, 4 , 5, 6, 7, 15, 23, 31, 39, 47, 55, 63, 56, 57, 58, 59, 60, 61, 62, 8, 16, 24, 32, 40, 48];
 const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
+const kingStartingPositionWhite = 60;
+const kingStartingPositionBlack = 4;
 
 // ************************************************** Functions called by drag drop events **************************************************
 
@@ -224,6 +226,8 @@ function changeTurn(){
 }
 
 function highlightTiles(_homeTile, movement, sliding, piece){
+
+
 
     // check if piece is near edge
     let exemption = []
@@ -238,7 +242,6 @@ function highlightTiles(_homeTile, movement, sliding, piece){
     let bottomEdge = [1, 6, 7];
     let leftEdge = [3, 5, 7, 9];
     let descending = [0,3,5,4];
-
 
     // highlight legal moves
     if(!sliding){
@@ -268,7 +271,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
-                
+
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -285,6 +288,21 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pawnCaptureMovement = true;
                 }
 
+            }
+        }
+
+        // King Castling
+        if (piece === "K" || piece === "k") {
+            if (piece === "K") {
+                console.log("White king")
+                if(kingStartingPositionWhite === parseInt(_homeTile)){
+                    console.log(true, `in starting position White`)
+                }
+            }
+            else {
+                if(kingStartingPositionBlack === parseInt(_homeTile)){
+                    console.log(true, `in starting position black`)
+                }
             }
         }
 
@@ -345,7 +363,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                             if(piece == "P" && pieceMovement[j] == -8){
                                 continue;
                             }
-                            
+
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             // continue;
                         }
