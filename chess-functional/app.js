@@ -216,6 +216,11 @@ const boardEdges = [0, 1, 2, 3, 4 , 5, 6, 7, 15, 23, 31, 39, 47, 55, 63, 56, 57,
 const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
 
+
+const whitePromotionField = [0, 1, 2, 3, 4, 5, 6, 7];
+const blackPromotionField = [56, 57, 58, 59, 60, 61, 62, 63];
+
+
 // ************************************************** Functions called by drag drop events **************************************************
 
 function changeTurn(){
@@ -268,7 +273,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
-                
+
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -345,7 +350,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                             if(piece == "P" && pieceMovement[j] == -8){
                                 continue;
                             }
-                            
+
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             // continue;
                         }
@@ -573,6 +578,18 @@ async function drop(e) {
     e.preventDefault();
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
+
+
+
+    if (piece === "P" || piece === "p") {
+        if (piece === "P") {
+            console.log("White pawn moved")
+        }
+        else {
+            console.log("Black pawn moved");
+
+        }
+    }
 
 
     if(e.target.children[1]){
