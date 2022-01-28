@@ -222,13 +222,14 @@ const kingStartingPositionBlack = 4;
 // ************************************************************ Utility functions ***********************************************************
 
 
-// for castling to get rookID on king's initial position
-function getRookID(sign, _tile_to_add, _homeTile) {
+// for castling
+// get rook' id relative to king's initial position
+function getRook(sign, _tile_to_add, _homeTile) {
     switch (sign) {
         case "+":
-            return tiles[parseInt(_homeTile) + _tile_to_add].children[0].id;
+            return tiles[parseInt(_homeTile) + _tile_to_add].children[0];
         case "-":
-            return tiles[parseInt(_homeTile) - _tile_to_add].children[0].id;
+            return tiles[parseInt(_homeTile) - _tile_to_add].children[0];
         default:
             throw new Error("Invalid sign");
     }
@@ -332,32 +333,20 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     console.log(true, `in starting position White`);
                     console.log("Setting piece movement into initialMovement");
                     pieceMovement = pieceClass.generatePiece(piece).initialMovement;
-
                 }
-
-                // catle behavior
-                const rightRookId = getRookID("+", 3, _homeTile);
-                const leftRookId  = getRookID("-", 4, _homeTile);
-                const rookCode    = new Piece().generatePiece("R").code;
 
             }
             else {
                 console.log("Black king")
+
                 // Use initialMovement
                 if(kingStartingPositionBlack === parseInt(_homeTile)){
 
-                console.log(true, `in starting position black`);
-                console.log("Setting piece movement into initialMovement");
-                pieceMovement = pieceClass.generatePiece(piece).initialMovement;
-
+                    console.log(true, `in starting position black`);
+                    console.log("Setting piece movement into initialMovement");
+                    pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                 }
-                // catle behavior
-                const rightRookId = getRookID("+", 3, _homeTile);
-                const leftRookId  = getRookID("-", 4, _homeTile);
-                const rookCode    = new Piece().generatePiece("r").code;
-
-
             }
         }
 
@@ -646,6 +635,31 @@ async function drop(e) {
     e.preventDefault();
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
+
+
+    // King's castling
+    if (piece === "K" || piece === "k") {
+
+        // White's castling
+        if (piece === "K") {
+
+            const rightRook = getRook("+", 3, homeTile[0]);
+            const leftRook  = getRook("-", 4, homeTile[0]);
+
+            if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+            }
+            else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+            }
+        }
+        else {
+            // Black's castling
+        }
+    }
+
+
+
 
 
     if(e.target.children[1]){
