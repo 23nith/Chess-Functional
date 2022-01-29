@@ -375,21 +375,25 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         tempInitialMovement.pop();
                         pieceMovement = tempInitialMovement;
                     }
+                    if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(2);
+                        console.log(tempInitialMovement);
+                        pieceMovement = tempInitialMovement;
+                        console.log(tiles[parseInt(_homeTile) + 1].children[0]);
+                    }
                     else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
                         tempInitialMovement.pop();
                         tempInitialMovement.push(-2);
-                        pieceMovement = tempInitialMovement;
-                    }
-                    else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
-                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
-                        tempInitialMovement.pop();
-                        tempInitialMovement.pop();
-                        tempInitialMovement.push(2);
+                        console.log(tempInitialMovement);
                         pieceMovement = tempInitialMovement;
 
                     }
+
                     else if (whiteKingCastlingLimit === 1) {
 
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
@@ -403,7 +407,8 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 const pieceClass = new Piece();
                 if(kingStartingPositionBlack === parseInt(_homeTile)){
 
-                     if (blackKingCastlingLimit === 1) {
+
+                    if (blackKingCastlingLimit === 1) {
 
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
@@ -659,10 +664,6 @@ function addDragFeatureLight(someNodeList){
 async function dropAllow(e) {
     console.log("hellow")
     e.preventDefault();
-
-    console.log(e.target.id);
-    console.log(piece);
-
 
     // Can King castles ?
     if (piece === "K" || piece === "k") {
