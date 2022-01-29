@@ -583,10 +583,16 @@ async function drop(e) {
 
     if (piece === "P" || piece === "p") {
         if (piece === "P") {
-            console.log("White pawn moved")
+            console.log("White pawn moved");
+            if (whitePromotionField.includes(parseInt(e.target.id))) {
+                console.log("White's pawn promoted")
+
+            }
         }
         else {
-            console.log("Black pawn moved");
+            if (blackPromotionField.includes(parseInt(e.target.id))) {
+                console.log("Black's pawn promoted")
+            }
 
         }
     }
