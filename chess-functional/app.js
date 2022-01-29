@@ -368,14 +368,21 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
-                    if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
+                    if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        pieceMovement = tempInitialMovement;
+                    }
+                    else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
                         tempInitialMovement.pop();
                         tempInitialMovement.push(-2);
                         pieceMovement = tempInitialMovement;
                     }
-                    if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                    else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
                         tempInitialMovement.pop();
@@ -396,7 +403,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 const pieceClass = new Piece();
                 if(kingStartingPositionBlack === parseInt(_homeTile)){
 
-                    if (blackKingCastlingLimit === 1) {
+                     if (blackKingCastlingLimit === 1) {
 
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
@@ -691,7 +698,6 @@ async function dropAllow(e) {
             } else {
                 isCanCastleRightBlack = false;
             }
-
         }
     }
 
