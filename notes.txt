@@ -17,6 +17,7 @@ normal prio
 -fix castling issues when there are pieces between.
 -fix can castle even the rook moves already
 -fix side pawns give an error when reach promotion field/bottom edge/top edge
+-fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
 
 less prio
 -Add timer
