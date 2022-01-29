@@ -580,8 +580,8 @@ async function drop(e) {
 
 
     if (piece === "P" || piece === "p") {
-        const pawnPiece = new Piece();
         if (piece === "P") {
+            const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
             console.log("White pawn moved");
             if (whitePromotionField.includes(parseInt(e.target.id))) {
@@ -608,44 +608,44 @@ async function drop(e) {
                 queenPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.Q).icon;
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.id}`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
                     targetPawn.isPromoted   = true;
                     promotionUiChoices.style.display = "none"
-                    piece = pawnPiece.generatePiece(promotionChoices.Q).icon;
+                    piece = pawnPiece.generatePiece(promotionChoices.Q).code;
                 })
 
                 rookPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.R).icon;
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.id}`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
                     targetPawn.isPromoted = true;
                     promotionUiChoices.style.display = "none"
-                    piece = pawnPiece.generatePiece(promotionChoices.R).icon;
+                    piece = pawnPiece.generatePiece(promotionChoices.R).code;
                 })
 
                 bishopPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.B).icon;
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.id}`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
                     targetPawn.isPromoted   = true;
                     promotionUiChoices.style.display = "none"
-                    piece = pawnPiece.generatePiece(promotionChoices.B).icon;
+                    piece = pawnPiece.generatePiece(promotionChoices.B).code;
                 })
 
                 knightPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.N).icon;
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.id}`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
                     targetPawn.isPromoted   = true;
                     promotionUiChoices.style.display = "none"
-                    piece = pawnPiece.generatePiece(promotionChoices.N).icon;
+                    piece = pawnPiece.generatePiece(promotionChoices.N).code;
                 })
             }
         }
         else {
+            const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
             console.log("Black's pawn moved");
-
             if (blackPromotionField.includes(parseInt(e.target.id))) {
                 console.log("Black's pawn promoted")
                 console.log(targetPawn.id);
@@ -670,29 +670,45 @@ async function drop(e) {
                 queenPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.q).icon;
                     targetPawn.className    = `${promotionPieceIcon} blackPiece`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.q).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted   = true;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
                     promotionUiChoices.style.display = "none"
-                    targetPawn.isPromoted = true;
+                    piece = pawnPiece.generatePiece(promotionChoices.q).code;
                 })
 
                 rookPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.r).icon;
                     targetPawn.className    = `${promotionPieceIcon} blackPiece`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.r).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted   = true;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
                     promotionUiChoices.style.display = "none"
-                    targetPawn.isPromoted = true;
+                    piece = pawnPiece.generatePiece(promotionChoices.r).code;
                 })
 
                 bishopPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.b).icon;
                     targetPawn.className    = `${promotionPieceIcon} blackPiece`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.b).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted   = true;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
                     promotionUiChoices.style.display = "none"
-                    targetPawn.isPromoted = true;
+                    piece = pawnPiece.generatePiece(promotionChoices.b).code;
                 })
 
                 knightPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.n).icon;
                     targetPawn.className    = `${promotionPieceIcon} blackPiece`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.n).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted   = true;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
                     promotionUiChoices.style.display = "none"
-                    targetPawn.isPromoted = true;
+                    piece = pawnPiece.generatePiece(promotionChoices.n).code;
                 })
             }
 
