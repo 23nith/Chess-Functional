@@ -360,24 +360,15 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
 
             if (piece === "K") {
+                // White's king`
                 const pieceClass = new Piece();
-
-
 
                 const tiles = document.querySelectorAll(".container div");
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
-                    // is left and right tile aviable for highlighting
-                    if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
-                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))) {
-                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
-                        tempInitialMovement.pop();
-                        tempInitialMovement.pop();
-                        pieceMovement = tempInitialMovement;
-                    }
 
-                    // is left tile available for highlighting
+                    // is left tile available for highlighting on white
                     if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
@@ -387,7 +378,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         pieceMovement = tempInitialMovement;
                         console.log(tiles[parseInt(_homeTile) + 1].children[0]);
                     }
-                    // is right tile available for highlighting
+                    // is right tile available for highlighting on white
                     else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
@@ -404,19 +395,61 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                     }
+                    // is left and right tile aviable for highlighting on white
+                    if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        pieceMovement = tempInitialMovement;
+                    }
                 }
 
             }
             else {
-
+                // Black's king
                 const pieceClass = new Piece();
+
+                const tiles = document.querySelectorAll(".container div");
+                // Use initialMovement
                 if(kingStartingPositionBlack === parseInt(_homeTile)){
 
 
-                    if (blackKingCastlingLimit === 1) {
+                    // is left tile available for highlighting for black
+                    if ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(2);
+                        console.log(tempInitialMovement);
+                        pieceMovement = tempInitialMovement;
+                        console.log(tiles[parseInt(_homeTile) + 1].children[0]);
+                    }
+                    // is right tile available for highlighting for black
+                    else if ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(-2);
+                        console.log(tempInitialMovement);
+                        pieceMovement = tempInitialMovement;
+
+                    }
+
+                    // default highlight black king is free bo blockers
+                    else if (blackKingCastlingLimit === 1) {
 
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
+                    }
+
+                    // is left and right tile aviable for highlighting for black
+                    if (((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        pieceMovement = tempInitialMovement;
                     }
                 }
             }
