@@ -56,7 +56,7 @@ async function drawGrid(col, row, _fen){
 
     // PLACE PIECES ON THE BOARD
 
-       let grid = document.querySelectorAll(".container div");
+        let grid = document.querySelectorAll(".container div");
         let piece = new Piece();
         let gridCounter = 0;
 
@@ -78,8 +78,6 @@ async function drawGrid(col, row, _fen){
         }
 
     // - END
-
-
 }
 
 async function formatFen(_FEN){
@@ -582,11 +580,54 @@ async function drop(e) {
 
 
     if (piece === "P" || piece === "p") {
+        const pawnPiece = new Piece();
         if (piece === "P") {
+            let targetPawn = e.target.children[0];
             console.log("White pawn moved");
             if (whitePromotionField.includes(parseInt(e.target.id))) {
                 console.log("White's pawn promoted")
+                console.log(targetPawn.id);
 
+                const promotionChoices = {
+                    Q: "Q",
+                    R: "R",
+                    B: "B",
+                    N: "N",
+                }
+
+                const promotionUiChoices = document.querySelector(".promotion-choices-white")
+
+                promotionUiChoices.style.display = "block";
+
+                const queenPromotionBtn  = document.querySelector(".promotion-white-queen");
+                const rookPromotionBtn   = document.querySelector(".promotion-white-rook");
+                const bishopPromotionBtn = document.querySelector(".promotion-white-bishop");
+                const knightPromotionBtn = document.querySelector(".promotion-white-knight");
+
+
+                queenPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.Q).icon;
+                    targetPawn.className    = `${promotionPieceIcon} lightPiece`
+                    promotionUiChoices.style.display = "none"
+                })
+
+                rookPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.R).icon;
+                    targetPawn.className    = `${promotionPieceIcon} lightPiece`
+                    promotionUiChoices.style.display = "none"
+                })
+
+                bishopPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.B).icon;
+                    targetPawn.className    = `${promotionPieceIcon} lightPiece`
+                    promotionUiChoices.style.display = "none"
+                })
+
+                knightPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.N).icon;
+                    targetPawn.className    = `${promotionPieceIcon} lightPiece`
+                    promotionUiChoices.style.display = "none"
+                })
             }
         }
         else {

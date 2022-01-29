@@ -68,3 +68,8 @@ p {
 .black-captured div, .white-captured div{
     margin-left: 15px;
 }
+
+
+.promotion-choices-white {
+    display: none;
+}
