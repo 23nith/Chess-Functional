@@ -368,6 +368,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
+                    // is left and right tile aviable for highlighting
                     if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
                         && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
@@ -375,6 +376,8 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         tempInitialMovement.pop();
                         pieceMovement = tempInitialMovement;
                     }
+
+                    // is left tile available for highlighting
                     if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
@@ -384,6 +387,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         pieceMovement = tempInitialMovement;
                         console.log(tiles[parseInt(_homeTile) + 1].children[0]);
                     }
+                    // is right tile available for highlighting
                     else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
@@ -394,6 +398,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
                     }
 
+                    // default highlight white king is free bo blockers
                     else if (whiteKingCastlingLimit === 1) {
 
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
