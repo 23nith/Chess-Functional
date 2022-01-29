@@ -108,7 +108,7 @@ async function undo(){
     fenArray.pop(fenArray.length -1);
     // console.log(fenArray);
     changeTurn();
-    // 
+    //
     // let checkBoardDisplay = await document.querySelector(".container").children[63];
 
     // console.log("test");
@@ -131,7 +131,7 @@ async function undo(){
 
     //     }
     // }
-    // 
+    //
 }
 
 function getFEN(){
@@ -209,8 +209,15 @@ let darkPieces;
 let lightTiles;
 let darkTiles;
 let turn = "White";
-let whiteKingCastlingLimit = 1;
-let blackKingCastlingLimit = 1;
+let whiteKingCastlingLimit  = 1;
+let blackKingCastlingLimit  = 1;
+
+let isCanCastleRightWhite   = false;
+let isCanCastleLeftWhite    = false;
+
+let isCanCastleRightBlack   = false;
+let isCanCastleLeftBlack    = false;
+
 let enPassantPiecesWhite = [];
 let enPassantPiecesBlack = [];
 
@@ -225,10 +232,14 @@ const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
 const pawnEnPassantWhite = [32, 33, 34, 35, 36, 37, 38, 39];
 const pawnEnPassantBlack = [24, 25, 26, 27, 28, 29, 30, 31];
+
 const kingStartingPositionWhite = 60;
 const kingStartingPositionBlack = 4;
 
-
+const leftBlackCastlingTile     = 2;
+const rightBlackCastlingTile    = 6;
+const leftWhiteCastlingTile     = 58;
+const rightWhiteCastlingTile    = 62;
 
 // ************************************************************ Utility functions ***********************************************************
 
@@ -284,7 +295,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         if(piece == "P" || piece == "p"){
             let pieceClass = new Piece();
 
-            
+
             // check piece color
             if(piece == "P"){
                 // initial behavior
@@ -301,7 +312,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
-                // En Passant 
+                // En Passant
                 if(enPassantPiecesBlack.includes(captureTile1)){
                     pieceMovement.push(-7)
                 }
@@ -323,7 +334,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(9)
                     pawnCaptureMovement = true;
                 }
-                // En Passant 
+                // En Passant
                 if(enPassantPiecesWhite.includes(captureTile1)){
                     pieceMovement.push(7)
                 }
@@ -347,13 +358,32 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         // King's highlight for castling
         if (piece === "K" || piece === "k") {
 
-            const pieceClass = new Piece();
 
             if (piece === "K") {
+                const pieceClass = new Piece();
+
+
+
+                const tiles = document.querySelectorAll(".container div");
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
-                    if (whiteKingCastlingLimit === 1) {
+                    if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(-2);
+                        pieceMovement = tempInitialMovement;
+                    }
+                    if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(2);
+                        pieceMovement = tempInitialMovement;
+
+                    }
+                    else if (whiteKingCastlingLimit === 1) {
 
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
@@ -363,6 +393,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
             }
             else {
 
+                const pieceClass = new Piece();
                 if(kingStartingPositionBlack === parseInt(_homeTile)){
 
                     if (blackKingCastlingLimit === 1) {
@@ -619,7 +650,52 @@ function addDragFeatureLight(someNodeList){
 //************************************************************************************** Drag and drop events **************************************************************************************
 
 async function dropAllow(e) {
+    console.log("hellow")
     e.preventDefault();
+
+    console.log(e.target.id);
+    console.log(piece);
+
+
+    // Can King castles ?
+    if (piece === "K" || piece === "k") {
+        if (piece === "K") {
+            // White king
+
+            // Is tile available for castling
+            if (parseInt(e.target.id) === rightWhiteCastlingTile) {
+                isCanCastleRightWhite = true;
+            } else {
+                isCanCastleRightWhite = false;
+            }
+
+            if (parseInt(e.target.id) === leftWhiteCastlingTile) {
+                isCanCastleLeftWhite = true;
+            } else {
+                isCanCastleLeftWhite = false;
+            }
+
+
+        } else {
+            // Black king
+
+            // Is tile available for castling
+            if (parseInt(e.target.id) === leftBlackCastlingTile) {
+                isCanCastleLeftBlack = true;
+            } else {
+                isCanCastleLeftBlack = false;
+            }
+
+            if (parseInt(e.target.id) === rightBlackCastlingTile) {
+                isCanCastleRightBlack = true;
+            } else {
+                isCanCastleRightBlack = false;
+            }
+
+        }
+    }
+
+
     tiles = document.querySelectorAll(".container div");
     // console.log(tiles);
     lightTiles = document.querySelectorAll(".lightTiles");
@@ -671,13 +747,14 @@ async function drop(e) {
             const leftRook  = getRook("-", 4, homeTile[0]);
 
             if (whiteKingCastlingLimit === 1) {
-                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+
+                if (isCanCastleRightWhite) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
 
                     // remove castling ability
                     whiteKingCastlingLimit--;
                 }
-                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                else if (isCanCastleLeftWhite) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
 
                     // remove castling ability
@@ -695,13 +772,13 @@ async function drop(e) {
             const leftRook  = getRook("-", 4, homeTile[0]);
 
             if (blackKingCastlingLimit === 1) {
-                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                if (isCanCastleRightBlack) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
 
                     // remove castling ability
                     blackKingCastlingLimit--;
                 }
-                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                else if (isCanCastleLeftBlack) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
 
                     // remove castling ability
@@ -776,13 +853,13 @@ async function drop(e) {
         }
 
     }
-    
+
     if(piece == "p"){
         // record pawn pieces vulnerable to En Passant
         if(pawnEnPassantBlack.includes(parseInt(landed))){
             console.log("piece: ", piece);
             enPassantPiecesBlack.push(parseInt(homeTile[0])+8);
-        } 
+        }
         // capture by en passant
         if(enPassantPiecesWhite.includes(parseInt(landed))){
             console.log("tile of capture: ", tiles[parseInt(landed)-8]);
