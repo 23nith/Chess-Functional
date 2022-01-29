@@ -631,8 +631,53 @@ async function drop(e) {
             }
         }
         else {
+            let targetPawn = e.target.children[0];
+            console.log("Black's pawn moved");
+
             if (blackPromotionField.includes(parseInt(e.target.id))) {
                 console.log("Black's pawn promoted")
+                console.log(targetPawn.id);
+
+                const promotionChoices = {
+                    q: "q",
+                    r: "r",
+                    b: "b",
+                    n: "n",
+                }
+
+                const promotionUiChoices = document.querySelector(".promotion-choices-black")
+
+                promotionUiChoices.style.display = "block";
+
+                const queenPromotionBtn  = document.querySelector(".promotion-black-queen");
+                const rookPromotionBtn   = document.querySelector(".promotion-black-rook");
+                const bishopPromotionBtn = document.querySelector(".promotion-black-bishop");
+                const knightPromotionBtn = document.querySelector(".promotion-black-knight");
+
+
+                queenPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.q).icon;
+                    targetPawn.className    = `${promotionPieceIcon} blackPiece`
+                    promotionUiChoices.style.display = "none"
+                })
+
+                rookPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.r).icon;
+                    targetPawn.className    = `${promotionPieceIcon} blackPiece`
+                    promotionUiChoices.style.display = "none"
+                })
+
+                bishopPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.b).icon;
+                    targetPawn.className    = `${promotionPieceIcon} blackPiece`
+                    promotionUiChoices.style.display = "none"
+                })
+
+                knightPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.n).icon;
+                    targetPawn.className    = `${promotionPieceIcon} blackPiece`
+                    promotionUiChoices.style.display = "none"
+                })
             }
 
         }

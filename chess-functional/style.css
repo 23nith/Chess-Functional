@@ -70,6 +70,7 @@ p {
 }
 
 
-.promotion-choices-white {
+.promotion-choices-white,
+.promotion-choices-black{
     display: none;
 }
