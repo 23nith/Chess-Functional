@@ -610,6 +610,8 @@ async function drop(e) {
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
                     targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
                     targetPawn.isPromoted   = true;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
                     promotionUiChoices.style.display = "none"
                     piece = pawnPiece.generatePiece(promotionChoices.Q).code;
                 })
@@ -619,6 +621,8 @@ async function drop(e) {
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
                     targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
                     targetPawn.isPromoted = true;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
                     promotionUiChoices.style.display = "none"
                     piece = pawnPiece.generatePiece(promotionChoices.R).code;
                 })
@@ -628,6 +632,8 @@ async function drop(e) {
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
                     targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
                     targetPawn.isPromoted   = true;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
                     promotionUiChoices.style.display = "none"
                     piece = pawnPiece.generatePiece(promotionChoices.B).code;
                 })
@@ -637,6 +643,8 @@ async function drop(e) {
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
                     targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
                     targetPawn.isPromoted   = true;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
                     promotionUiChoices.style.display = "none"
                     piece = pawnPiece.generatePiece(promotionChoices.N).code;
                 })
