@@ -358,7 +358,6 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         // King's highlight for castling
         if (piece === "K" || piece === "k") {
 
-
             if (piece === "K") {
                 // White's king`
                 const pieceClass = new Piece();
@@ -780,6 +779,19 @@ async function drop(e) {
     e.preventDefault();
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
+
+
+    // Remove castling features if rook is move
+
+    if (piece === "R" || piece === "r") {
+
+        // White's rook
+        if (piece === "R") whiteKingCastlingLimit--;
+        // Black's rook
+        else if (piece === "r") blackKingCastlingLimit--;
+    }
+
+
 
 
     // King's castling
