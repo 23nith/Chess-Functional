@@ -608,25 +608,37 @@ async function drop(e) {
                 queenPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.Q).icon;
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.id}`
+                    targetPawn.isPromoted   = true;
                     promotionUiChoices.style.display = "none"
+                    piece = pawnPiece.generatePiece(promotionChoices.Q).icon;
                 })
 
                 rookPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.R).icon;
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.id}`
+                    targetPawn.isPromoted = true;
                     promotionUiChoices.style.display = "none"
+                    piece = pawnPiece.generatePiece(promotionChoices.R).icon;
                 })
 
                 bishopPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.B).icon;
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.id}`
+                    targetPawn.isPromoted   = true;
                     promotionUiChoices.style.display = "none"
+                    piece = pawnPiece.generatePiece(promotionChoices.B).icon;
                 })
 
                 knightPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.N).icon;
                     targetPawn.className    = `${promotionPieceIcon} lightPiece`
+                    targetPawn.id           = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.id}`
+                    targetPawn.isPromoted   = true;
                     promotionUiChoices.style.display = "none"
+                    piece = pawnPiece.generatePiece(promotionChoices.N).icon;
                 })
             }
         }
@@ -659,24 +671,28 @@ async function drop(e) {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.q).icon;
                     targetPawn.className    = `${promotionPieceIcon} blackPiece`
                     promotionUiChoices.style.display = "none"
+                    targetPawn.isPromoted = true;
                 })
 
                 rookPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.r).icon;
                     targetPawn.className    = `${promotionPieceIcon} blackPiece`
                     promotionUiChoices.style.display = "none"
+                    targetPawn.isPromoted = true;
                 })
 
                 bishopPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.b).icon;
                     targetPawn.className    = `${promotionPieceIcon} blackPiece`
                     promotionUiChoices.style.display = "none"
+                    targetPawn.isPromoted = true;
                 })
 
                 knightPromotionBtn.addEventListener("click", () => {
                     let promotionPieceIcon  = pawnPiece.generatePiece(promotionChoices.n).icon;
                     targetPawn.className    = `${promotionPieceIcon} blackPiece`
                     promotionUiChoices.style.display = "none"
+                    targetPawn.isPromoted = true;
                 })
             }
 
