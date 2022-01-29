@@ -16,7 +16,7 @@ normal prio
 -fix can't change piece to move once click piece, sometimes you can change a piece but it uses the previous piece move behavior
 -fix castling issues when there are pieces between.
 -fix can castle even the rook moves already
--fix side pawns give an error when reach promotion field.
+-fix side pawns give an error when reach promotion field/bottom edge/top edge
 
 less prio
 -Add timer
