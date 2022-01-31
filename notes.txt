@@ -19,6 +19,7 @@ normal prio
 -fix side pawns give an error when reach promotion field/bottom edge/top edge
 -fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
 -fix can opponent can move when other pawn is on promotion process
+-fix highlighting sometimes not working.
 
 less prio
 -Add timer
