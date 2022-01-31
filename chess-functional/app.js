@@ -219,6 +219,9 @@ let isCanCastleLeftBlack    = false;
 let enPassantPiecesWhite = [];
 let enPassantPiecesBlack = [];
 
+let currentTilesOnThreat = {
+
+};
 
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
@@ -268,10 +271,11 @@ function changeTurn(){
 }
 
 
-function highlightTiles(_homeTile, movement, sliding, piece){
+function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
+    currentTilesOnThreat = {};
+    console.log("currentTilesOnThreat: ", currentTilesOnThreat)
 
-
-
+    let checking = forChecking;
     // check if piece is near edge
     let exemption = []
     let exemptedTiles = [];
@@ -303,7 +307,9 @@ function highlightTiles(_homeTile, movement, sliding, piece){
             if(piece == "P"){
                 // initial behavior
                 if(pawnStartingPositionWhite.includes(parseInt(_homeTile))){
-                    pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    if(!checking){
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    }
                 }
                 // capture behavior
                 let captureTile1 = parseInt(_homeTile) - 7;
@@ -322,10 +328,27 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(enPassantPiecesBlack.includes(captureTile2)){
                     pieceMovement.push(-9)
                 }
+
+                // for checking
+                if(checking){
+                    let indexOfToRemove = pieceMovement.indexOf(-8);
+                    pieceMovement.splice(indexOfToRemove, 1);
+                    pieceMovement.push(-7, -9);
+                    if(boardRightEdge.includes(parseInt(_homeTile))){
+                        let indexOfToRemove = pieceMovement.indexOf(-7);
+                        pieceMovement.splice(indexOfToRemove, 1);
+                    }
+                    if(boardLeftEdge.includes(parseInt(_homeTile))){
+                        let indexOfToRemove = pieceMovement.indexOf(-9);
+                        pieceMovement.splice(indexOfToRemove, 1);
+                    }
+                }
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
-                    pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    if(!checking){
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    }
                 }
                 // capture behavior
                 let captureTile1 = parseInt(_homeTile) + 7;
@@ -345,7 +368,20 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(9)
                 }
 
-
+                // for checking
+                if(checking){
+                    let indexOfToRemove = pieceMovement.indexOf(8);
+                    pieceMovement.splice(indexOfToRemove, 1);
+                    pieceMovement.push(7, 9);
+                    if(boardRightEdge.includes(parseInt(_homeTile))){
+                        let indexOfToRemove = pieceMovement.indexOf(9);
+                        pieceMovement.splice(indexOfToRemove, 1);
+                    }
+                    if(boardLeftEdge.includes(parseInt(_homeTile))){
+                        let indexOfToRemove = pieceMovement.indexOf(7);
+                        pieceMovement.splice(indexOfToRemove, 1);
+                    }
+                }
             }
         }
 
@@ -362,7 +398,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         if (piece === "K" || piece === "k") {
 
             if (piece === "K") {
-                // White's king`
+                // White's king
                 const pieceClass = new Piece();
 
                 const tiles = document.querySelectorAll(".container div");
@@ -529,6 +565,12 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 }
                 tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
                 tiles[validMove].style.backgroundColor = "#F91F15";
+                if(checking){
+                    if(currentTilesOnThreat[piece] == undefined){
+                        currentTilesOnThreat[piece] = [];
+                    }
+                    currentTilesOnThreat[piece].push(validMove);
+                }
             }
         }
 
@@ -1087,4 +1129,15 @@ async function drop(e) {
     fenArray.push(getFEN());
     displayFEN()
     // console.log("drop", e.target); //Information on the tile where the piece landed
+
+    for(x = 0; x < 64; x++){
+        if(tiles[x].children[0]){
+            let currentPieceToEvaluate = tiles[x].children[0].id[0];
+            let pieceObj = new Piece();
+            let currentPiece = pieceObj.generatePiece(currentPieceToEvaluate);
+            highlightTiles(tiles[x].id, currentPiece.movement, currentPiece.sliding, currentPiece.code, true);
+            console.log("stop")
+        }
+    }
+    console.log("currentTilesOnThreat: ", currentTilesOnThreat);
 }
