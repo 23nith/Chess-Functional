@@ -14,6 +14,7 @@ normal prio
 -fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
 -fix can opponent can move when other pawn is on promotion process
 -fix highlighting sometimes not working.
+-fix pawn can move diagonally when an opponent pawn pass it after en passant.
 
 less prio
 -Add timer
