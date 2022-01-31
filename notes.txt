@@ -7,8 +7,6 @@ User stories
 
 -Implement Checking
 -Implement Checkmate
--Implement pawn promotion
-
 
 normal prio
 -fix the drag drop specific to turn order after clicking undo
@@ -55,3 +53,5 @@ for the sliding pieces
 -Implement En passant
 
 -Implement Castling
+
+-Implement pawn promotion
