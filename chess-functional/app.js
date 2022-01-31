@@ -366,16 +366,22 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
-
+                    // is left and right tile aviable for highlighting on white
+                    if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        pieceMovement = tempInitialMovement;
+                    }
                     // is left tile available for highlighting on white
-                    if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                    else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
                         tempInitialMovement.pop();
                         tempInitialMovement.push(2);
                         console.log(tempInitialMovement);
                         pieceMovement = tempInitialMovement;
-                        console.log(tiles[parseInt(_homeTile) + 1].children[0]);
                     }
                     // is right tile available for highlighting on white
                     else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
@@ -383,7 +389,6 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         tempInitialMovement.pop();
                         tempInitialMovement.pop();
                         tempInitialMovement.push(-2);
-                        console.log(tempInitialMovement);
                         pieceMovement = tempInitialMovement;
 
                     }
@@ -394,14 +399,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                     }
-                    // is left and right tile aviable for highlighting on white
-                    if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
-                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))) {
-                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
-                        tempInitialMovement.pop();
-                        tempInitialMovement.pop();
-                        pieceMovement = tempInitialMovement;
-                    }
+
                 }
 
             }
