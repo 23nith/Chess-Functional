@@ -106,7 +106,7 @@ async function undo(){
     fenArray.pop(fenArray.length -1);
     // console.log(fenArray);
     changeTurn();
-    // 
+    //
     // let checkBoardDisplay = await document.querySelector(".container").children[63];
 
     // console.log("test");
@@ -129,7 +129,7 @@ async function undo(){
 
     //     }
     // }
-    // 
+    //
 }
 
 function getFEN(){
@@ -287,7 +287,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         if(piece == "P" || piece == "p"){
             let pieceClass = new Piece();
 
-            
+
             // check piece color
             if(piece == "P"){
                 // initial behavior
@@ -304,7 +304,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
-                // En Passant 
+                // En Passant
                 if(enPassantPiecesBlack.includes(captureTile1)){
                     pieceMovement.push(-7)
                 }
@@ -326,7 +326,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(9)
                     pawnCaptureMovement = true;
                 }
-                // En Passant 
+                // En Passant
                 if(enPassantPiecesWhite.includes(captureTile1)){
                     pieceMovement.push(7)
                 }
@@ -820,7 +820,6 @@ async function drop(e) {
         }
     }
 
-=======
     // King's castling
     if (piece === "K" || piece === "k") {
 
@@ -936,13 +935,13 @@ async function drop(e) {
         }
 
     }
-    
+
     if(piece == "p"){
         // record pawn pieces vulnerable to En Passant
         if(pawnEnPassantBlack.includes(parseInt(landed))){
             console.log("piece: ", piece);
             enPassantPiecesBlack.push(parseInt(homeTile[0])+8);
-        } 
+        }
         // capture by en passant
         if(enPassantPiecesWhite.includes(parseInt(landed))){
             console.log("tile of capture: ", tiles[parseInt(landed)-8]);
