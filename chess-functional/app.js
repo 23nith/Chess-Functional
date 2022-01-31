@@ -67,7 +67,9 @@ async function drawGrid(col, row, _fen){
                 let character = fenArr[i];
                 let capital = character == character.toUpperCase();
 
-                grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}"></i>`;
+                // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}" ></i>`;
+                let theId = (piece.generatePiece(fenArr[i]).code == "k" || piece.generatePiece(fenArr[i]).code == "K")? piece.generatePiece(fenArr[i]).code : `${piece.generatePiece(fenArr[i]).code}-${i}`;
+                grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" ></i>`;
                 if (character == character.toUpperCase()){
                     grid[gridCounter].children[0].classList.add("lightPiece")
                 }else{
@@ -272,8 +274,6 @@ function changeTurn(){
 
 
 function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
-    currentTilesOnThreat = {};
-    console.log("currentTilesOnThreat: ", currentTilesOnThreat)
 
     let checking = forChecking;
     // check if piece is near edge
@@ -294,8 +294,10 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
     if(!sliding){
         // Knight, King, Pawn
 
-        for(i = 0; i < 64; i++){
-            tiles[i].setAttribute("ondragover", "removeDrop(event)");
+        if(!checking){
+            for(i = 0; i < 64; i++){
+                tiles[i].setAttribute("ondragover", "removeDrop(event)");
+            }
         }
 
         // Pawn pieces variouss behavior
@@ -539,8 +541,9 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             if(piece == "P" && pieceMovement[j] == -8){
                                 continue;
                             }
-
-                            tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                            if(!checking){
+                                tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                            }
                             // continue;
                         }
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
@@ -554,7 +557,9 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             if(piece == "p" && pieceMovement[j] == 8){
                                 continue;
                             }
-                            tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                            if(!checking){
+                                tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                            }
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
                             // console.log("friendly piece");
@@ -563,8 +568,10 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
                     }
                 }
-                tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                tiles[validMove].style.backgroundColor = "#F91F15";
+                if(!checking){
+                    tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
+                    tiles[validMove].style.backgroundColor = "#F91F15";
+                }
                 if(checking){
                     if(currentTilesOnThreat[piece] == undefined){
                         currentTilesOnThreat[piece] = [];
@@ -589,7 +596,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                 for(desc? tile = 63: tile = 0;  desc? tile >= 0: tile < 64;  desc? tile-- : tile++){
                     let currentTile = tiles[tile];
 
-                    if(!exemptedTiles.includes(currentTile.id)){
+                    if(!exemptedTiles.includes(currentTile.id) && !checking){
                         currentTile.setAttribute("ondragover", "removeDrop(event)")
                     }
                     for(n = 0; n < 64; n++){
@@ -608,11 +615,19 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                 if(lightPiece){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
                                         // console.log("enemy piece");
-                                        currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                        if(!checking){
+                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                         // continue;
-                                        currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            currentTile.style.backgroundColor = "#F91F15";
+                                        }
+                                        if(checking){
+                                            if(currentTilesOnThreat[piece] == undefined){
+                                                currentTilesOnThreat[piece] = [];
+                                            }
+                                            currentTilesOnThreat[piece].push(tile);
+                                        }
                                         exemptedTiles.push(currentTile.id);
-                                        currentTile.style.backgroundColor = "#F91F15";
                                         break loop1;
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
@@ -625,11 +640,19 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
                                 }else{
                                     if(currentTile.children[0].classList.contains("lightPiece")){
-                                        currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
-                                        // console.log("enemy piece");
-                                        currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                        if(!checking){
+                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                            // console.log("enemy piece");
+                                            currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            currentTile.style.backgroundColor = "#F91F15";
+                                        }
+                                        if(checking){
+                                            if(currentTilesOnThreat[piece] == undefined){
+                                                currentTilesOnThreat[piece] = [];
+                                            }
+                                            currentTilesOnThreat[piece].push(tile);
+                                        }
                                         exemptedTiles.push(currentTile.id);
-                                        currentTile.style.backgroundColor = "#F91F15";
                                         break loop1;
                                         // continue;
                                     }
@@ -643,10 +666,17 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
                                 }
                             }
-
-                            currentTile.setAttribute("ondragover", "dropAllow(event)");
+                            if(!checking){
+                                currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                currentTile.style.backgroundColor = "#F91F15";
+                            }
+                            if(checking){
+                                if(currentTilesOnThreat[piece] == undefined){
+                                    currentTilesOnThreat[piece] = [];
+                                }
+                                currentTilesOnThreat[piece].push(tile);
+                            }
                             exemptedTiles.push(currentTile.id);
-                            currentTile.style.backgroundColor = "#F91F15";
 
                             if(topEdge.includes(j)){
                                 if(boardTopEdge.includes(tileNumber)){
@@ -733,7 +763,6 @@ function addDragFeatureLight(someNodeList){
 //************************************************************************************** Drag and drop events **************************************************************************************
 
 async function dropAllow(e) {
-    console.log("hellow")
     e.preventDefault();
 
     // Can King castles ?
@@ -1130,6 +1159,8 @@ async function drop(e) {
     displayFEN()
     // console.log("drop", e.target); //Information on the tile where the piece landed
 
+    // Implement check feature
+    currentTilesOnThreat = {};
     for(x = 0; x < 64; x++){
         if(tiles[x].children[0]){
             let currentPieceToEvaluate = tiles[x].children[0].id[0];
@@ -1140,4 +1171,59 @@ async function drop(e) {
         }
     }
     console.log("currentTilesOnThreat: ", currentTilesOnThreat);
+    let information = document.querySelector(".info");
+    let checked = false;
+    // if piece is lightpiece
+    if(piece == piece.toUpperCase()){
+        // lightpiece
+        console.log("lightpiece moved");
+        // get tile of darkpiece king
+        let darkKing = document.querySelector("#k");
+        let tileOfKing = darkKing.parentElement.id;
+        for(item in currentTilesOnThreat){
+            // compare against possible capture of lightpieces
+            if(item == item.toUpperCase()){
+                if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
+                    console.log("check");
+                    let msg = document.createElement("div");
+                    msg.innerText = `Black king is checked`;
+                    msg.style.fontSize = "25px";
+                    msg.style.color = "White";
+                    msg.classList.add("checkInfo");
+                    information.appendChild(msg);
+                    checked = true;
+                }
+            }
+        }
+    }else{
+        // darkpiece
+        console.log("darkpiece moved");
+        // get tile of lightpiece king
+        let lightKing = document.querySelector("#K");
+        let tileOfKing = lightKing.parentElement.id;
+        for(item in currentTilesOnThreat){
+            // compare against possible capture of lightpieces
+            if(item != item.toUpperCase()){
+                if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
+                    console.log("check");
+                    let msg = document.createElement("div");
+                    msg.innerText = `White king is checked`;
+                    msg.style.fontSize = "25px"
+                    msg.style.color = "White" 
+                    msg.classList.add("checkInfo");
+                    information.appendChild(msg);
+                    checked = true;
+                }
+            }
+        }
+    }
+    if(!checked){
+        document.querySelector(".checkInfo").remove();
+    }
+    // for(item in currentTilesOnThreat){
+    //     console.log("item:", item);
+    //     if(item == item.toUpperCase()){
+    //         console.log("capital:", item);
+    //     }
+    // }
 }
