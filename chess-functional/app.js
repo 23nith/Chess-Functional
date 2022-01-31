@@ -10,14 +10,14 @@ class Piece {
             n : {name: "black-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "n", sliding: false},
             b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
             q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
-            k : {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "k", sliding: false},
+            k : {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
             p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
 
             R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
             N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
             B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
             Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
-            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "K", sliding: false},
+            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
             P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16]},
         }
         return pieces[_fenLetter];
@@ -104,8 +104,9 @@ async function undo(){
     // fenArray[fenArray.length-1]
     drawGrid(8,8, submittedFen);
     fenArray.pop(fenArray.length -1);
-    console.log(fenArray);
+    // console.log(fenArray);
     changeTurn();
+    // 
     // let checkBoardDisplay = await document.querySelector(".container").children[63];
 
     // console.log("test");
@@ -128,10 +129,11 @@ async function undo(){
 
     //     }
     // }
+    // 
 }
 
 function getFEN(){
-    console.log("triggered");
+    // console.log("triggered");
     let counter = 0;
     let fenArr = new Array(8).fill(0).map(() => new Array(8).fill(0));
     for(i = 0; i < 8; i++){
@@ -166,7 +168,7 @@ function getFEN(){
         i == 7 ? fenFormattedArr+=row : fenFormattedArr+=row+"/";
         row="";
     }
-    console.log("fenArray: ", fenArray);
+    // console.log("fenArray: ", fenArray);
     return fenFormattedArr;
 }
 
@@ -197,7 +199,7 @@ function reset(){
 let tiles;
 let lifted;
 let piece;
-let landed;
+let landed = "hello";
 let homeTile = []; //If piece was lifted but still remained to its home tile, this value will be null
 let pieceColor;
 let lightPieces;
@@ -205,6 +207,12 @@ let darkPieces;
 let lightTiles;
 let darkTiles;
 let turn = "White";
+let whiteKingCastlingLimit = 1;
+let blackKingCastlingLimit = 1;
+let enPassantPiecesWhite = [];
+let enPassantPiecesBlack = [];
+
+
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -213,6 +221,28 @@ const surroundingTiles = [8, -8, 7, -7, 9, -9, 1, -1];
 const boardEdges = [0, 1, 2, 3, 4 , 5, 6, 7, 15, 23, 31, 39, 47, 55, 63, 56, 57, 58, 59, 60, 61, 62, 8, 16, 24, 32, 40, 48];
 const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
+const pawnEnPassantWhite = [32, 33, 34, 35, 36, 37, 38, 39];
+const pawnEnPassantBlack = [24, 25, 26, 27, 28, 29, 30, 31];
+const kingStartingPositionWhite = 60;
+const kingStartingPositionBlack = 4;
+
+
+
+// ************************************************************ Utility functions ***********************************************************
+
+
+// for castling
+// get rook' id relative to king's initial position
+function getRook(sign, _tile_to_add, _homeTile) {
+    switch (sign) {
+        case "+":
+            return tiles[parseInt(_homeTile) + _tile_to_add].children[0];
+        case "-":
+            return tiles[parseInt(_homeTile) - _tile_to_add].children[0];
+        default:
+            throw new Error("Invalid sign");
+    }
+}
 
 
 const whitePromotionField = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -226,7 +256,10 @@ function changeTurn(){
     document.querySelector(".turn").innerHTML = `${turn}'s turn`;
 }
 
+
 function highlightTiles(_homeTile, movement, sliding, piece){
+
+
 
     // check if piece is near edge
     let exemption = []
@@ -242,7 +275,6 @@ function highlightTiles(_homeTile, movement, sliding, piece){
     let leftEdge = [3, 5, 7, 9];
     let descending = [0,3,5,4];
 
-
     // highlight legal moves
     if(!sliding){
         // Knight, King, Pawn
@@ -255,6 +287,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         if(piece == "P" || piece == "p"){
             let pieceClass = new Piece();
 
+            
             // check piece color
             if(piece == "P"){
                 // initial behavior
@@ -271,7 +304,13 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
-
+                // En Passant 
+                if(enPassantPiecesBlack.includes(captureTile1)){
+                    pieceMovement.push(-7)
+                }
+                if(enPassantPiecesBlack.includes(captureTile2)){
+                    pieceMovement.push(-9)
+                }
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -287,7 +326,54 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     pieceMovement.push(9)
                     pawnCaptureMovement = true;
                 }
+                // En Passant 
+                if(enPassantPiecesWhite.includes(captureTile1)){
+                    pieceMovement.push(7)
+                }
+                if(enPassantPiecesWhite.includes(captureTile2)){
+                    pieceMovement.push(9)
+                }
 
+
+            }
+        }
+
+        // King Castling
+
+        // king test for castle test
+        // 4k3/8/8/8/8/8/8/4K3
+
+        // king and rook for castle test
+        // r3k2r/8/8/8/8/8/8/R3K2R
+
+
+        // King's highlight for castling
+        if (piece === "K" || piece === "k") {
+
+            const pieceClass = new Piece();
+
+            if (piece === "K") {
+                // Use initialMovement
+                if(kingStartingPositionWhite === parseInt(_homeTile)){
+
+                    if (whiteKingCastlingLimit === 1) {
+
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    }
+                }
+
+            }
+            else {
+
+                if(kingStartingPositionBlack === parseInt(_homeTile)){
+
+                    if (blackKingCastlingLimit === 1) {
+
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    }
+                }
             }
         }
 
@@ -339,11 +425,11 @@ function highlightTiles(_homeTile, movement, sliding, piece){
 
             if(validMove < 64){
                 if(tiles[validMove].children[0]){
-                    console.log("child");
+                    // console.log("child");
 
                     if(lightPiece){
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
-                            console.log("enemy piece");
+                            // console.log("enemy piece");
                             // if ememy piece is in front of pawn
                             if(piece == "P" && pieceMovement[j] == -8){
                                 continue;
@@ -353,20 +439,20 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                             // continue;
                         }
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
-                            console.log("friendly piece");
+                            // console.log("friendly piece");
                             continue;
                         }
 
                     }else{
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
-                            console.log("enemy piece");
+                            // console.log("enemy piece");
                             if(piece == "p" && pieceMovement[j] == 8){
                                 continue;
                             }
                             tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
-                            console.log("friendly piece");
+                            // console.log("friendly piece");
                             continue;
                         }
 
@@ -400,17 +486,17 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         directionLine = (direction * n) + parseInt(_homeTile);
 
                         if(tileNumber == 0 && directionLine == 0){
-                            console.log("zero");
+                            // console.log("zero");
                         }
 
                         if(tileNumber == directionLine){
 
                             if(currentTile.children[0]){
-                                console.log("has piece");
+                                // console.log("has piece");
 
                                 if(lightPiece){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
-                                        console.log("enemy piece");
+                                        // console.log("enemy piece");
                                         currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                         // continue;
                                         currentTile.setAttribute("ondragover", "dropAllow(event)");
@@ -419,7 +505,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                         break loop1;
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
-                                        console.log("friendly piece");
+                                        // console.log("friendly piece");
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
@@ -429,7 +515,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                 }else{
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
-                                        console.log("enemy piece");
+                                        // console.log("enemy piece");
                                         currentTile.setAttribute("ondragover", "dropAllow(event)");
                                         exemptedTiles.push(currentTile.id);
                                         currentTile.style.backgroundColor = "#F91F15";
@@ -437,7 +523,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                                         // continue;
                                     }
                                     if(currentTile.children[0].classList.contains("darkPiece")){
-                                        console.log("friendly piece");
+                                        // console.log("friendly piece");
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
@@ -549,7 +635,7 @@ async function dropAllow(e) {
     lifted = e.target.parentElement.getAttribute("data-tilenumber");
     if(lifted){
         homeTile.push(lifted);
-        console.log("homeTile: ", homeTile[0])
+        // console.log("homeTile: ", homeTile[0])
         let pieceClass = new Piece();
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
@@ -576,8 +662,6 @@ async function drop(e) {
     e.preventDefault();
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
-
-
 
     if (piece === "P" || piece === "p") {
         // Whites' pawn
@@ -736,8 +820,63 @@ async function drop(e) {
         }
     }
 
+=======
+    // King's castling
+    if (piece === "K" || piece === "k") {
+
+        // White's castling
+        if (piece === "K") {
+
+            const rightRook = getRook("+", 3, homeTile[0]);
+            const leftRook  = getRook("-", 4, homeTile[0]);
+
+            if (whiteKingCastlingLimit === 1) {
+                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+
+                    // remove castling ability
+                    whiteKingCastlingLimit--;
+                }
+                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+
+                    // remove castling ability
+                    whiteKingCastlingLimit--;
+                }
+            }
+
+            // remove castling ability
+            whiteKingCastlingLimit--;
+
+        }
+        else {
+            // Black's castling
+            const rightRook = getRook("+", 3, homeTile[0]);
+            const leftRook  = getRook("-", 4, homeTile[0]);
+
+            if (blackKingCastlingLimit === 1) {
+                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+
+                    // remove castling ability
+                    blackKingCastlingLimit--;
+                }
+                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
+
+                    // remove castling ability
+                    blackKingCastlingLimit--;
+                }
+            }
+
+            // remove castling ability
+            blackKingCastlingLimit--;
+
+        }
+    }
+    // Capture pieces
     if(e.target.children[1]){
-        console.log("capture");
+        // console.log("capture");
         let container = document.createElement("div");
         if(e.target.children[0].classList.contains("lightPiece")){
             container.appendChild(e.target.children[0]);
@@ -751,7 +890,7 @@ async function drop(e) {
 
 
     if(homeTile){
-        console.log(`${pieceColor} ${piece} moved`);
+        // console.log(`${pieceColor} ${piece} moved`);
 
         if(pieceColor == "White"){
             lightPieces = document.querySelectorAll(".lightPiece");
@@ -775,7 +914,46 @@ async function drop(e) {
 
     }
 
-    landed = e.target;
+    // Detect pawn pieces vulnerable to En Passant
+    landed = e.target.id;
+
+    let container1 = document.createElement("div");
+
+    if(piece == "P"){
+        // record pawn pieces vulnerable to En Passant
+        if(pawnEnPassantWhite.includes(parseInt(landed))){
+            console.log("piece: ", piece);
+            enPassantPiecesWhite.push(parseInt(homeTile[0])-8);
+        }
+        // capture by en passant
+        if(enPassantPiecesBlack.includes(parseInt(landed))){
+            console.log("tile of capture: ", tiles[parseInt(landed)+8]);
+            if(tiles[parseInt(landed)+8].children[0].id[0] == "p"){
+                container1.appendChild(tiles[parseInt(landed)+8].children[0]);
+                document.querySelector(".white-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            }
+
+        }
+
+    }
+    
+    if(piece == "p"){
+        // record pawn pieces vulnerable to En Passant
+        if(pawnEnPassantBlack.includes(parseInt(landed))){
+            console.log("piece: ", piece);
+            enPassantPiecesBlack.push(parseInt(homeTile[0])+8);
+        } 
+        // capture by en passant
+        if(enPassantPiecesWhite.includes(parseInt(landed))){
+            console.log("tile of capture: ", tiles[parseInt(landed)-8]);
+            if(tiles[parseInt(landed)-8].children[0].id[0] == "P"){
+                container1.appendChild(tiles[parseInt(landed)-8].children[0]);
+                document.querySelector(".black-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            }
+        }
+    }
+
+    //
 
     homeTile = [];
     // console.log("tiles: ", tiles);

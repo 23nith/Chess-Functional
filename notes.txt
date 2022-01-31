@@ -5,15 +5,21 @@ high prio
 
 User stories
 
--Implement En passant
--Implement Castling
-
+-Implement Checking
+-Implement Checkmate
+-Implement pawn promotion
 
 
 normal prio
 -fix the drag drop specific to turn order after clicking undo
 -let undo track when pieces were captured
 -fix can't change piece to move once click piece, sometimes you can change a piece but it uses the previous piece move behavior
+-fix castling issues when there are pieces between.
+-fix can castle even the rook moves already
+-fix side pawns give an error when reach promotion field/bottom edge/top edge
+-fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
+-fix can opponent can move when other pawn is on promotion process
+-fix highlighting sometimes not working.
 
 less prio
 -Add timer
@@ -25,7 +31,7 @@ Things already done:
 for function errors
 -fix uncaught promises errors that might affecting the flow of the code on drawgrid
 
-already fixed validmovements exceeding the edge of the board when piece is one tile away from edge
+-already fixed valid movements exceeding the edge of the board when piece is one tile away from edge
 
 for the pawns
 -if p/P piece index is == pawnStartingPosition, highlight +2 also
@@ -44,7 +50,8 @@ for the sliding pieces
 
 -initiate snapshot of fen for undo button
 
-
 -sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
 
+-Implement En passant
 
+-Implement Castling
