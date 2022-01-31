@@ -323,10 +323,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(enPassantPiecesBlack.includes(captureTile2)){
                     pieceMovement.push(-9)
                 }
-                // Remove En Passant 
-                if(pawnEnPassantWhite.includes(parseInt(_homeTile))){
-
-                }
+                
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
