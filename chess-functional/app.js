@@ -207,8 +207,15 @@ let darkPieces;
 let lightTiles;
 let darkTiles;
 let turn = "White";
-let whiteKingCastlingLimit = 1;
-let blackKingCastlingLimit = 1;
+let whiteKingCastlingLimit  = 1;
+let blackKingCastlingLimit  = 1;
+
+let isCanCastleRightWhite   = false;
+let isCanCastleLeftWhite    = false;
+
+let isCanCastleRightBlack   = false;
+let isCanCastleLeftBlack    = false;
+
 let enPassantPiecesWhite = [];
 let enPassantPiecesBlack = [];
 
@@ -223,10 +230,14 @@ const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
 const pawnEnPassantWhite = [32, 33, 34, 35, 36, 37, 38, 39];
 const pawnEnPassantBlack = [24, 25, 26, 27, 28, 29, 30, 31];
+
 const kingStartingPositionWhite = 60;
 const kingStartingPositionBlack = 4;
 
-
+const leftBlackCastlingTile     = 2;
+const rightBlackCastlingTile    = 6;
+const leftWhiteCastlingTile     = 58;
+const rightWhiteCastlingTile    = 62;
 
 // ************************************************************ Utility functions ***********************************************************
 
@@ -350,26 +361,84 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         // King's highlight for castling
         if (piece === "K" || piece === "k") {
 
-            const pieceClass = new Piece();
-
             if (piece === "K") {
+                // White's king`
+                const pieceClass = new Piece();
+
+                const tiles = document.querySelectorAll(".container div");
                 // Use initialMovement
                 if(kingStartingPositionWhite === parseInt(_homeTile)){
 
-                    if (whiteKingCastlingLimit === 1) {
+                    // is left and right tile aviable for highlighting on white
+                    if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        pieceMovement = tempInitialMovement;
+                    }
+                    // is right tile available for highlighting on white
+                    else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(2);
+                        pieceMovement = tempInitialMovement;
+                    }
+                    // is left tile available for highlighting on white
+                    else if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(-2);
+                        pieceMovement = tempInitialMovement;
+                    }
 
+                    // default highlight white king is free bo blockers
+                    else if((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined)) {
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                     }
                 }
-
             }
             else {
+                // Black's king
+                const pieceClass = new Piece();
 
+                const tiles = document.querySelectorAll(".container div");
+                // Use initialMovement
                 if(kingStartingPositionBlack === parseInt(_homeTile)){
 
-                    if (blackKingCastlingLimit === 1) {
+                    // is left and right tile aviable for highlighting for black
+                    if (((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        pieceMovement = tempInitialMovement;
+                    }
 
+                    // is left tile available for highlighting for black
+                    else if ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(2);
+                        pieceMovement = tempInitialMovement;
+                    }
+                    // is left tile available for highlighting on black
+                    else if (((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(-2);
+                        pieceMovement = tempInitialMovement;
+                    }
+
+                    // default highlight black king is free bo blockers
+                    else if((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined)) {
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                     }
@@ -622,7 +691,47 @@ function addDragFeatureLight(someNodeList){
 //************************************************************************************** Drag and drop events **************************************************************************************
 
 async function dropAllow(e) {
+    console.log("hellow")
     e.preventDefault();
+
+    // Can King castles ?
+    if (piece === "K" || piece === "k") {
+        if (piece === "K") {
+            // White king
+
+            // Is tile available for castling
+            if (parseInt(e.target.id) === rightWhiteCastlingTile) {
+                isCanCastleRightWhite = true;
+            } else {
+                isCanCastleRightWhite = false;
+            }
+
+            if (parseInt(e.target.id) === leftWhiteCastlingTile) {
+                isCanCastleLeftWhite = true;
+            } else {
+                isCanCastleLeftWhite = false;
+            }
+
+
+        } else {
+            // Black king
+
+            // Is tile available for castling
+            if (parseInt(e.target.id) === leftBlackCastlingTile) {
+                isCanCastleLeftBlack = true;
+            } else {
+                isCanCastleLeftBlack = false;
+            }
+
+            if (parseInt(e.target.id) === rightBlackCastlingTile) {
+                isCanCastleRightBlack = true;
+            } else {
+                isCanCastleRightBlack = false;
+            }
+        }
+    }
+
+
     tiles = document.querySelectorAll(".container div");
     // console.log(tiles);
     lightTiles = document.querySelectorAll(".lightTiles");
@@ -820,6 +929,19 @@ async function drop(e) {
         }
     }
 
+    // Remove castling features if rook is move
+
+    if (piece === "R" || piece === "r") {
+
+        // White's rook
+        if (piece === "R") whiteKingCastlingLimit--;
+        // Black's rook
+        else if (piece === "r") blackKingCastlingLimit--;
+    }
+
+
+
+
     // King's castling
     if (piece === "K" || piece === "k") {
 
@@ -830,13 +952,14 @@ async function drop(e) {
             const leftRook  = getRook("-", 4, homeTile[0]);
 
             if (whiteKingCastlingLimit === 1) {
-                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+
+                if (isCanCastleRightWhite) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
 
                     // remove castling ability
                     whiteKingCastlingLimit--;
                 }
-                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                else if (isCanCastleLeftWhite) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
 
                     // remove castling ability
@@ -854,13 +977,13 @@ async function drop(e) {
             const leftRook  = getRook("-", 4, homeTile[0]);
 
             if (blackKingCastlingLimit === 1) {
-                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                if (isCanCastleRightBlack) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
 
                     // remove castling ability
                     blackKingCastlingLimit--;
                 }
-                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                else if (isCanCastleLeftBlack) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
 
                     // remove castling ability
