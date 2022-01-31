@@ -380,22 +380,20 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         tempInitialMovement.pop();
                         tempInitialMovement.pop();
                         tempInitialMovement.push(2);
-                        console.log(tempInitialMovement);
                         pieceMovement = tempInitialMovement;
                     }
                     // is right tile available for highlighting on white
-                    else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
+                    else if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined))) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
                         tempInitialMovement.pop();
                         tempInitialMovement.push(-2);
                         pieceMovement = tempInitialMovement;
-
                     }
 
                     // default highlight white king is free bo blockers
-                    else if (whiteKingCastlingLimit === 1) {
-
+                    else if((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined)) {
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                     }
