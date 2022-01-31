@@ -374,7 +374,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         tempInitialMovement.pop();
                         pieceMovement = tempInitialMovement;
                     }
-                    // is left tile available for highlighting on white
+                    // is right tile available for highlighting on white
                     else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
@@ -382,7 +382,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         tempInitialMovement.push(2);
                         pieceMovement = tempInitialMovement;
                     }
-                    // is right tile available for highlighting on white
+                    // is left tile available for highlighting on white
                     else if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
                         && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined))) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
@@ -397,9 +397,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                     }
-
                 }
-
             }
             else {
                 // Black's king
@@ -426,24 +424,21 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                         tempInitialMovement.push(2);
                         pieceMovement = tempInitialMovement;
                     }
-                    // is right tile available for highlighting for black
-                    else if ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined)) {
+                    // is left tile available for highlighting on black
+                    else if (((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined))) {
                         let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
                         tempInitialMovement.pop();
                         tempInitialMovement.pop();
                         tempInitialMovement.push(-2);
-                        console.log(tempInitialMovement);
                         pieceMovement = tempInitialMovement;
-
                     }
 
                     // default highlight black king is free bo blockers
-                    else if (blackKingCastlingLimit === 1) {
-
+                    else if((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined)) {
                         pieceMovement = pieceClass.generatePiece(piece).initialMovement;
 
                     }
-
                 }
             }
         }
