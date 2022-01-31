@@ -1056,9 +1056,10 @@ async function drop(e) {
                 container1.appendChild(tiles[parseInt(landed)+8].children[0]);
                 document.querySelector(".white-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
             }
-
+            let indexOfTileCapture = enPassantPiecesBlack.indexOf(parseInt(landed));
+            enPassantPiecesBlack.splice(indexOfTileCapture, 1);
         }
-        
+
     }
 
     if(piece == "p"){
@@ -1074,7 +1075,8 @@ async function drop(e) {
                 container1.appendChild(tiles[parseInt(landed)-8].children[0]);
                 document.querySelector(".black-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
             }
-
+            let indexOfTileCapture = enPassantPiecesWhite.indexOf(parseInt(landed));
+            enPassantPiecesWhite.splice(indexOfTileCapture, 1);
         }
     }
 
