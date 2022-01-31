@@ -30,13 +30,13 @@ User story
 -History
 
 Castling Bugs
-
 -fix castling issues when there are pieces between.
 -fix can castle even the rook moves already
 
 For function errors
 -fix uncaught promises errors that might affecting the flow of the code on drawgrid
 
+For move rule
 -already fixed valid movements exceeding the edge of the board when piece is one tile away from edge
 
 For the pawns
