@@ -323,6 +323,10 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(enPassantPiecesBlack.includes(captureTile2)){
                     pieceMovement.push(-9)
                 }
+                // Remove En Passant 
+                if(pawnEnPassantWhite.includes(parseInt(_homeTile))){
+
+                }
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -1059,7 +1063,11 @@ async function drop(e) {
             let indexOfTileCapture = enPassantPiecesBlack.indexOf(parseInt(landed));
             enPassantPiecesBlack.splice(indexOfTileCapture, 1);
         }
-
+        // remove en passant
+        if(pawnEnPassantBlack.includes(parseInt(landed))){
+            let indexOfTileCapture = enPassantPiecesWhite.indexOf(parseInt(landed)+16);
+            enPassantPiecesWhite.splice(indexOfTileCapture, 1);
+        }
     }
 
     if(piece == "p"){
@@ -1077,6 +1085,11 @@ async function drop(e) {
             }
             let indexOfTileCapture = enPassantPiecesWhite.indexOf(parseInt(landed));
             enPassantPiecesWhite.splice(indexOfTileCapture, 1);
+        }
+        // remove en passant
+        if(pawnEnPassantWhite.includes(parseInt(landed))){
+            let indexOfTileCapture = enPassantPiecesBlack.indexOf(parseInt(landed)-16);
+            enPassantPiecesBlack.splice(indexOfTileCapture, 1);
         }
     }
 
