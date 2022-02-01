@@ -1,0 +1,28 @@
+{
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "lint": "./node_modules/.bin/eslint ./src --ext .js",
+        "start": "webpack --config webpack.dev.js",
+        "test": "webpack serve --open --config webpack.dev.js",
+        "build": "webpack --config webpack.prod.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "eslint": "^8.6.0",
+        "css-loader": "^6.5.1",
+        "css-minimizer-webpack-plugin": "^3.2.0",
+        "html-webpack-plugin": "^5.5.0",
+        "mini-css-extract-plugin": "^2.4.5",
+        "node-sass": "^6.0.1",
+        "sass-loader": "^12.3.0",
+        "style-loader": "^3.3.1",
+        "webpack": "^5.64.3",
+        "webpack-cli": "^4.9.1",
+        "webpack-dev-server": "^4.6.0",
+        "webpack-merge": "^5.8.0"
+    }
+}
