@@ -649,6 +649,9 @@ function removeDrop(e){
 function returnDrop(){
     for(i = 0; i < 64; i++){
         tiles[i].setAttribute("ondragover", "dropAllow(event)");
+        if(tiles[i].children[0]){
+            tiles[i].children[0].setAttribute("ondragover", "dropAllow(event)");
+        }
     }
 }
 
