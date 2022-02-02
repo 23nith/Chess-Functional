@@ -755,13 +755,24 @@ async function dropAllow(e) {
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
-
+        
     }
+    // console.log("lifted: ", lifted);
+    // console.log("homeTile: ", homeTile);
 
 }
 
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
+
+    if(homeTile[0] != undefined){
+        console.log("retract touchmove")
+        returnDrop();
+        returnTileColors();
+        homeTile[0] = e.target.parentElement.id;
+    }
+
+    // console.log("e.target.parentElement.id: ", e.target.parentElement.id);    
 
     piece = e.target.id[0]
     if(e.target.classList.contains("lightPiece")){
@@ -772,6 +783,9 @@ function drag(e) {
 
     // console.log("drag", e.target); //information on the piece moved
 }
+
+let dropValue = undefined;
+
 
 async function drop(e) {
     e.preventDefault();
@@ -1101,8 +1115,11 @@ async function drop(e) {
     // console.log("landed: ", landed);
     // console.log("homeTile: ", homeTile);
     // console.log("pieceColor: ", pieceColor);
+    // console.log("lifted at end: ", lifted);
     // getFEN();
     fenArray.push(getFEN());
     displayFEN()
     // console.log("drop", e.target); //Information on the tile where the piece landed
+    dropValue = e.target;
+    // console.log("dropValue: ", dropValue);
 }
