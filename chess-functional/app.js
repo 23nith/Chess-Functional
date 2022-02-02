@@ -1182,7 +1182,7 @@ async function drop(e) {
         }
     // console.log("currentTilesOnThreat: ", currentTilesOnThreat);
     let checked = false;
-    
+
     // if piece is lightpiece
     if(piece == piece.toUpperCase()){
         // lightpiece
@@ -1247,7 +1247,7 @@ async function drop(e) {
         if(kingNextMovements.every(allMovesCheck)){
             console.log("checkmate");
             let checkInfo = document.querySelector(".checkInfo")
-            checkInfo.innerHTML = `Black king is checkmate`;
+            // checkInfo.innerHTML = `Black king is checkmate`;
             checked = true;
         }
     }else{
