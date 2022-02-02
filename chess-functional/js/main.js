@@ -1,28 +1,23 @@
-class Piece {
-    constructor(piece){
-        this.piece = piece
-    }
-    // [north, south, east, west, north-east, north-west, south-east, south-west]
+import {BlackPawn, BlackRook, BlackKnight, BlackQueen, BlackKing, BlackBishop} from './Piece.js';
+import {WhitePawn, WhiteRook, WhiteKnight, WhiteQueen, WhiteKing, WhiteBishop} from './Piece.js';
 
-    generatePiece(_fenLetter){
-        let pieces = {
-            r : {name: "black-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "r", sliding: true},
-            n : {name: "black-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "n", sliding: false},
-            b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
-            q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
-            k : {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
-            p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
 
-            R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
-            N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
-            B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
-            Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
-            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
-            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16]},
-        }
-        return pieces[_fenLetter];
-    }
+
+let pieces = {
+    r : BlackRook,
+    n : BlackKnight,
+    b : BlackBishop,
+    q : BlackQueen,
+    k : BlackKing,
+    p : BlackPawn,
+    R : WhiteRook,
+    N : WhiteKnight,
+    B : WhiteBishop,
+    Q : WhiteQueen,
+    K : WhiteKing,
+    P : WhitePawn
 }
+        
 
 
 async function drawGrid(col, row, _fen){
@@ -33,7 +28,7 @@ async function drawGrid(col, row, _fen){
 
         for(col = 0; col < 8; col++){
             for(row = 0; row < 8; row++){
-                isLightSquare = (col + row) % 2 == 0;
+                let isLightSquare = (col + row) % 2 == 0;
                 let gridBox = document.createElement("div");
                 gridBox.style.order = counter;
                 // gridBox.innerHTML = counter;
@@ -57,17 +52,18 @@ async function drawGrid(col, row, _fen){
     // PLACE PIECES ON THE BOARD
 
         let grid = document.querySelectorAll(".container div");
-        let piece = new Piece();
         let gridCounter = 0;
 
-        for(i = 0; i < fenArr.length; i++){
+        for(let i = 0; i < fenArr.length; i++){
             if(parseInt(fenArr[i])){
                 gridCounter += (parseInt(fenArr[i]) - 1);
             }else{
                 let character = fenArr[i];
-                let capital = character == character.toUpperCase();
-
-                grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}"></i>`;
+                
+                // let capital = character == character.toUpperCase();
+                // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${pieces[character].icon()}" id="${pieces[character].code()}-${i}"></i>`;
+                
+                grid[gridCounter].innerHTML = pieces[character].element(i);
                 if (character == character.toUpperCase()){
                     grid[gridCounter].children[0].classList.add("lightPiece")
                 }else{
@@ -87,8 +83,8 @@ async function formatFen(_FEN){
         return item.split("");
     })
     let fenArray2 = []
-    for(item of fenArrayModified){
-        for(element of item){
+    for(const item of fenArrayModified){
+        for(const element of item){
             fenArray2.push(element);
         }
     }
@@ -362,7 +358,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         if (piece === "K" || piece === "k") {
 
             if (piece === "K") {
-                // White's king`
+                // White's king
                 const pieceClass = new Piece();
 
                 const tiles = document.querySelectorAll(".container div");
