@@ -311,7 +311,8 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(tiles[captureTile1].children[0]){
                     pieceMovement.push(-7)
                     pawnCaptureMovement = true;
-                }else if(tiles[captureTile2].children[0]){
+                }
+                if(tiles[captureTile2].children[0]){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
@@ -322,6 +323,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(enPassantPiecesBlack.includes(captureTile2)){
                     pieceMovement.push(-9)
                 }
+                
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -333,7 +335,8 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(tiles[captureTile1].children[0]){
                     pieceMovement.push(7)
                     pawnCaptureMovement = true;
-                }else if(tiles[captureTile2].children[0]){
+                }
+                if(tiles[captureTile2].children[0]){
                     pieceMovement.push(9)
                     pawnCaptureMovement = true;
                 }
@@ -362,7 +365,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         if (piece === "K" || piece === "k") {
 
             if (piece === "K") {
-                // White's king`
+                // White's king
                 const pieceClass = new Piece();
 
                 const tiles = document.querySelectorAll(".container div");
@@ -646,6 +649,9 @@ function removeDrop(e){
 function returnDrop(){
     for(i = 0; i < 64; i++){
         tiles[i].setAttribute("ondragover", "dropAllow(event)");
+        if(tiles[i].children[0]){
+            tiles[i].children[0].setAttribute("ondragover", "dropAllow(event)");
+        }
     }
 }
 
@@ -1054,9 +1060,14 @@ async function drop(e) {
                 container1.appendChild(tiles[parseInt(landed)+8].children[0]);
                 document.querySelector(".white-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
             }
-
+            let indexOfTileCapture = enPassantPiecesBlack.indexOf(parseInt(landed));
+            enPassantPiecesBlack.splice(indexOfTileCapture, 1);
         }
-
+        // remove en passant
+        if(pawnEnPassantBlack.includes(parseInt(landed))){
+            let indexOfTileCapture = enPassantPiecesWhite.indexOf(parseInt(landed)+16);
+            enPassantPiecesWhite.splice(indexOfTileCapture, 1);
+        }
     }
 
     if(piece == "p"){
@@ -1072,6 +1083,13 @@ async function drop(e) {
                 container1.appendChild(tiles[parseInt(landed)-8].children[0]);
                 document.querySelector(".black-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
             }
+            let indexOfTileCapture = enPassantPiecesWhite.indexOf(parseInt(landed));
+            enPassantPiecesWhite.splice(indexOfTileCapture, 1);
+        }
+        // remove en passant
+        if(pawnEnPassantWhite.includes(parseInt(landed))){
+            let indexOfTileCapture = enPassantPiecesBlack.indexOf(parseInt(landed)-16);
+            enPassantPiecesBlack.splice(indexOfTileCapture, 1);
         }
     }
 
