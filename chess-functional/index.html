@@ -18,10 +18,8 @@
     <div class="info">
         <div class="turn">White's turn</div>
     </div>
-    <div class="checkInfo">
-        
-    </div>
-    
+    <div class="checkInfo"></div>
+
     <div>
         <p>Sample FEN: 4k2r/6r1/8/8/8/8/3R4/R3K3</p>
         <input placeholder="Enter FEN here"
@@ -32,7 +30,6 @@
             onclick="submitFEN()">Submit</button>
     </div>
 
-
     <div class="black-captured"></div>
 
     <div class="promotion-choices-white">
@@ -40,7 +37,14 @@
         <button class="promotion-white-rook">Rook</button>
         <button class="promotion-white-bishop">Bishop</button>
         <button class="promotion-white-knight">Knight</button>
+        <div class="promotion-choices-white">
+            <button class="promotion-white-queen">Queen</button>
+            <button class="promotion-white-rook">Rook</button>
+            <button class="promotion-white-bishop">Bishop</button>
+            <button class="promotion-white-knight">Knight</button>
+        </div>
     </div>
+
     <div class="container"></div>
 
     <div class="promotion-choices-black">
@@ -48,23 +52,12 @@
         <button class="promotion-black-rook">Rook</button>
         <button class="promotion-black-bishop">Bishop</button>
         <button class="promotion-black-knight">Knight</button>
-    <div class="black-captured">
-        <div class="black-captured"></div>
-    </div>
-    <div class="promotion-choices-white">
-        <button class="promotion-white-queen">Queen</button>
-        <button class="promotion-white-rook">Rook</button>
-        <button class="promotion-white-bishop">Bishop</button>
-        <button class="promotion-white-knight">Knight</button>
-
-    </div>
-    <div class="container"></div>
-
-    <div class="promotion-choices-black">
-        <button class="promotion-black-queen">Queen</button>
-        <button class="promotion-black-rook">Rook</button>
-        <button class="promotion-black-bishop">Bishop</button>
-        <button class="promotion-black-knight">Knight</button>
+        <div class="promotion-choices-black">
+            <button class="promotion-black-queen">Queen</button>
+            <button class="promotion-black-rook">Rook</button>
+            <button class="promotion-black-bishop">Bishop</button>
+            <button class="promotion-black-knight">Knight</button>
+        </div>
     </div>
 
     <div class="white-captured"></div>
@@ -81,9 +74,9 @@
 
     <div class="fen-info">
         <p class="fen-display">
-
         </p>
     </div>
+
 
     <script src="app.js"></script>
 </body>
