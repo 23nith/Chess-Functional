@@ -104,7 +104,7 @@ async function undo(){
     document.querySelector(".container").innerHTML = "";
     let submittedFen = fenArray[fenArray.length-2];
     // fenArray[fenArray.length-1]
-    drawGrid(8,8, submittedFen);
+    let drawGridFinished = await drawGrid(8,8, submittedFen);
     fenArray.pop(fenArray.length -1);
     whiteCapturedHistory.pop(whiteCapturedHistory.length -1);
     blackCapturedHistory.pop(whiteCapturedHistory.length -1);
@@ -129,29 +129,29 @@ async function undo(){
         }
     });
     //
-    // let checkBoardDisplay = await document.querySelector(".container").children[63];
+    let checkBoardDisplay = await document.querySelectorAll(".container div");
 
-    // console.log("test");
+    console.log("test");
 
-    // if(await checkBoardDisplay){
-    //     if(turn == "White"){
-    //         lightPieces = document.querySelectorAll(".lightPiece");
-    //         removeDragFeatureLight(lightPieces);
+    if(checkBoardDisplay){
+        if(turn == "White"){
+            lightPieces = document.querySelectorAll(".lightPiece");
+            darkPieces = document.querySelectorAll(".darkPiece");
+            removeDragFeatureDark(darkPieces)
 
-    //         darkPieces = document.querySelectorAll(".darkPiece");
-    //         addDragFeatureDark(darkPieces)
+            addDragFeatureLight(lightPieces)
 
 
-    //     }else{
-    //         darkPieces = document.querySelectorAll(".darkPiece");
-    //         removeDragFeatureDark(darkPieces)
+        }else{
+            darkPieces = document.querySelectorAll(".darkPiece");
+            lightPieces = document.querySelectorAll(".lightPiece");
+            removeDragFeatureLight(lightPieces);
 
-    //         lightPieces = document.querySelectorAll(".lightPiece");
-    //         addDragFeatureLight(lightPieces)
+            addDragFeatureDark(darkPieces)
 
-    //     }
-    // }
-    //
+        }
+    }
+    
 }
 
 function getFEN(){
