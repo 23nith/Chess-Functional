@@ -1,20 +1,21 @@
-Need to do:
-
+*******************************
+        Need to do:
+*******************************
 
 high prio
-User stories
--Implement Checkmate
+ User stories
+ -Implement Checkmate
 
 
 normal prio
+ -fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
 
-
--fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
 less prio
--Add timer
+ -Add timer
 
-
-Things already done:
+************************************************************************************************************************
+                                                       Things already done:
+************************************************************************************************************************
 
 User story
 -Implement En passant
