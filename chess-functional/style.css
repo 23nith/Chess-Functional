@@ -74,3 +74,8 @@ p {
 .promotion-choices-black{
     display: none;
 }
+
+.checkInfo {
+    font-size: 25px;
+    color: white;
+}
