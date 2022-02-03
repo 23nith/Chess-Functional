@@ -106,6 +106,7 @@ async function undo(){
     fenArray.pop(fenArray.length -1);
     console.log(fenArray);
     changeTurn();
+
     // let checkBoardDisplay = await document.querySelector(".container").children[63];
 
     // console.log("test");
@@ -128,6 +129,7 @@ async function undo(){
 
     //     }
     // }
+
 }
 
 function getFEN(){
@@ -205,6 +207,20 @@ let darkPieces;
 let lightTiles;
 let darkTiles;
 let turn = "White";
+
+
+let whiteKingCastlingLimit  = 1;
+let blackKingCastlingLimit  = 1;
+
+let isCanCastleRightWhite   = false;
+let isCanCastleLeftWhite    = false;
+
+let isCanCastleRightBlack   = false;
+let isCanCastleLeftBlack    = false;
+
+let enPassantPiecesWhite = [];
+let enPassantPiecesBlack = [];
+
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -213,6 +229,23 @@ const surroundingTiles = [8, -8, 7, -7, 9, -9, 1, -1];
 const boardEdges = [0, 1, 2, 3, 4 , 5, 6, 7, 15, 23, 31, 39, 47, 55, 63, 56, 57, 58, 59, 60, 61, 62, 8, 16, 24, 32, 40, 48];
 const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
+
+
+const whitePromotionField = [0, 1, 2, 3, 4, 5, 6, 7];
+const blackPromotionField = [56, 57, 58, 59, 60, 61, 62, 63];
+
+const pawnEnPassantWhite = [32, 33, 34, 35, 36, 37, 38, 39];
+const pawnEnPassantBlack = [24, 25, 26, 27, 28, 29, 30, 31];
+
+const kingStartingPositionWhite = 60;
+const kingStartingPositionBlack = 4;
+
+const leftBlackCastlingTile     = 2;
+const rightBlackCastlingTile    = 6;
+const leftWhiteCastlingTile     = 58;
+const rightWhiteCastlingTile    = 62;
+
+
 
 
 const whitePromotionField = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -255,6 +288,8 @@ function highlightTiles(_homeTile, movement, sliding, piece){
         if(piece == "P" || piece == "p"){
             let pieceClass = new Piece();
 
+
+
             // check piece color
             if(piece == "P"){
                 // initial behavior
@@ -267,11 +302,20 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(tiles[captureTile1].children[0]){
                     pieceMovement.push(-7)
                     pawnCaptureMovement = true;
-                }else if(tiles[captureTile2].children[0]){
+                }
+                if(tiles[captureTile2].children[0]){
                     pieceMovement.push(-9)
                     pawnCaptureMovement = true;
                 }
 
+                // En Passant
+                if(enPassantPiecesBlack.includes(captureTile1)){
+                    pieceMovement.push(-7)
+                }
+                if(enPassantPiecesBlack.includes(captureTile2)){
+                    pieceMovement.push(-9)
+                }
+              
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -283,11 +327,118 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(tiles[captureTile1].children[0]){
                     pieceMovement.push(7)
                     pawnCaptureMovement = true;
-                }else if(tiles[captureTile2].children[0]){
+                }
+                if(tiles[captureTile2].children[0]){
                     pieceMovement.push(9)
                     pawnCaptureMovement = true;
                 }
 
+                // En Passant
+                if(enPassantPiecesWhite.includes(captureTile1)){
+                    pieceMovement.push(7)
+                }
+                if(enPassantPiecesWhite.includes(captureTile2)){
+                    pieceMovement.push(9)
+                }
+
+
+            }
+        }
+
+        // King Castling
+
+        // king test for castle test
+        // 4k3/8/8/8/8/8/8/4K3
+
+        // king and rook for castle test
+        // r3k2r/8/8/8/8/8/8/R3K2R
+
+
+        // King's highlight for castling
+        if (piece === "K" || piece === "k") {
+
+            if (piece === "K") {
+                // White's king
+                const pieceClass = new Piece();
+
+                const tiles = document.querySelectorAll(".container div");
+                // Use initialMovement
+                if(kingStartingPositionWhite === parseInt(_homeTile)){
+
+                    // is left and right tile aviable for highlighting on white
+                    if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        pieceMovement = tempInitialMovement;
+                    }
+                    // is right tile available for highlighting on white
+                    else if ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(2);
+                        pieceMovement = tempInitialMovement;
+                    }
+                    // is left tile available for highlighting on white
+                    else if (((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(-2);
+                        pieceMovement = tempInitialMovement;
+                    }
+
+                    // default highlight white king is free bo blockers
+                    else if((whiteKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined)) {
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    }
+                }
+            }
+            else {
+                // Black's king
+                const pieceClass = new Piece();
+
+                const tiles = document.querySelectorAll(".container div");
+                // Use initialMovement
+                if(kingStartingPositionBlack === parseInt(_homeTile)){
+
+                    // is left and right tile aviable for highlighting for black
+                    if (((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        pieceMovement = tempInitialMovement;
+                    }
+
+                    // is left tile available for highlighting for black
+                    else if ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 1].children[0] !== undefined)) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(2);
+                        pieceMovement = tempInitialMovement;
+                    }
+                    // is left tile available for highlighting on black
+                    else if (((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) + 1].children[0] !== undefined))
+                        && ((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined))) {
+                        let tempInitialMovement = pieceClass.generatePiece(piece).initialMovement;
+                        tempInitialMovement.pop();
+                        tempInitialMovement.pop();
+                        tempInitialMovement.push(-2);
+                        pieceMovement = tempInitialMovement;
+                    }
+
+                    // default highlight black king is free bo blockers
+                    else if((blackKingCastlingLimit === 1) && (tiles[parseInt(_homeTile) - 3].children[0] === undefined)) {
+                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    }
+                }
             }
         }
 
@@ -298,12 +449,24 @@ function highlightTiles(_homeTile, movement, sliding, piece){
             }
             if(boardRightEdge.includes(parseInt(_homeTile))){
                 exemption.push(...rightEdge);
+                if(piece === "P" || piece === "p"){
+                    let capture1 = (pieceMovement.indexOf(9) != -1) ? pieceMovement.indexOf(9): false;
+                    let capture2 = (pieceMovement.indexOf(-7) != -1) ? pieceMovement.indexOf(-7): false;
+                    let removeCapture = capture1 || capture2;
+                    exemption.push(removeCapture);                    
+                }
             }
             if(boardBottomEdge.includes(parseInt(_homeTile))){
                 exemption.push(...bottomEdge);
             }
             if(boardLeftEdge.includes(parseInt(_homeTile))){
                 exemption.push(...leftEdge);
+                if(piece === "P" || piece === "p"){
+                    let capture1 = (pieceMovement.indexOf(-9) != -1) ? pieceMovement.indexOf(-9): false;
+                    let capture2 = (pieceMovement.indexOf(7) != -1) ? pieceMovement.indexOf(7): false;
+                    let removeCapture = capture1 || capture2;
+                    exemption.push(removeCapture);                    
+                }
             }
         }
 
@@ -491,6 +654,9 @@ function removeDrop(e){
 function returnDrop(){
     for(i = 0; i < 64; i++){
         tiles[i].setAttribute("ondragover", "dropAllow(event)");
+        if(tiles[i].children[0]){
+            tiles[i].children[0].setAttribute("ondragover", "dropAllow(event)");
+        }
     }
 }
 
@@ -536,7 +702,47 @@ function addDragFeatureLight(someNodeList){
 //************************************************************************************** Drag and drop events **************************************************************************************
 
 async function dropAllow(e) {
+    console.log("hellow")
     e.preventDefault();
+
+    // Can King castles ?
+    if (piece === "K" || piece === "k") {
+        if (piece === "K") {
+            // White king
+
+            // Is tile available for castling
+            if (parseInt(e.target.id) === rightWhiteCastlingTile) {
+                isCanCastleRightWhite = true;
+            } else {
+                isCanCastleRightWhite = false;
+            }
+
+            if (parseInt(e.target.id) === leftWhiteCastlingTile) {
+                isCanCastleLeftWhite = true;
+            } else {
+                isCanCastleLeftWhite = false;
+            }
+
+
+        } else {
+            // Black king
+
+            // Is tile available for castling
+            if (parseInt(e.target.id) === leftBlackCastlingTile) {
+                isCanCastleLeftBlack = true;
+            } else {
+                isCanCastleLeftBlack = false;
+            }
+
+            if (parseInt(e.target.id) === rightBlackCastlingTile) {
+                isCanCastleRightBlack = true;
+            } else {
+                isCanCastleRightBlack = false;
+            }
+        }
+    }
+
+
     tiles = document.querySelectorAll(".container div");
     // console.log(tiles);
     lightTiles = document.querySelectorAll(".lightTiles");
@@ -577,8 +783,6 @@ async function drop(e) {
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
 
-
-
     if (piece === "P" || piece === "p") {
         // Whites' pawn
         if (piece === "P") {
@@ -595,6 +799,185 @@ async function drop(e) {
                     B: "B",
                     N: "N",
                 }
+
+                const promotionUiChoices = document.querySelector(".promotion-choices-white")
+
+                // Show ui for promotion
+                promotionUiChoices.style.display = "block";
+
+                // Fetch buttons on white promotion
+                const queenPromotionBtn  = document.querySelector(".promotion-white-queen");
+                const rookPromotionBtn   = document.querySelector(".promotion-white-rook");
+                const bishopPromotionBtn = document.querySelector(".promotion-white-bishop");
+                const knightPromotionBtn = document.querySelector(".promotion-white-knight");
+
+                // Promote to white queen
+                queenPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.Q).icon;
+                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
+                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted               = true;
+                    piece                               = pawnPiece.generatePiece(promotionChoices.Q).code;
+                    promotionUiChoices.style.display    = "none"
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
+                })
+
+                // Promote to white rook
+                rookPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.R).icon;
+                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
+                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted               = true;
+                    piece                               = pawnPiece.generatePiece(promotionChoices.R).code;
+                    promotionUiChoices.style.display    = "none"
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
+                })
+
+                // Promote to white bishop
+                bishopPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.B).icon;
+                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
+                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted               = true;
+                    piece                               = pawnPiece.generatePiece(promotionChoices.B).code;
+                    promotionUiChoices.style.display    = "none"
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
+                })
+
+                // Promote to white knight
+                knightPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.N).icon;
+                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
+                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted               = true;
+                    piece                               = pawnPiece.generatePiece(promotionChoices.N).code;
+                    promotionUiChoices.style.display    = "none"
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
+                })
+            }
+        }
+        else {
+            // Blacks' pawn
+            //
+            const pawnPiece = new Piece();
+            let targetPawn = e.target.children[0];
+
+            // Black promotion check
+            if (blackPromotionField.includes(parseInt(e.target.id))) {
+
+                const promotionChoices = {
+                    q: "q",
+                    r: "r",
+                    b: "b",
+                    n: "n",
+                }
+
+                const promotionUiChoices = document.querySelector(".promotion-choices-black")
+
+                // Show ui for black promotion
+                promotionUiChoices.style.display = "block";
+
+                // Fetch buttons for  black promotion
+                const queenPromotionBtn  = document.querySelector(".promotion-black-queen");
+                const rookPromotionBtn   = document.querySelector(".promotion-black-rook");
+                const bishopPromotionBtn = document.querySelector(".promotion-black-bishop");
+                const knightPromotionBtn = document.querySelector(".promotion-black-knight");
+
+
+                // Promote to black queen
+                queenPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.q).icon;
+                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
+                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.q).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted               = true;
+                    piece                               = pawnPiece.generatePiece(promotionChoices.q).code;
+                    promotionUiChoices.style.display    = "none"
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
+                })
+
+                // Promote to black rook
+                rookPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.r).icon;
+                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
+                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.r).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted               = true;
+                    promotionUiChoices.style.display    = "none"
+                    piece                               = pawnPiece.generatePiece(promotionChoices.r).code;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
+                })
+
+                // Promote to black bishop
+                bishopPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.b).icon;
+                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
+                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.b).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted               = true;
+                    piece                               = pawnPiece.generatePiece(promotionChoices.b).code;
+                    promotionUiChoices.style.display    = "none"
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
+                })
+
+                // Promote to black knight
+                knightPromotionBtn.addEventListener("click", () => {
+                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.n).icon;
+                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
+                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.n).code}-${targetPawn.parentElement.id}`
+                    targetPawn.isPromoted               = true;
+                    promotionUiChoices.style.display    = "none"
+                    piece                               = pawnPiece.generatePiece(promotionChoices.n).code;
+                    targetPawn.setAttribute("draggable", "true");
+                    targetPawn.setAttribute("ondragstart", "drag(event)");
+                })
+            }
+
+        }
+    }
+
+    // Remove castling features if rook is move
+
+    if (piece === "R" || piece === "r") {
+
+        // White's rook
+        if (piece === "R") whiteKingCastlingLimit--;
+        // Black's rook
+        else if (piece === "r") blackKingCastlingLimit--;
+    }
+
+
+
+
+
+    if (piece === "P" || piece === "p") {
+        // Whites' pawn
+        if (piece === "P") {
+
+            const pawnPiece = new Piece();
+            let targetPawn = e.target.children[0];
+
+
+            // White promotion check
+            if (whitePromotionField.includes(parseInt(e.target.id))) {
+
+            if (whiteKingCastlingLimit === 1) {
+
+                if (isCanCastleRightWhite) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook)
+
+                const promotionChoices = {
+                    Q: "Q",
+                    R: "R",
+                    B: "B",
+                    N: "N",
+                }
+                else if (isCanCastleLeftWhite) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
 
                 const promotionUiChoices = document.querySelector(".promotion-choices-white")
 
@@ -663,7 +1046,19 @@ async function drop(e) {
                     b: "b",
                     n: "n",
                 }
+            // Black's castling
+            const rightRook = getRook("+", 3, homeTile[0]);
+            const leftRook  = getRook("-", 4, homeTile[0]);
 
+            if (blackKingCastlingLimit === 1) {
+                if (isCanCastleRightBlack) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
+
+                    // remove castling ability
+                    blackKingCastlingLimit--;
+                }
+                else if (isCanCastleLeftBlack) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
                 const promotionUiChoices = document.querySelector(".promotion-choices-black")
 
                 // Show ui for black promotion
@@ -760,6 +1155,58 @@ async function drop(e) {
     }
 
     landed = e.target;
+    // Detect pawn pieces vulnerable to En Passant
+    landed = e.target.id;
+
+    let container1 = document.createElement("div");
+
+    if(piece == "P"){
+        // record pawn pieces vulnerable to En Passant
+        if(pawnEnPassantWhite.includes(parseInt(landed))){
+            console.log("piece: ", piece);
+            enPassantPiecesWhite.push(parseInt(homeTile[0])-8);
+        }
+        // capture by en passant
+        if(enPassantPiecesBlack.includes(parseInt(landed))){
+            console.log("tile of capture: ", tiles[parseInt(landed)+8]);
+            if(tiles[parseInt(landed)+8].children[0].id[0] == "p"){
+                container1.appendChild(tiles[parseInt(landed)+8].children[0]);
+                document.querySelector(".white-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            }
+            let indexOfTileCapture = enPassantPiecesBlack.indexOf(parseInt(landed));
+            enPassantPiecesBlack.splice(indexOfTileCapture, 1);
+        }
+        // remove en passant
+        if(pawnEnPassantBlack.includes(parseInt(landed))){
+            let indexOfTileCapture = enPassantPiecesWhite.indexOf(parseInt(landed)+16);
+            enPassantPiecesWhite.splice(indexOfTileCapture, 1);
+        }
+    }
+
+    if(piece == "p"){
+        // record pawn pieces vulnerable to En Passant
+        if(pawnEnPassantBlack.includes(parseInt(landed))){
+            console.log("piece: ", piece);
+            enPassantPiecesBlack.push(parseInt(homeTile[0])+8);
+        }
+        // capture by en passant
+        if(enPassantPiecesWhite.includes(parseInt(landed))){
+            console.log("tile of capture: ", tiles[parseInt(landed)-8]);
+            if(tiles[parseInt(landed)-8].children[0].id[0] == "P"){
+                container1.appendChild(tiles[parseInt(landed)-8].children[0]);
+                document.querySelector(".black-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
+            }
+            let indexOfTileCapture = enPassantPiecesWhite.indexOf(parseInt(landed));
+            enPassantPiecesWhite.splice(indexOfTileCapture, 1);
+        }
+        // remove en passant
+        if(pawnEnPassantWhite.includes(parseInt(landed))){
+            let indexOfTileCapture = enPassantPiecesBlack.indexOf(parseInt(landed)-16);
+            enPassantPiecesBlack.splice(indexOfTileCapture, 1);
+        }
+    }
+
+    //
 
     homeTile = [];
     // console.log("tiles: ", tiles);
