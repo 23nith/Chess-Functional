@@ -201,7 +201,7 @@ function getFEN(){
 }
 
 function displayFEN(){
-    document.querySelector("p").innerHTML = `Current FEN: <br>${fenArray[fenArray.length-1]}`;
+    document.querySelector("p").innerHTML = `Current FEN: ${fenArray[fenArray.length-1]}`;
 }
 
 // Initiate default chessboard
@@ -613,7 +613,12 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                         }
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
                             console.log("friendly piece");
-                            continue;
+                            if(checking){
+
+                            }else{  
+                                continue;
+                            }
+
                         }
 
                     }else{
@@ -628,15 +633,20 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
                             console.log("friendly piece");
-                            continue;
+                            if(checking){
+
+                            }else{ 
+                                continue;
+                            }
                         }
 
                     }
                 }
                 if(!checking){
                     tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                    tiles[validMove].style.backgroundColor = "#F91F15";
+                    // tiles[validMove].style.backgroundColor = "#F91F15";
                 }
+                tiles[validMove].style.backgroundColor = "#F91F15";
                 if(checking){
                     if(currentTilesOnThreat[piece] == undefined){
                         currentTilesOnThreat[piece] = [];
@@ -699,6 +709,12 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         console.log("friendly piece");
+                                        if(checking){
+                                            currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            currentTile.style.backgroundColor = "#F91F15";
+                                        }else{
+                                            
+                                        }
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
@@ -727,6 +743,12 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                     }
                                     if(currentTile.children[0].classList.contains("darkPiece")){
                                         console.log("friendly piece");
+                                        if(checking){
+                                            currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            currentTile.style.backgroundColor = "#F91F15";
+                                        }else{
+
+                                        }
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
@@ -1342,6 +1364,8 @@ async function drop(e) {
                         return currentTilesOnThreat[item].includes(parseInt(nextMove));
                     }
                 }
+            }else if(tiles[nextMove].children[0]){
+                console.log("tiles[nextMove].children[0]", tiles[nextMove].children[0]);
             }else{
                 return true;
             }

@@ -15,19 +15,22 @@
 </head>
 
 <body>
-    <div class="info">
-        <div class="turn">White's turn</div>
-    </div>
-    <div class="checkInfo"></div>
-
-    <div>
-        <p>Sample FEN: 4k2r/6r1/8/8/8/8/3R4/R3K3</p>
-        <input placeholder="Enter FEN here"
+    <div class="row">
+        <div class="info">
+            <div class="turn">White's turn</div>
+        </div>
+        <div class="checkInfo"></div>
+        
+        <div>
+            <p>Sample FEN: 4k2r/6r1/8/8/8/8/3R4/R3K3</p>
+            <input placeholder="Enter FEN here"
             type="text"
             name=""
             id="fen">
-        <button type="submit"
+            <button type="submit"
             onclick="submitFEN()">Submit</button>
+            
+        </div>
     </div>
 
     <div class="black-captured"></div>
