@@ -3,27 +3,13 @@ Need to do:
 
 high prio
 User stories
-
--Implement En passant
--Implement Castling
-
-
-
--Implement Checking
 -Implement Checkmate
 
 
 normal prio
--fix the drag drop specific to turn order after clicking undo
--let undo track when pieces were captured
--fix can't change piece to move once click piece, sometimes you can change a piece but it uses the previous piece move behavior
+
 
 -fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
-
--fix highlighting sometimes not working.
--fix pawn can move diagonally when an opponent pawn pass it after en passant.
-
-
 less prio
 -Add timer
 
@@ -50,13 +36,14 @@ already fixed validmovements exceeding the edge of the board when piece is one t
 
 For move rule
 -already fixed valid movements exceeding the edge of the board when piece is one tile away from edge
-
+-sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
 
 For the pawns
 -if p/P piece index is == pawnStartingPosition, highlight +2 also
 -push the index out of the array after pawn's initial move
 -fix side pawns give an error when reach promotion field/bottom edge/top edge
 -fix can opponent can move when other pawn is on promotion process
+-fix pawn can move diagonally when an opponent pawn pass it after en passant.
 
 For the sliding pieces
 -get piece index add continuously to index until edge of board is reached
@@ -65,14 +52,18 @@ For the sliding pieces
 For Dragging
 -figure out how to remove the changing of homeTile value when dragging pieces
 -figure out how to disable allow drop for tile illegal moves
+-fix can't change piece to move once click piece, sometimes you can change a piece but it uses the previous piece move behavior
 
 for Pieces
 -avoid ending color's turn when piece is returned to homeTile
 -disable ability to place piece inside <i> element
+-fix highlighting sometimes not working.
 
 For History
 -initiate snapshot of fen for undo button
+-fix the drag drop specific to turn order after clicking undo
+-let undo track when pieces were captured
 
 
--sliding pieces must recognize valid movements only up to a certain point where another piece is blocking 
+
 
