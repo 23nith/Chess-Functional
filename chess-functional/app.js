@@ -305,8 +305,6 @@ function getRook(sign, _tile_to_add, _homeTile) {
 
 
 
-const whitePromotionField = [0, 1, 2, 3, 4, 5, 6, 7];
-const blackPromotionField = [56, 57, 58, 59, 60, 61, 62, 63];
 
 
 // ************************************************** Functions called by drag drop events **************************************************
@@ -1082,172 +1080,59 @@ async function drop(e) {
         else if (piece === "r") blackKingCastlingLimit--;
     }
 
+    // King's castling
+    if (piece === "K" || piece === "k") {
 
+        // White's castling
+        if (piece === "K") {
 
-
-
-    if (piece === "P" || piece === "p") {
-        // Whites' pawn
-        if (piece === "P") {
-
-            const pawnPiece = new Piece();
-            let targetPawn = e.target.children[0];
-
-
-            // White promotion check
-            if (whitePromotionField.includes(parseInt(e.target.id))) {
+            const rightRook = getRook("+", 3, homeTile[0]);
+            const leftRook  = getRook("-", 4, homeTile[0]);
 
             if (whiteKingCastlingLimit === 1) {
+                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
 
-                if (isCanCastleRightWhite) {
-                    e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook)
-
-                const promotionChoices = {
-                    Q: "Q",
-                    R: "R",
-                    B: "B",
-                    N: "N",
+                    // remove castling ability
+                    whiteKingCastlingLimit--;
                 }
-                else if (isCanCastleLeftWhite) {
+                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
 
-                const promotionUiChoices = document.querySelector(".promotion-choices-white")
-
-                // Show ui for promotion
-                promotionUiChoices.style.display = "block";
-
-                // Fetch buttons on white promotion
-                const queenPromotionBtn  = document.querySelector(".promotion-white-queen");
-                const rookPromotionBtn   = document.querySelector(".promotion-white-rook");
-                const bishopPromotionBtn = document.querySelector(".promotion-white-bishop");
-                const knightPromotionBtn = document.querySelector(".promotion-white-knight");
-
-                // Promote to white queen
-                queenPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.Q).icon;
-                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.Q).code;
-                    promotionUiChoices.style.display    = "none"
-                })
-
-                // Promote to white rook
-                rookPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.R).icon;
-                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.R).code;
-                    promotionUiChoices.style.display    = "none"
-                })
-
-                // Promote to white bishop
-                bishopPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.B).icon;
-                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.B).code;
-                    promotionUiChoices.style.display    = "none"
-                })
-
-                // Promote to white knight
-                knightPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.N).icon;
-                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.N).code;
-                    promotionUiChoices.style.display    = "none"
-                })
+                    // remove castling ability
+                    whiteKingCastlingLimit--;
+                }
             }
+
+            // remove castling ability
+            whiteKingCastlingLimit--;
+
         }
         else {
-            // Blacks' pawn
-            //
-            const pawnPiece = new Piece();
-            let targetPawn = e.target.children[0];
-
-            // Black promotion check
-            if (blackPromotionField.includes(parseInt(e.target.id))) {
-
-                const promotionChoices = {
-                    q: "q",
-                    r: "r",
-                    b: "b",
-                    n: "n",
-                }
             // Black's castling
             const rightRook = getRook("+", 3, homeTile[0]);
             const leftRook  = getRook("-", 4, homeTile[0]);
 
             if (blackKingCastlingLimit === 1) {
-                if (isCanCastleRightBlack) {
+                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
 
                     // remove castling ability
                     blackKingCastlingLimit--;
                 }
-                else if (isCanCastleLeftBlack) {
+                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
-                const promotionUiChoices = document.querySelector(".promotion-choices-black")
 
-                // Show ui for black promotion
-                promotionUiChoices.style.display = "block";
-
-                // Fetch buttons for  black promotion
-                const queenPromotionBtn  = document.querySelector(".promotion-black-queen");
-                const rookPromotionBtn   = document.querySelector(".promotion-black-rook");
-                const bishopPromotionBtn = document.querySelector(".promotion-black-bishop");
-                const knightPromotionBtn = document.querySelector(".promotion-black-knight");
-
-
-                // Promote to black queen
-                queenPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.q).icon;
-                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.q).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.q).code;
-                    promotionUiChoices.style.display    = "none"
-                })
-
-                // Promote to black rook
-                rookPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.r).icon;
-                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.r).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    promotionUiChoices.style.display    = "none"
-                    piece                               = pawnPiece.generatePiece(promotionChoices.r).code;
-                })
-
-                // Promote to black bishop
-                bishopPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.b).icon;
-                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.b).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.b).code;
-                    promotionUiChoices.style.display    = "none"
-                })
-
-                // Promote to black knight
-                knightPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.n).icon;
-                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.n).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    promotionUiChoices.style.display    = "none"
-                    piece                               = pawnPiece.generatePiece(promotionChoices.n).code;
-                })
+                    // remove castling ability
+                    blackKingCastlingLimit--;
+                }
             }
+
+            // remove castling ability
+            blackKingCastlingLimit--;
 
         }
     }
-
-
 
     // Capture pieces
 
@@ -1429,7 +1314,7 @@ async function drop(e) {
                 return
             }
         });
-        
+
         function allMovesCheck(nextMove, index){
             if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){
                 for(item in currentTilesOnThreat){
