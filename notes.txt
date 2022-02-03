@@ -11,7 +11,7 @@ normal prio
 -let undo track when pieces were captured
 -fix can't change piece to move once click piece, sometimes you can change a piece but it uses the previous piece move behavior
 -fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
--fix can opponent can move when other pawn is on promotion process
+
 -fix highlighting sometimes not working.
 -fix pawn can move diagonally when an opponent pawn pass it after en passant.
 
@@ -43,6 +43,7 @@ For the pawns
 -if p/P piece index is == pawnStartingPosition, highlight +2 also
 -push the index out of the array after pawn's initial move
 -fix side pawns give an error when reach promotion field/bottom edge/top edge
+-fix can opponent can move when other pawn is on promotion process
 
 For the sliding pieces
 -get piece index add continuously to index until edge of board is reached
