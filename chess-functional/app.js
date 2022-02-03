@@ -456,12 +456,24 @@ function highlightTiles(_homeTile, movement, sliding, piece){
             }
             if(boardRightEdge.includes(parseInt(_homeTile))){
                 exemption.push(...rightEdge);
+                if(piece === "P" || piece === "p"){
+                    let capture1 = (pieceMovement.indexOf(9) != -1) ? pieceMovement.indexOf(9): false;
+                    let capture2 = (pieceMovement.indexOf(-7) != -1) ? pieceMovement.indexOf(-7): false;
+                    let removeCapture = capture1 || capture2;
+                    exemption.push(removeCapture);                    
+                }
             }
             if(boardBottomEdge.includes(parseInt(_homeTile))){
                 exemption.push(...bottomEdge);
             }
             if(boardLeftEdge.includes(parseInt(_homeTile))){
                 exemption.push(...leftEdge);
+                if(piece === "P" || piece === "p"){
+                    let capture1 = (pieceMovement.indexOf(-9) != -1) ? pieceMovement.indexOf(-9): false;
+                    let capture2 = (pieceMovement.indexOf(7) != -1) ? pieceMovement.indexOf(7): false;
+                    let removeCapture = capture1 || capture2;
+                    exemption.push(removeCapture);                    
+                }
             }
         }
 
