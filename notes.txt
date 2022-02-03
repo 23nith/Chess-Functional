@@ -8,7 +8,6 @@ high prio
 
 
 normal prio
- -fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
 
 less prio
  -Add timer
@@ -45,6 +44,8 @@ For the pawns
 -fix side pawns give an error when reach promotion field/bottom edge/top edge
 -fix can opponent can move when other pawn is on promotion process
 -fix pawn can move diagonally when an opponent pawn pass it after en passant.
+-fix when pawn is promoted the other promoted pawn are promoted into the chosen piece
+
 
 For the sliding pieces
 -get piece index add continuously to index until edge of board is reached
