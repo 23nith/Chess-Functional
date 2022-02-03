@@ -10,14 +10,14 @@ class Piece {
             n : {name: "black-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "n", sliding: false},
             b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
             q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
-            k : {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "k", sliding: false},
+            k: {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
             p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
 
             R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
             N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
             B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
+            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
             Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
-            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "K", sliding: false},
             P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16]},
         }
         return pieces[_fenLetter];
@@ -1080,6 +1080,8 @@ async function drop(e) {
         else if (piece === "r") blackKingCastlingLimit--;
     }
 
+
+
     // King's castling
     if (piece === "K" || piece === "k") {
 
@@ -1090,13 +1092,14 @@ async function drop(e) {
             const leftRook  = getRook("-", 4, homeTile[0]);
 
             if (whiteKingCastlingLimit === 1) {
-                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+
+                if (isCanCastleRightWhite) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
 
                     // remove castling ability
                     whiteKingCastlingLimit--;
                 }
-                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                else if (isCanCastleLeftWhite) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
 
                     // remove castling ability
@@ -1114,13 +1117,13 @@ async function drop(e) {
             const leftRook  = getRook("-", 4, homeTile[0]);
 
             if (blackKingCastlingLimit === 1) {
-                if (e.target.parentElement.children[parseInt(homeTile[0]) + 2].children[0] !== undefined) {
+                if (isCanCastleRightBlack) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) + 1)].appendChild(rightRook);
 
                     // remove castling ability
                     blackKingCastlingLimit--;
                 }
-                else if (e.target.parentElement.children[parseInt(homeTile[0]) - 2].children[0] !== undefined) {
+                else if (isCanCastleLeftBlack) {
                     e.target.parentElement.children[(parseInt(homeTile[0]) - 1)].appendChild(leftRook);
 
                     // remove castling ability
@@ -1130,9 +1133,9 @@ async function drop(e) {
 
             // remove castling ability
             blackKingCastlingLimit--;
-
         }
     }
+
 
     // Capture pieces
 
