@@ -959,42 +959,50 @@ async function drop(e) {
 
                 // Promote to white queen
                 queenPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.Q).icon;
-                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.Q).code;
-                    promotionUiChoices.style.display    = "none"
+                    if (!(targetPawn.hasAttribute(`isPromoted`))) {
+                        let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.Q).icon;
+                        targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
+                        piece = pawnPiece.generatePiece(promotionChoices.Q).code;
+                        promotionUiChoices.style.display = "none"
+                        targetPawn.setAttribute(`isPromoted`, true);
+                    }
                 })
 
                 // Promote to white rook
                 rookPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.R).icon;
-                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.R).code;
-                    promotionUiChoices.style.display    = "none"
+                    if (!(targetPawn.hasAttribute(`isPromoted`))) {
+                        let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.R).icon;
+                        targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
+                        piece = pawnPiece.generatePiece(promotionChoices.R).code;
+                        promotionUiChoices.style.display = "none"
+                        targetPawn.setAttribute(`isPromoted`, true);
+                    }
                 })
 
                 // Promote to white bishop
                 bishopPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.B).icon;
-                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.B).code;
-                    promotionUiChoices.style.display    = "none"
+                    if (!(targetPawn.hasAttribute(`isPromoted`))) {
+                        let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.B).icon;
+                        targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
+                        piece = pawnPiece.generatePiece(promotionChoices.B).code;
+                        promotionUiChoices.style.display = "none"
+                        targetPawn.setAttribute(`isPromoted`, true);
+                    }
                 })
 
                 // Promote to white knight
                 knightPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.N).icon;
-                    targetPawn.className                = `${promotionPieceIcon} lightPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.N).code;
-                    promotionUiChoices.style.display    = "none"
+                    if (!(targetPawn.hasAttribute(`isPromoted`))) {
+                        let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.N).icon;
+                        targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
+                        piece = pawnPiece.generatePiece(promotionChoices.N).code;
+                        promotionUiChoices.style.display = "none"
+                        targetPawn.setAttribute(`isPromoted`, true);
+                    }
                 })
             }
         }
@@ -1028,42 +1036,50 @@ async function drop(e) {
 
                 // Promote to black queen
                 queenPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.q).icon;
-                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.q).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.q).code;
-                    promotionUiChoices.style.display    = "none"
+                    if (!(targetPawn.hasAttribute(`isPromoted`))) {
+                        let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.q).icon;
+                        targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.q).code}-${targetPawn.parentElement.id}`
+                        piece = pawnPiece.generatePiece(promotionChoices.q).code;
+                        promotionUiChoices.style.display = "none"
+                        targetPawn.setAttribute(`isPromoted`, true);
+                    }
                 })
 
                 // Promote to black rook
                 rookPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.r).icon;
-                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.r).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    promotionUiChoices.style.display    = "none"
-                    piece                               = pawnPiece.generatePiece(promotionChoices.r).code;
+                    if (!(targetPawn.hasAttribute(`isPromoted`))) {
+                        let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.r).icon;
+                        targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.r).code}-${targetPawn.parentElement.id}`
+                        promotionUiChoices.style.display = "none"
+                        piece = pawnPiece.generatePiece(promotionChoices.r).code;
+                    }
+                    targetPawn.setAttribute(`isPromoted`, true);
                 })
 
                 // Promote to black bishop
                 bishopPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.b).icon;
-                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.b).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    piece                               = pawnPiece.generatePiece(promotionChoices.b).code;
-                    promotionUiChoices.style.display    = "none"
+                    if (!(targetPawn.hasAttribute(`isPromoted`))) {
+                        let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.b).icon;
+                        targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.b).code}-${targetPawn.parentElement.id}`
+                        piece = pawnPiece.generatePiece(promotionChoices.b).code;
+                        promotionUiChoices.style.display = "none"
+                        targetPawn.setAttribute(`isPromoted`, true);
+                    }
                 })
 
                 // Promote to black knight
                 knightPromotionBtn.addEventListener("click", () => {
-                    let promotionPieceIcon              = pawnPiece.generatePiece(promotionChoices.n).icon;
-                    targetPawn.className                = `${promotionPieceIcon} blackPiece`
-                    targetPawn.id                       = `${pawnPiece.generatePiece(promotionChoices.n).code}-${targetPawn.parentElement.id}`
-                    targetPawn.isPromoted               = true;
-                    promotionUiChoices.style.display    = "none"
-                    piece                               = pawnPiece.generatePiece(promotionChoices.n).code;
+                    if (!(targetPawn.hasAttribute(`isPromoted`))) {
+                        let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.n).icon;
+                        targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.n).code}-${targetPawn.parentElement.id}`
+                        promotionUiChoices.style.display = "none"
+                        piece = pawnPiece.generatePiece(promotionChoices.n).code;
+                        targetPawn.setAttribute(`isPromoted`, true);
+                    }
                 })
             }
 
