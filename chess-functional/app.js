@@ -96,6 +96,8 @@ async function formatFen(_FEN){
 }
 
 let fenArray = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"];
+let whiteCapturedHistory = [];
+let blackCapturedHistory = [];
 
 async function undo(){
     if((fenArray.length-1)<=0) return;
@@ -104,8 +106,28 @@ async function undo(){
     // fenArray[fenArray.length-1]
     drawGrid(8,8, submittedFen);
     fenArray.pop(fenArray.length -1);
+    whiteCapturedHistory.pop(whiteCapturedHistory.length -1);
+    blackCapturedHistory.pop(whiteCapturedHistory.length -1);
     // console.log(fenArray);
     changeTurn();
+
+    let piece = new Piece();
+    document.querySelector(".black-captured").innerHTML = "";
+    document.querySelector(".white-captured").innerHTML = "";
+    whiteCapturedHistory.map((item)=>{
+        if(item != ""){
+            let container = document.createElement("div");
+            container.innerHTML = `<i class="${piece.generatePiece(item).icon}"></i>`
+            document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+        }
+    });
+    blackCapturedHistory.map((item)=>{
+        if(item != ""){
+            let container = document.createElement("div");
+            container.innerHTML = `<i class="${piece.generatePiece(item).icon} lightPiece"></i>`
+            document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+        }
+    });
     //
     // let checkBoardDisplay = await document.querySelector(".container").children[63];
 
@@ -1014,20 +1036,29 @@ async function drop(e) {
 
         }
     }
+
+
     // Capture pieces
     if(e.target.children[1]){
         // console.log("capture");
         let container = document.createElement("div");
         if(e.target.children[0].classList.contains("lightPiece")){
+            blackCapturedHistory.push(e.target.children[0].id[0]);
             container.appendChild(e.target.children[0]);
             document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+            whiteCapturedHistory.push("");
         }else{
+            whiteCapturedHistory.push(e.target.children[0].id[0]); 
             container.appendChild(e.target.children[0]);
             document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+            blackCapturedHistory.push("");
         }
         // e.target.children[0].remove();
     }
-
+    else{
+        whiteCapturedHistory.push("");
+        blackCapturedHistory.push("");
+    }
 
     if(homeTile){
         // console.log(`${pieceColor} ${piece} moved`);
@@ -1115,6 +1146,7 @@ async function drop(e) {
     // console.log("pieceColor: ", pieceColor);
     // getFEN();
     fenArray.push(getFEN());
+
     displayFEN()
     // console.log("drop", e.target); //Information on the tile where the piece landed
 }
