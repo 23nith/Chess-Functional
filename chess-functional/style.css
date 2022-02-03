@@ -18,7 +18,7 @@ body {
     border: solid black 2px;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
-    margin-top: 15px;
+    /* margin-top: 15px; */
 }
 
 .tile {
@@ -84,4 +84,52 @@ p {
 .checkInfo {
     font-size: 25px;
     color: white;
+}
+
+.wrapper-1{
+    display: flex;
+    flex-direction: row;
+}
+
+.wrapper-2{
+    display: flex;
+    flex-direction: column;
+}
+
+.left-coordinate{
+    width: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-coordinate{
+    height: 20px;
+    width: 654px;
+    display: flex;
+    flex-direction: row;
+    margin-left: 20px;
+    /* align-content: flex-end;
+    align-items: flex-end;
+    justify-content: flex-end; */
+}
+
+.left-coordinate div{
+    flex-grow: 1;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-weight: 700;
+}
+
+.top-coordinate div{
+    flex-grow: 1;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-weight: 700;
 }
