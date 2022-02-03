@@ -615,8 +615,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.Q).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to white rook
@@ -627,8 +625,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.R).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to white bishop
@@ -639,8 +635,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.B).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to white knight
@@ -651,8 +645,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.N).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
             }
         }
@@ -692,8 +684,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.q).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to black rook
@@ -704,8 +694,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     promotionUiChoices.style.display    = "none"
                     piece                               = pawnPiece.generatePiece(promotionChoices.r).code;
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to black bishop
@@ -716,8 +704,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.b).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to black knight
@@ -728,8 +714,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     promotionUiChoices.style.display    = "none"
                     piece                               = pawnPiece.generatePiece(promotionChoices.n).code;
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
             }
 
