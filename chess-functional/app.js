@@ -151,7 +151,7 @@ async function undo(){
 
         }
     }
-    
+
 }
 
 function getFEN(){
@@ -345,7 +345,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                 if(enPassantPiecesBlack.includes(captureTile2)){
                     pieceMovement.push(-9)
                 }
-                
+
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -482,7 +482,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     let capture1 = (pieceMovement.indexOf(9) != -1) ? pieceMovement.indexOf(9): false;
                     let capture2 = (pieceMovement.indexOf(-7) != -1) ? pieceMovement.indexOf(-7): false;
                     let removeCapture = capture1 || capture2;
-                    exemption.push(removeCapture);                    
+                    exemption.push(removeCapture);
                 }
             }
             if(boardBottomEdge.includes(parseInt(_homeTile))){
@@ -494,7 +494,7 @@ function highlightTiles(_homeTile, movement, sliding, piece){
                     let capture1 = (pieceMovement.indexOf(-9) != -1) ? pieceMovement.indexOf(-9): false;
                     let capture2 = (pieceMovement.indexOf(7) != -1) ? pieceMovement.indexOf(7): false;
                     let removeCapture = capture1 || capture2;
-                    exemption.push(removeCapture);                    
+                    exemption.push(removeCapture);
                 }
             }
         }
@@ -789,7 +789,7 @@ async function dropAllow(e) {
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
-        
+
     }
     // console.log("lifted: ", lifted);
     // console.log("homeTile: ", homeTile);
@@ -806,7 +806,7 @@ function drag(e) {
         homeTile[0] = e.target.parentElement.id;
     }
 
-    // console.log("e.target.parentElement.id: ", e.target.parentElement.id);    
+    // console.log("e.target.parentElement.id: ", e.target.parentElement.id);
 
     piece = e.target.id[0]
     if(e.target.classList.contains("lightPiece")){
@@ -862,8 +862,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.Q).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to white rook
@@ -874,8 +872,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.R).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to white bishop
@@ -886,8 +882,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.B).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to white knight
@@ -898,8 +892,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.N).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
             }
         }
@@ -939,8 +931,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.q).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to black rook
@@ -951,8 +941,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     promotionUiChoices.style.display    = "none"
                     piece                               = pawnPiece.generatePiece(promotionChoices.r).code;
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to black bishop
@@ -963,8 +951,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     piece                               = pawnPiece.generatePiece(promotionChoices.b).code;
                     promotionUiChoices.style.display    = "none"
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
 
                 // Promote to black knight
@@ -975,8 +961,6 @@ async function drop(e) {
                     targetPawn.isPromoted               = true;
                     promotionUiChoices.style.display    = "none"
                     piece                               = pawnPiece.generatePiece(promotionChoices.n).code;
-                    targetPawn.setAttribute("draggable", "true");
-                    targetPawn.setAttribute("ondragstart", "drag(event)");
                 })
             }
 
@@ -1062,7 +1046,7 @@ async function drop(e) {
             document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
             whiteCapturedHistory.push("");
         }else{
-            whiteCapturedHistory.push(e.target.children[0].id[0]); 
+            whiteCapturedHistory.push(e.target.children[0].id[0]);
             container.appendChild(e.target.children[0]);
             document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
             blackCapturedHistory.push("");
