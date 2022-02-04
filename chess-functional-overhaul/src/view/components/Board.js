@@ -43,8 +43,6 @@ export default class ChessBoard extends CustomElement {
         //      [ ]
         //  ]
 
-
-
         this.onBody(this);
 
     }
