@@ -1534,6 +1534,7 @@ async function drop(e) {
                                 }
                             }
                         }
+                        loop1:
                         for(const item in currentTilesOnThreat){
                             if(item != item.toUpperCase()){
                                 console.log("item: ", item);
@@ -1542,13 +1543,13 @@ async function drop(e) {
                                 let pieceThreat = threatBy2[item1][0];
                                 if(currentTilesOnThreat[item].includes(parseInt(pieceThreat)) && (item != piece)){
                                     edibleThreat += 1;
-                                    // continue;
+                                    break loop1;
                                 }
                             }
                         }
-                        if(edibleThreat == Object.keys(threatBy2).length) return;
-                        if(blockCounter2 == nextMoveNoPieceNotSafe) return;
                     } 
+                    if(edibleThreat == Object.keys(threatBy2).length) return;
+                    if(blockCounter2 == nextMoveNoPieceNotSafe) return;
                     console.log("checkmate");
                     let checkInfo = document.querySelector(".checkInfo")
                         checkInfo.innerHTML = `Black king has been checkmated`;
@@ -1704,12 +1705,15 @@ async function drop(e) {
                 if(blockCounter != kingNextMovements.length){
                     const sliding = ["Q", "q", "B", "b", "R", "r"]
                     blockCounter2 = 0;
-                    for(item in threatBy2){
-                        let piece = item;
-                        let mystring = `${item}-${threatBy2[item][1]}`;
+                    let edibleThreat = 0;
+                    for(item1 in threatBy2){
+                        let piece = item1;
+                        let mystring = `${item1}-${threatBy2[item1][1]}`;
+                        if(threateningPiece[mystring] == undefined) continue;
+                        if(!sliding.includes(item1)) continue;
                         for([index, object] of threateningPiece[mystring].entries()){
                             let thisTile = threateningPiece[mystring][index]
-                            for(item in currentTilesOnThreat){
+                            for(const item in currentTilesOnThreat){
                                 if(item == item.toUpperCase()){
                                     if(currentTilesOnThreat[item].includes(parseInt(thisTile)) && (item != piece) && (item != "K")){
                                         console.log("test");
@@ -1719,6 +1723,7 @@ async function drop(e) {
                                 }
                             }
                         }
+                        loop1:
                         for(const item in currentTilesOnThreat){
                             if(item == item.toUpperCase()){
                                 console.log("item: ", item);
@@ -1727,13 +1732,13 @@ async function drop(e) {
                                 let pieceThreat = threatBy2[item1][0];
                                 if(currentTilesOnThreat[item].includes(parseInt(pieceThreat)) && (item != piece)){
                                     edibleThreat += 1;
-                                    // continue;
+                                    break loop1;
                                 }
                             }
                         }
-                        if(edibleThreat == Object.keys(threatBy2).length) return;
-                        if(blockCounter2 == nextMoveNoPieceNotSafe) return;
                     } 
+                    if(blockCounter2 == nextMoveNoPieceNotSafe) return;
+                    if(edibleThreat == Object.keys(threatBy2).length) return;
                     console.log("checkmate");
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king has been checkmated`;
