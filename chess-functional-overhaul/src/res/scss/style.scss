@@ -9,23 +9,25 @@
 
 .name {
 
-    font-size: 5rem;
+    font-size:          5rem;
 
 }
 
 .divss {
 
-    font-size: 15px;
+    font-size:          15px;
 
 }
 
 chess-board {
-    position: relative;
-    display: block;
-    width:  30vw;
-    height: 30vw;
+    position:           relative;
+    display:        block;
+    width:          30vw;
+    height:         30vw;
 }
 
 body {
-
+    display:        grid;
+    place-items:    center;
+    height:         100vh;
 }
