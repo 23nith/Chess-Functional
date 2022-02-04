@@ -1532,7 +1532,7 @@ async function drop(e) {
                     } 
                     console.log("checkmate");
                     let checkInfo = document.querySelector(".checkInfo")
-                        checkInfo.innerHTML = `Black king is checkmate`;
+                        checkInfo.innerHTML = `Black king is checkmated`;
                         checked = true;
                     }
                 }
@@ -1705,7 +1705,7 @@ async function drop(e) {
                     } 
                     console.log("checkmate");
                     let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `White king is checkmate`;
+                    checkInfo.innerHTML = `White king is checkmated`;
                     checked = true;
                 }
             }
