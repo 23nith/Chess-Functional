@@ -1247,7 +1247,6 @@ async function drop(e) {
             const hasPiece = BoardChildArr[i].children[0];
             if (!hasPiece) continue;
 
-
             // White piece only
             const PieceCode = hasPiece.id[0];
             if (PieceCode === PieceCode.toUpperCase()) continue;
@@ -1269,7 +1268,6 @@ async function drop(e) {
 
             // Black piece only
             const PieceCode = hasPiece.id[0];
-            if (PieceCode === PieceCode.toUpperCase()) continue;
 
             if (PieceCode !== BlackPiece.k) continue;
 
@@ -1277,15 +1275,14 @@ async function drop(e) {
             blackKingPos = hasPiece
                 .parentElement
                 .getAttribute(`data-tilenumber`)
-
         }
 
     } else {
 
-        let blackKingPos = 0;
+        let whiteKingPos = 0;
 
-        const BlackPiece = {
-            k: `k`,
+        const WhitePiece = {
+            K: `K`,
         }
 
         for (let i = 0; i < 64; i++) {
@@ -1304,11 +1301,33 @@ async function drop(e) {
             const PieceCode = hasPiece.id[0];
             if (PieceCode === PieceCode.toUpperCase()) continue;
 
-            if (PieceCode !== BlackPiece.k) continue;
-
-            console.log(hasPiece);
         }
 
+        // Get White king pos
+        for (let i = 0; i < 64; i++) {
+            const BoardChildArr = Array
+                .from(e
+                    .target
+                    .parentElement
+                    .children
+                );
+
+            // Skip empty cell
+            const hasPiece = BoardChildArr[i].children[0];
+            if (!hasPiece) continue;
+
+            // Black piece only
+            const PieceCode = hasPiece.id[0];
+
+            if (PieceCode !== WhitePiece.K) continue;
+
+            // Get Black king current Pos
+            whiteKingPos = hasPiece
+                .parentElement
+                .getAttribute(`data-tilenumber`)
+
+            console.log(whiteKingPos);
+        }
     }
 
 
