@@ -587,12 +587,20 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
             // Store threats
             if ((!tilesOnThreatBlackKing[validMove])
-                && turn === `White`) {
+                && (turn === `White`)
+                && (!(tilesOnThreatBlackKing[homeTile]))) {
+                tilesOnThreatBlackKing[validMove] = validMove;
+                console.log(tilesOnThreatBlackKing);
+
+            } else if ((!tilesOnThreatBlackKing[validMove])
+                && (turn === `White`)
+                && (!(tilesOnThreatBlackKing[homeTile]))) {
                 tilesOnThreatBlackKing[validMove] = validMove;
                 console.log(tilesOnThreatBlackKing);
 
             }else if (!tilesOnThreatWhiteKing[validMove]
-                && turn === `Black`) {
+                && (turn === `Black`)
+                && (!(tilesOnThreatWhiteKing[homeTile]))) {
                 tilesOnThreatWhiteKing[validMove] = validMove;
                 console.log(tilesOnThreatWhiteKing);
             }
