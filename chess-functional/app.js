@@ -585,6 +585,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
             let validMove = parseInt(_homeTile)+pieceMovement[j];
 
 
+            // Store threats
             if ((!tilesOnThreatBlackKing[validMove])
                 && turn === `White`) {
                 tilesOnThreatBlackKing[validMove] = validMove;
@@ -1240,7 +1241,8 @@ async function drop(e) {
     // checking
     if (turn === `Black`) {
 
-        let blackKingPos = 0;
+        let blackKingPos    = 0;
+        let PieceObject     = new Piece();
 
         const BlackPiece = {
             k: `k`,
@@ -1260,10 +1262,18 @@ async function drop(e) {
 
             // White piece only
             const PieceCode = hasPiece.id[0];
-            if (PieceCode === PieceCode.toUpperCase()) continue;
+            if (PieceCode === PieceCode.toLowerCase()) continue;
 
+            let movement      = PieceObject.generatePiece(PieceCode).movement;
+            let sliding       = PieceObject.generatePiece(PieceCode).sliding;
+            let pieceHomeTile = hasPiece
+                .parentElement
+                .getAttribute(`data-tilenumber`)
+
+            highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
         }
 
+        console.log(tilesOnThreatBlackKing);
         // Get Black king pos
         for (let i = 0; i < 64; i++) {
             const BoardChildArr = Array
