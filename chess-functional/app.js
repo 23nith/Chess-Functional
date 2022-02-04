@@ -1380,41 +1380,52 @@ async function drop(e) {
             });
 
             // check if all king's possible next move will be a potential capture by opponent
+            let blockCounter = 0;
             function allMovesCheck(nextMove, index){
                 if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
-                    // let unsafeTile = false;
-                    // let cannotBeBlocked = true;
-                    // for(item in currentTilesOnThreat){
-                    //     // compare against possible capture of lightpieces
-                    //     if(item == item.toUpperCase()){ 
-                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
-                    //             unsafeTile = true; 
-                    //             break;
-                    //         }
-                    //     }
-                    // }
-                    // for(item in currentTilesOnThreat){ 
-                    //     // compare if enemy king's allies (with opposite letter case of offensive player) can go to this tile to protect king
-                    //     let sliding = ["q", "b", "r"];
-                    //     if(item != item.toUpperCase() && item != "k"){
-                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if an ally of king under threat can protect him  //*(b.2)
-                    //             cannotBeBlocked = false;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
-                    // let notSafe = unsafeTile && cannotBeBlocked;
-                    // console.log(notSafe);
-                    // return notSafe;
+                    let unsafeTile = false;
+                    let cannotBeBlocked = true;
+                    let threatBy = {};
                     for(item in currentTilesOnThreat){
                         // compare against possible capture of lightpieces
                         if(item == item.toUpperCase()){ 
                             if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
-                                return true;
+                                unsafeTile = true; 
+                                if(!threatBy[nextMove]){
+                                    threatBy[nextMove] = [];
+                                }
+                                threatBy[nextMove].push(item);
+                                break;
                             }
                         }
                     }
-                    return false;
+                    for(item in currentTilesOnThreat){ 
+                        // compare if enemy king's allies (with opposite letter case of offensive player) can go to this tile to protect king
+                        if(item != item.toUpperCase() && item != "k"){
+                            if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if an ally of king under threat can protect him  //*(b.2)
+                                if(threatBy[nextMove] == "N"){
+                                    break;
+                                }
+                                // cannotBeBlocked = false;
+                                blockCounter +=1;
+                                break;
+                            }
+                        }
+                    }
+                    let notSafe = unsafeTile && cannotBeBlocked;
+                    console.log(notSafe);
+                    return notSafe;
+
+                    // for(item in currentTilesOnThreat){
+                    //     // compare against possible capture of lightpieces
+                    //     if(item == item.toUpperCase()){ 
+                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
+                    //             return true;
+                    //         }
+                    //     }
+                    // }
+                    // return false;
+
                 }else if(!exemption.includes(index) && tiles[nextMove].children[0].classList.contains("lightPiece")){ // if tile has ally piece
                     for(item in currentTilesOnThreat){
                         // compare against possible capture of lightpieces
@@ -1426,15 +1437,18 @@ async function drop(e) {
                     }
                     return false;
                 }else{
+                    blockCounter +=1;
                     return true; // if tile has foe piece it will not be part of the evaluation thus will always return true (not safe)
                 }
             };
 
-            if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
-                console.log("checkmate");
-                let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `Black king is checkmate`;
-                    checked = true;
+            if(kingNextMovements.every(allMovesCheck) && (blockCounter != kingNextMovements.length)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
+                if(blockCounter != kingNextMovements.length){
+                    console.log("checkmate");
+                    let checkInfo = document.querySelector(".checkInfo")
+                        checkInfo.innerHTML = `Black king is checkmate`;
+                        checked = true;
+                    }
                 }
 
         }
@@ -1452,7 +1466,7 @@ async function drop(e) {
                 if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
                     console.log("check");
                     let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `Black king is checked`;
+                    checkInfo.innerHTML = `White king is checked`;
                     checked = true;
                     break;
                 }
@@ -1492,39 +1506,51 @@ async function drop(e) {
             });
 
             // check if all king's possible next move will be a potential capture by opponent
+            let blockCounter = 0;
             function allMovesCheck(nextMove, index){
                 if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
-                    // let unsafeTile = false;
-                    // let cannotBeBlocked = true;
-                    // let notSafe = unsafeTile && cannotBeBlocked;
-                    // for(item in currentTilesOnThreat){
-                    //     // compare against possible capture of darkpieces
-                    //     if(item != item.toUpperCase()){ 
-                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
-                    //             unsafeTile = true;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
-                    // for(item in currentTilesOnThreat){ 
-                    //     // compare if enemy king's allies (with opposite letter case of offensive player) can go to this tile to protect king
-                    //     if(item == item.toUpperCase()){
-                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if an ally of king under threat can protect him  //*(b.2)
-                    //             cannotBeBlocked = false;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
-                    // return notSafe;
+                    let unsafeTile = false;
+                    let cannotBeBlocked = true;
+                    let threatBy = {};
                     for(item in currentTilesOnThreat){
                         // compare against possible capture of darkpieces
                         if(item != item.toUpperCase()){ 
                             if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
-                                return true;
+                                unsafeTile = true;
+                                if(!threatBy[nextMove]){
+                                    threatBy[nextMove] = [];
+                                }
+                                threatBy[nextMove].push(item);
+                                break;
                             }
                         }
                     }
-                    return false;
+                    for(item in currentTilesOnThreat){ 
+                        // compare if enemy king's allies (with opposite letter case of offensive player) can go to this tile to protect king
+                        if(item == item.toUpperCase() && item != "K"){
+                            if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if an ally of king under threat can protect him  //*(b.2)
+                                if(threatBy[nextMove] == "n"){
+                                    break;
+                                }
+                                // cannotBeBlocked = false;
+                                blockCounter +=1;
+                                break;
+                            }
+                        }
+                    }
+                    let notSafe = unsafeTile && cannotBeBlocked;
+                    console.log(notSafe);
+                    return notSafe;
+
+                    // for(item in currentTilesOnThreat){
+                    //     // compare against possible capture of darkpieces
+                    //     if(item != item.toUpperCase()){ 
+                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
+                    //             return true;
+                    //         }
+                    //     }
+                    // }
+                    // return false;
 
                 }else if(!exemption.includes(index) && tiles[nextMove].children[0].classList.contains("darkPiece")){ // if tile has ally piece
                     for(item in currentTilesOnThreat){
@@ -1537,16 +1563,22 @@ async function drop(e) {
                     }
                     return false;
                 }else{
+                    blockCounter +=1;
                     return true; // if tile has foe piece it will not be part of the evaluation thus will always return true
                 }
             };
+            console.log(blockCounter);
 
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
-                console.log("checkmate");
-                let checkInfo = document.querySelector(".checkInfo")
-                checkInfo.innerHTML = `White king is checkmate`;
-                checked = true;
+                if(blockCounter != kingNextMovements.length){
+                    console.log("checkmate");
+                    let checkInfo = document.querySelector(".checkInfo")
+                    checkInfo.innerHTML = `White king is checkmate`;
+                    checked = true;
+                }
             }
+
+            console.log(blockCounter);
         }
     }
     if(!checked){
