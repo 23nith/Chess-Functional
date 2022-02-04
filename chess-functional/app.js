@@ -201,7 +201,7 @@ function getFEN(){
 }
 
 function displayFEN(){
-    document.querySelector("p").innerHTML = `Current FEN: ${fenArray[fenArray.length-1]}`;
+    document.querySelector("p").innerHTML = `Current FEN: <br>${fenArray[fenArray.length-1]}`;
 }
 
 // Initiate default chessboard
@@ -614,11 +614,15 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
                             console.log("friendly piece");
                             if(checking){
-
-                            }else{  
-                                continue;
+                                if(tiles[validMove].children[0].id[0] != "K"){
+                                    // tiles[validMove].style.backgroundColor = "#f57842"; //*(a)
+                                    if(currentTilesOnThreat[piece] == undefined){
+                                        currentTilesOnThreat[piece] = [];
+                                    }
+                                    currentTilesOnThreat[piece].push(validMove);
+                                }
                             }
-
+                            continue;
                         }
 
                     }else{
@@ -634,20 +638,25 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
                             console.log("friendly piece");
                             if(checking){
-
-                            }else{ 
-                                continue;
+                                if(tiles[validMove].children[0].id[0] != "k"){
+                                    // tiles[validMove].style.backgroundColor = "#f57842"; //*(a)
+                                    if(currentTilesOnThreat[piece] == undefined){
+                                        currentTilesOnThreat[piece] = [];
+                                    }
+                                    currentTilesOnThreat[piece].push(validMove);
+                                }
                             }
+                            continue;
                         }
 
                     }
                 }
                 if(!checking){
                     tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                    // tiles[validMove].style.backgroundColor = "#F91F15";
+                    tiles[validMove].style.backgroundColor = "#F91F15";
                 }
-                tiles[validMove].style.backgroundColor = "#F91F15";
                 if(checking){
+                    // tiles[validMove].style.backgroundColor = "#f57842"; //**(b)
                     if(currentTilesOnThreat[piece] == undefined){
                         currentTilesOnThreat[piece] = [];
                     }
@@ -699,6 +708,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                             currentTile.style.backgroundColor = "#F91F15";
                                         }
                                         if(checking){
+                                            // currentTile.style.backgroundColor = "#48f542";
                                             if(currentTilesOnThreat[piece] == undefined){
                                                 currentTilesOnThreat[piece] = [];
                                             }
@@ -710,18 +720,22 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         console.log("friendly piece");
                                         if(checking){
-                                            currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                            currentTile.style.backgroundColor = "#F91F15";
-                                        }else{
-                                            
+                                            if(currentTile.children[0].id[0] != "K"){
+                                                // currentTile.style.backgroundColor = "#48f542"; //*(a)
+                                                if(currentTilesOnThreat[piece] == undefined){
+                                                    currentTilesOnThreat[piece] = [];
+                                                }
+                                                currentTilesOnThreat[piece].push(tile);
+                                            }
                                         }
+
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
                                         // continue;
                                     }
 
-                                }else{
+                                }else{ //friendly piece
                                     if(currentTile.children[0].classList.contains("lightPiece")){
 
                                         if(!checking){
@@ -731,6 +745,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                             currentTile.style.backgroundColor = "#F91F15";
                                         }
                                         if(checking){
+                                            // currentTile.style.backgroundColor = "#48f542";
                                             if(currentTilesOnThreat[piece] == undefined){
                                                 currentTilesOnThreat[piece] = [];
                                             }
@@ -744,10 +759,13 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
                                         console.log("friendly piece");
                                         if(checking){
-                                            currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                            currentTile.style.backgroundColor = "#F91F15";
-                                        }else{
-
+                                            if(currentTile.children[0].id[0] != "k"){
+                                                // currentTile.style.backgroundColor = "#48f542"; //*(a)
+                                                if(currentTilesOnThreat[piece] == undefined){
+                                                    currentTilesOnThreat[piece] = [];
+                                                }
+                                                currentTilesOnThreat[piece].push(tile);
+                                            }
                                         }
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
@@ -762,6 +780,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                 currentTile.style.backgroundColor = "#F91F15";
                             }
                             if(checking){
+                                // currentTile.style.backgroundColor = "#48f542"; //*(b)
                                 if(currentTilesOnThreat[piece] == undefined){
                                     currentTilesOnThreat[piece] = [];
                                 }
@@ -1327,70 +1346,206 @@ async function drop(e) {
             }
         }
 
-        // check if checkmate
-        let movements = [-8, 8, 1, -1, -7, -9, 9, 7]
-        let exemption = [];
-        if(boardEdges.includes(parseInt(tileOfKing))){
-            if(boardTopEdge.includes(parseInt(tileOfKing))){
-                exemption.push(...topEdge);
-            }
-            if(boardRightEdge.includes(parseInt(tileOfKing))){
-                exemption.push(...rightEdge);
-            }
-            if(boardBottomEdge.includes(parseInt(tileOfKing))){
-                exemption.push(...bottomEdge);
-            }
-            if(boardLeftEdge.includes(parseInt(tileOfKing))){
-                exemption.push(...leftEdge);
-            }
-        }
-        // check if all kings possible next move will be a potential capture by opponent
-        let kingNextMovements = movements.map((item)=>{
-            console.log("movement item: ", item);
-            console.log("new item: ", parseInt(tileOfKing) + item);
-            let tileNumber = parseInt(tileOfKing) + item;
-            if((tileNumber >= 0) && (tileNumber < 64)){
-                return parseInt(tileOfKing) + item;
-            }else{
-                return
-            }
-        });
-
-        function allMovesCheck(nextMove, index){
-            if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){
-                for(item in currentTilesOnThreat){
-                    // compare against possible capture of lightpieces
-                    if(item == item.toUpperCase()){
-                        return currentTilesOnThreat[item].includes(parseInt(nextMove));
-                    }
+        if(checked == true){
+            
+        
+            // check if king is at one of the board edges
+            let movements = [-8, 8, 1, -1, -7, -9, 9, 7]
+            let exemption = [];
+            if(boardEdges.includes(parseInt(tileOfKing))){
+                if(boardTopEdge.includes(parseInt(tileOfKing))){
+                    exemption.push(...topEdge);
                 }
-            }else if(tiles[nextMove].children[0]){
-                console.log("tiles[nextMove].children[0]", tiles[nextMove].children[0]);
-            }else{
-                return true;
+                if(boardRightEdge.includes(parseInt(tileOfKing))){
+                    exemption.push(...rightEdge);
+                }
+                if(boardBottomEdge.includes(parseInt(tileOfKing))){
+                    exemption.push(...bottomEdge);
+                }
+                if(boardLeftEdge.includes(parseInt(tileOfKing))){
+                    exemption.push(...leftEdge);
+                }
             }
-        };
-        if(kingNextMovements.every(allMovesCheck)){
-            console.log("checkmate");
-            let checkInfo = document.querySelector(".checkInfo")
-            // checkInfo.innerHTML = `Black king is checkmate`;
-            checked = true;
+            
+            // get the actual tile numbers of kings next movement relative to its hometile
+            let kingNextMovements = movements.map((item)=>{
+                console.log("movement item: ", item);
+                console.log("new item: ", parseInt(tileOfKing) + item);
+                let tileNumber = parseInt(tileOfKing) + item;
+                if((tileNumber >= 0) && (tileNumber < 64)){
+                    return parseInt(tileOfKing) + item;
+                }else{
+                    return
+                }
+            });
+
+            // check if all king's possible next move will be a potential capture by opponent
+            function allMovesCheck(nextMove, index){
+                if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
+                    // let unsafeTile = false;
+                    // let cannotBeBlocked = true;
+                    // for(item in currentTilesOnThreat){
+                    //     // compare against possible capture of lightpieces
+                    //     if(item == item.toUpperCase()){ 
+                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
+                    //             unsafeTile = true; 
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                    // for(item in currentTilesOnThreat){ 
+                    //     // compare if enemy king's allies (with opposite letter case of offensive player) can go to this tile to protect king
+                    //     let sliding = ["q", "b", "r"];
+                    //     if(item != item.toUpperCase() && item != "k"){
+                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if an ally of king under threat can protect him  //*(b.2)
+                    //             cannotBeBlocked = false;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                    // let notSafe = unsafeTile && cannotBeBlocked;
+                    // console.log(notSafe);
+                    // return notSafe;
+                    for(item in currentTilesOnThreat){
+                        // compare against possible capture of lightpieces
+                        if(item == item.toUpperCase()){ 
+                            if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }else if(!exemption.includes(index) && tiles[nextMove].children[0].classList.contains("lightPiece")){ // if tile has ally piece
+                    for(item in currentTilesOnThreat){
+                        // compare against possible capture of lightpieces
+                        if(item == item.toUpperCase()){ 
+                            if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ //*(a.1) / return false if capturing piece will not expose king for capture
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }else{
+                    return true; // if tile has foe piece it will not be part of the evaluation thus will always return true (not safe)
+                }
+            };
+
+            if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
+                console.log("checkmate");
+                let checkInfo = document.querySelector(".checkInfo")
+                    checkInfo.innerHTML = `Black king is checkmate`;
+                    checked = true;
+                }
+
         }
     }else{
+        // let checked = false;
         // darkpiece
         console.log("darkpiece moved");
-        // get tile of lightpiece king
+        // get tile of darkpiece king
         let lightKing = document.querySelector("#K");
         let tileOfKing = lightKing.parentElement.id;
+        // iterate thru currentTilesOnThreat
         for(item in currentTilesOnThreat){
-            // compare against possible capture of lightpieces
+            // compare against possible capture of darkpieces
             if(item != item.toUpperCase()){
                 if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
                     console.log("check");
                     let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `White king is checked`;
+                    checkInfo.innerHTML = `Black king is checked`;
                     checked = true;
+                    break;
                 }
+            }
+        }
+
+        if(checked == true){
+
+            // check if king is at one of the board edges
+            let movements = [-8, 8, 1, -1, -7, -9, 9, 7]
+            let exemption = [];
+            if(boardEdges.includes(parseInt(tileOfKing))){
+                if(boardTopEdge.includes(parseInt(tileOfKing))){
+                    exemption.push(...topEdge);
+                }
+                if(boardRightEdge.includes(parseInt(tileOfKing))){
+                    exemption.push(...rightEdge);
+                }
+                if(boardBottomEdge.includes(parseInt(tileOfKing))){
+                    exemption.push(...bottomEdge);
+                }
+                if(boardLeftEdge.includes(parseInt(tileOfKing))){
+                    exemption.push(...leftEdge);
+                }
+            }
+            
+            // get the actual tile numbers of kings next movement relative to its hometile
+            let kingNextMovements = movements.map((item)=>{
+                console.log("movement item: ", item);
+                console.log("new item: ", parseInt(tileOfKing) + item);
+                let tileNumber = parseInt(tileOfKing) + item;
+                if((tileNumber >= 0) && (tileNumber < 64)){
+                    return parseInt(tileOfKing) + item;
+                }else{
+                    return
+                }
+            });
+
+            // check if all king's possible next move will be a potential capture by opponent
+            function allMovesCheck(nextMove, index){
+                if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
+                    // let unsafeTile = false;
+                    // let cannotBeBlocked = true;
+                    // let notSafe = unsafeTile && cannotBeBlocked;
+                    // for(item in currentTilesOnThreat){
+                    //     // compare against possible capture of darkpieces
+                    //     if(item != item.toUpperCase()){ 
+                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
+                    //             unsafeTile = true;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                    // for(item in currentTilesOnThreat){ 
+                    //     // compare if enemy king's allies (with opposite letter case of offensive player) can go to this tile to protect king
+                    //     if(item == item.toUpperCase()){
+                    //         if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if an ally of king under threat can protect him  //*(b.2)
+                    //             cannotBeBlocked = false;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+                    // return notSafe;
+                    for(item in currentTilesOnThreat){
+                        // compare against possible capture of darkpieces
+                        if(item != item.toUpperCase()){ 
+                            if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ // return false if movig to this tile will not expose king for capture
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+
+                }else if(!exemption.includes(index) && tiles[nextMove].children[0].classList.contains("darkPiece")){ // if tile has ally piece
+                    for(item in currentTilesOnThreat){
+                        // compare against possible capture of darkpieces
+                        if(item != item.toUpperCase()){ 
+                            if(currentTilesOnThreat[item].includes(parseInt(nextMove))){ //*(a.1) / return false if capturing piece will not expose king for capture
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }else{
+                    return true; // if tile has foe piece it will not be part of the evaluation thus will always return true
+                }
+            };
+
+            if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
+                console.log("checkmate");
+                let checkInfo = document.querySelector(".checkInfo")
+                checkInfo.innerHTML = `White king is checkmate`;
+                checked = true;
             }
         }
     }

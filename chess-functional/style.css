@@ -105,7 +105,7 @@ p {
 
 .top-coordinate{
     height: 20px;
-    width: 654px;
+    width: 654.5px;
     display: flex;
     flex-direction: row;
     margin-left: 20px;
@@ -120,8 +120,9 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    background-color: #31692b;
     font-weight: 700;
+    color: white;
 }
 
 .top-coordinate div{
@@ -130,6 +131,7 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
+    background-color: #31692b;
     font-weight: 700;
+    color: white;
 }
