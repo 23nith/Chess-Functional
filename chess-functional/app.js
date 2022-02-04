@@ -315,7 +315,7 @@ function changeTurn(){
 
 
 function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThreat = false){
-    console.log(isThreat);
+
     let checking = forChecking;
 
     // check if piece is near edge
