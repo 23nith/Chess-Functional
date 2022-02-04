@@ -635,6 +635,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
 
                     }
                 }
+
                 if(!checking){
                     tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
                     tiles[validMove].style.backgroundColor = "#F91F15";
@@ -652,10 +653,10 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
 
     }else{
 
-        for(j = 0; j < pieceMovement.length; j++){
+        for (j = 0; j < pieceMovement.length; j++){
             let direction = pieceMovement[j];
 
-            // Store threats
+            // Store threat
             // if ((!tilesOnThreatBlackKing[direction])
             //     && (turn === `White`)
             //     && (!(tilesOnThreatBlackKing[homeTile]))) {
@@ -1279,17 +1280,40 @@ async function drop(e) {
             const PieceCode = hasPiece.id[0];
             if (PieceCode === PieceCode.toLowerCase()) continue;
 
-            let movement      = PieceObject.generatePiece(PieceCode).movement;
-            let sliding       = PieceObject.generatePiece(PieceCode).sliding
-            let pieceHomeTile = hasPiece
+            let movement        = PieceObject
+                .generatePiece(PieceCode)
+                .movement;
+
+            let sliding         = PieceObject
+                .generatePiece(PieceCode)
+                .sliding
+
+            let pieceHomeTile   = hasPiece
                 .parentElement
                 .getAttribute(`data-tilenumber`)
 
             if ((PieceCode === WhitePiece.P)) {
-                let captureMovement = PieceObject.generatePiece(PieceCode).captureMovement;
-                highlightTiles(pieceHomeTile, captureMovement, sliding, PieceCode, undefined, true);
+
+                let captureMovement = PieceObject
+                    .generatePiece(PieceCode)
+                    .captureMovement;
+
+                highlightTiles(
+                    pieceHomeTile,
+                    captureMovement,
+                    sliding,
+                    PieceCode,
+                    undefined,
+                    true
+                );
+
             } else {
-                highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
+                highlightTiles(
+                    pieceHomeTile,
+                    movement,
+                    sliding,
+                    PieceCode
+                );
             }
 
         }
@@ -1310,6 +1334,7 @@ async function drop(e) {
             // Black piece only
             const PieceCode = hasPiece.id[0];
 
+            // Black king only
             if (PieceCode !== BlackPiece.k) continue;
 
             // Get Black king current Pos
@@ -1317,7 +1342,6 @@ async function drop(e) {
                 .parentElement
                 .getAttribute(`data-tilenumber`)
         }
-
 
     } else {
 
@@ -1348,17 +1372,40 @@ async function drop(e) {
             const PieceCode = hasPiece.id[0];
             if (PieceCode === PieceCode.toUpperCase()) continue;
 
-            let movement      = PieceObject.generatePiece(PieceCode).movement;
-            let sliding       = PieceObject.generatePiece(PieceCode).sliding;
+            let movement      = PieceObject
+                .generatePiece(PieceCode)
+                .movement;
+
+            let sliding       = PieceObject
+                .generatePiece(PieceCode)
+                .sliding;
+
             let pieceHomeTile = hasPiece
                 .parentElement
                 .getAttribute(`data-tilenumber`)
 
             if ((PieceCode === BlackPiece.p)) {
-                let captureMovement = PieceObject.generatePiece(PieceCode).captureMovement;
-                highlightTiles(pieceHomeTile, captureMovement, sliding, PieceCode, undefined, true);
+
+                let captureMovement = PieceObject
+                    .generatePiece(PieceCode)
+                    .captureMovement;
+
+                highlightTiles(
+                    pieceHomeTile,
+                    captureMovement,
+                    sliding, PieceCode,
+                    undefined,
+                    true
+                );
+
             } else {
-                highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
+
+                highlightTiles(
+                    pieceHomeTile,
+                    movement,
+                    sliding,
+                    PieceCode
+                );
             }
         }
 
@@ -1378,9 +1425,10 @@ async function drop(e) {
             // Black piece only
             const PieceCode = hasPiece.id[0];
 
+            // White king only
             if (PieceCode !== WhitePiece.K) continue;
 
-            // Get Black king current Pos
+            // Get White king current Pos
             whiteKingPos = hasPiece
                 .parentElement
                 .getAttribute(`data-tilenumber`)
@@ -1388,9 +1436,6 @@ async function drop(e) {
         }
 
     }
-    tilesOnThreatBlackKing = {};
-    tilesOnThreatWhiteKing = {};
-
     dropValue = e.target;
 
 }
