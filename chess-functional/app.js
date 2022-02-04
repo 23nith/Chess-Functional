@@ -351,6 +351,8 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
             if(piece == "P"){
                 // initial behavior
                 if(pawnStartingPositionWhite.includes(parseInt(_homeTile))){
+
+                    // use pawn capture on threat
                     if (!isThreat) {
                         if (!checking) {
                             pieceMovement = pieceClass.generatePiece(piece).initialMovement;
@@ -398,8 +400,12 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
-                    if(!checking){
-                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    // use pawn capture on threat
+                    if (!isThreat) {
+                        if (!checking) {
+                            pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                        }
                     }
                 }
                 // capture behavior
@@ -1285,6 +1291,7 @@ async function drop(e) {
             } else {
                 highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
             }
+
         }
 
         // Get Black king pos
@@ -1321,6 +1328,10 @@ async function drop(e) {
             K: `K`,
         }
 
+        const BlackPiece = {
+            p: `p`,
+        }
+
         for (let i = 0; i < 64; i++) {
             const BoardChildArr = Array
                 .from(e
@@ -1343,8 +1354,12 @@ async function drop(e) {
                 .parentElement
                 .getAttribute(`data-tilenumber`)
 
-            highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
-
+            if ((PieceCode === BlackPiece.p)) {
+                let captureMovement = PieceObject.generatePiece(PieceCode).captureMovement;
+                highlightTiles(pieceHomeTile, captureMovement, sliding, PieceCode, undefined, true);
+            } else {
+                highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
+            }
         }
 
         // Get White king pos
