@@ -1229,6 +1229,29 @@ async function drop(e) {
     // checking
     if (turn === `Black`) {
 
+        for (let i = 0; i < 64; i++) {
+            const BoardChildArr   = Array
+                .from(e
+                    .target
+                    .parentElement
+                    .children
+                );
+
+            // Skip empty cell
+            const hasPiece       = BoardChildArr[i].children[0];
+            if (!hasPiece) continue;
+
+
+            // Black piece only
+            const PieceCode = hasPiece.id[0];
+            if (PieceCode
+                === PieceCode.toLowerCase()) continue;
+
+            console.log(PieceCode);
+
+        }
+
+    } else {
 
         for (let i = 0; i < 64; i++) {
             const BoardChildArr   = Array
@@ -1244,21 +1267,13 @@ async function drop(e) {
 
 
             // White piece only
-            const WhitePieceCode = hasPiece.id[0];
-            if (WhitePieceCode
-                === WhitePieceCode.toLowerCase()) continue;
+            const PieceCode = hasPiece.id[0];
+            if (PieceCode
+                === PieceCode.toUpperCase()) continue;
 
-            console.log(WhitePieceCode);
-
-
-
-
-
+            console.log(PieceCode);
 
         }
-
-    } else {
-
 
     }
 
