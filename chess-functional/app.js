@@ -111,7 +111,6 @@ async function undo(){
 
     whiteCapturedHistory.pop(whiteCapturedHistory.length -1);
     blackCapturedHistory.pop(whiteCapturedHistory.length -1);
-    // console.log(fenArray);
     changeTurn();
 
     let piece = new Piece();
@@ -133,9 +132,6 @@ async function undo(){
     });
     //
     let checkBoardDisplay = await document.querySelectorAll(".container div");
-
-
-    console.log("test");
 
     if(checkBoardDisplay){
         if(turn == "White"){
@@ -161,7 +157,6 @@ async function undo(){
 }
 
 function getFEN(){
-    console.log("triggered");
     let counter = 0;
     let fenArr = new Array(8).fill(0).map(() => new Array(8).fill(0));
     for(i = 0; i < 8; i++){
@@ -196,7 +191,6 @@ function getFEN(){
         i == 7 ? fenFormattedArr+=row : fenFormattedArr+=row+"/";
         row="";
     }
-    console.log("fenArray: ", fenArray);
     return fenFormattedArr;
 }
 
@@ -597,11 +591,8 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
             if(validMove < 64){
                 if(tiles[validMove].children[0]){
-                    console.log("child");
-
                     if(lightPiece){
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
-                            console.log("enemy piece");
                             // if ememy piece is in front of pawn
                             if(piece == "P" && pieceMovement[j] == -8){
                                 continue;
@@ -612,13 +603,11 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             // continue;
                         }
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
-                            console.log("friendly piece");
                             continue;
                         }
 
                     }else{
                         if(tiles[validMove].children[0].classList.contains("lightPiece")){
-                            console.log("enemy piece");
                             if(piece == "p" && pieceMovement[j] == 8){
                                 continue;
                             }
@@ -627,7 +616,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             }
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
-                            console.log("friendly piece");
                             continue;
                         }
 
@@ -669,18 +657,15 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                         directionLine = (direction * n) + parseInt(_homeTile);
 
                         if(tileNumber == 0 && directionLine == 0){
-                            console.log("zero");
                         }
 
                         if(tileNumber == directionLine){
 
                             if(currentTile.children[0]){
-                                console.log("has piece");
 
                                 if(lightPiece){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
 
-                                        // console.log("enemy piece");
                                         if(!checking){
                                             currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
 
@@ -698,7 +683,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                         break loop1;
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
-                                        console.log("friendly piece");
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
@@ -710,7 +694,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
                                         if(!checking){
                                             currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
-                                            // console.log("enemy piece");
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
                                             currentTile.style.backgroundColor = "#F91F15";
                                         }
@@ -726,7 +709,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                         // continue;
                                     }
                                     if(currentTile.children[0].classList.contains("darkPiece")){
-                                        console.log("friendly piece");
                                         if(tileNumber != parseInt(_homeTile)){
                                             break loop1;
                                         }
@@ -876,40 +858,28 @@ async function dropAllow(e) {
 
 
     tiles = document.querySelectorAll(".container div");
-    // console.log(tiles);
     lightTiles = document.querySelectorAll(".lightTiles");
     darkTiles = document.querySelectorAll(".darkTiles");
-
-    // console.log("dropAllow", e.target); //Information on the piece lifted
-    // console.log("parent: ", e.target.parentElement.getAttribute("data-tilenumber")); //Information on the home tile of the piece being lifted
-    // homeTile = e.target.parentElement.getAttribute("data-tilenumber") ? e.target.parentElement.getAttribute("data-tilenumber") : homeTile;
 
     lifted = e.target.parentElement.getAttribute("data-tilenumber");
     if(lifted){
         homeTile.push(lifted);
-        console.log("homeTile: ", homeTile[0])
         let pieceClass = new Piece();
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
 
     }
-    // console.log("lifted: ", lifted);
-    // console.log("homeTile: ", homeTile);
-
 }
 
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
 
     if(homeTile[0] != undefined){
-        console.log("retract touchmove")
         returnDrop();
         returnTileColors();
         homeTile[0] = e.target.parentElement.id;
     }
-
-    // console.log("e.target.parentElement.id: ", e.target.parentElement.id);
 
     piece = e.target.id[0]
     if(e.target.classList.contains("lightPiece")){
@@ -917,8 +887,6 @@ function drag(e) {
     }else{
         pieceColor = "Black";
     }
-
-    // console.log("drag", e.target); //information on the piece moved
 }
 
 let dropValue = undefined;
@@ -1156,7 +1124,6 @@ async function drop(e) {
     // Capture pieces
 
     if(e.target.children[1]){
-        console.log("capture");
         let container = document.createElement("div");
         if(e.target.children[0].classList.contains("lightPiece")){
             blackCapturedHistory.push(e.target.children[0].id[0]);
@@ -1177,8 +1144,6 @@ async function drop(e) {
     }
 
     if(homeTile){
-        console.log(`${pieceColor} ${piece} moved`);
-
         if(pieceColor == "White"){
             lightPieces = document.querySelectorAll(".lightPiece");
             removeDragFeatureLight(lightPieces);
@@ -1210,12 +1175,10 @@ async function drop(e) {
     if(piece == "P"){
         // record pawn pieces vulnerable to En Passant
         if(pawnEnPassantWhite.includes(parseInt(landed))){
-            console.log("piece: ", piece);
             enPassantPiecesWhite.push(parseInt(homeTile[0])-8);
         }
         // capture by en passant
         if(enPassantPiecesBlack.includes(parseInt(landed))){
-            console.log("tile of capture: ", tiles[parseInt(landed)+8]);
             if(tiles[parseInt(landed)+8].children[0].id[0] == "p"){
                 container1.appendChild(tiles[parseInt(landed)+8].children[0]);
                 document.querySelector(".white-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
@@ -1233,12 +1196,10 @@ async function drop(e) {
     if(piece == "p"){
         // record pawn pieces vulnerable to En Passant
         if(pawnEnPassantBlack.includes(parseInt(landed))){
-            console.log("piece: ", piece);
             enPassantPiecesBlack.push(parseInt(homeTile[0])+8);
         }
         // capture by en passant
         if(enPassantPiecesWhite.includes(parseInt(landed))){
-            console.log("tile of capture: ", tiles[parseInt(landed)-8]);
             if(tiles[parseInt(landed)-8].children[0].id[0] == "P"){
                 container1.appendChild(tiles[parseInt(landed)-8].children[0]);
                 document.querySelector(".black-captured").innerHTML += `<div class="tile">${container1.innerHTML}</div>`;
@@ -1256,18 +1217,9 @@ async function drop(e) {
     //
 
     homeTile = [];
-    // console.log("tiles: ", tiles);
-    // console.log("piece: ", piece);
-    // console.log("landed: ", landed);
-    // console.log("homeTile: ", homeTile);
-    // console.log("pieceColor: ", pieceColor);
-    // console.log("lifted at end: ", lifted);
-    // getFEN();
     fenArray.push(getFEN());
 
     displayFEN()
-    // console.log("drop", e.target); //Information on the tile where the piece landed
-
 
     // Implement check feature
     // reset value of currentTilesOnThreat
@@ -1279,16 +1231,13 @@ async function drop(e) {
                 let pieceObj = new Piece();
                 let currentPiece = pieceObj.generatePiece(currentPieceToEvaluate);
                 highlightTiles(tiles[x].id, currentPiece.movement, currentPiece.sliding, currentPiece.code, true);
-                console.log("stop")
             }
         }
-    // console.log("currentTilesOnThreat: ", currentTilesOnThreat);
     let checked = false;
 
     // if piece is lightpiece
     if(piece == piece.toUpperCase()){
         // lightpiece
-        console.log("lightpiece moved");
         // get tile of darkpiece king
         let darkKing = document.querySelector("#k");
         let tileOfKing = darkKing.parentElement.id;
@@ -1297,7 +1246,6 @@ async function drop(e) {
             // compare against possible capture of lightpieces
             if(item == item.toUpperCase()){
                 if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
-                    console.log("check");
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king is checked`;
                     checked = true;
@@ -1324,8 +1272,6 @@ async function drop(e) {
         }
         // check if all kings possible next move will be a potential capture by opponent
         let kingNextMovements = movements.map((item)=>{
-            console.log("movement item: ", item);
-            console.log("new item: ", parseInt(tileOfKing) + item);
             let tileNumber = parseInt(tileOfKing) + item;
             if((tileNumber >= 0) && (tileNumber < 64)){
                 return parseInt(tileOfKing) + item;
@@ -1347,14 +1293,12 @@ async function drop(e) {
             }
         };
         if(kingNextMovements.every(allMovesCheck)){
-            console.log("checkmate");
             let checkInfo = document.querySelector(".checkInfo")
             // checkInfo.innerHTML = `Black king is checkmate`;
             checked = true;
         }
     }else{
         // darkpiece
-        console.log("darkpiece moved");
         // get tile of lightpiece king
         let lightKing = document.querySelector("#K");
         let tileOfKing = lightKing.parentElement.id;
@@ -1362,7 +1306,6 @@ async function drop(e) {
             // compare against possible capture of lightpieces
             if(item != item.toUpperCase()){
                 if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
-                    console.log("check");
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king is checked`;
                     checked = true;
@@ -1373,14 +1316,7 @@ async function drop(e) {
     if(!checked){
             document.querySelector(".checkInfo").innerHTML = "";
     }
-    // for(item in currentTilesOnThreat){
-    //     console.log("item:", item);
-    //     if(item == item.toUpperCase()){
-    //         console.log("capital:", item);
-    //     }
-    // }
 
     dropValue = e.target;
-    // console.log("dropValue: ", dropValue);
 
 }
