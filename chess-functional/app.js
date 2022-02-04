@@ -557,24 +557,28 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                 exemption.push(...topEdge);
             }
             if(boardRightEdge.includes(parseInt(_homeTile))){
-                exemption.push(...rightEdge);
                 if(piece === "P" || piece === "p"){
-                    let capture1 = (pieceMovement.indexOf(9) != -1) ? pieceMovement.indexOf(9): false;
-                    let capture2 = (pieceMovement.indexOf(-7) != -1) ? pieceMovement.indexOf(-7): false;
-                    let removeCapture = capture1 || capture2;
-                    exemption.push(removeCapture);
+                    if(piece == "p"){
+                        let capture1 = (pieceMovement.indexOf(9) != -1) ? pieceMovement.indexOf(9): false;
+                        let capture2 = (pieceMovement.indexOf(-7) != -1) ? pieceMovement.indexOf(-7): false;
+                        let removeCapture = capture1 || capture2;
+                        exemption.push(removeCapture);
+                    }
+                }else{
+                    exemption.push(...rightEdge);
                 }
             }
             if(boardBottomEdge.includes(parseInt(_homeTile))){
                 exemption.push(...bottomEdge);
             }
             if(boardLeftEdge.includes(parseInt(_homeTile))){
-                exemption.push(...leftEdge);
                 if(piece === "P" || piece === "p"){
                     let capture1 = (pieceMovement.indexOf(-9) != -1) ? pieceMovement.indexOf(-9): false;
                     let capture2 = (pieceMovement.indexOf(7) != -1) ? pieceMovement.indexOf(7): false;
                     let removeCapture = capture1 || capture2;
                     exemption.push(removeCapture);
+                }else{
+                    exemption.push(...leftEdge);
                 }
             }
         }
@@ -1509,25 +1513,40 @@ async function drop(e) {
             if(kingNextMovements.every(allMovesCheck) && (blockCounter != kingNextMovements.length)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                 if(blockCounter != kingNextMovements.length){
                     const sliding = ["Q", "q", "B", "b", "R", "r"]
-                    blockCounter2 = 0;
-                    for(item in threatBy2){
-                        let piece = item;
-                        let mystring = `${item}-${threatBy2[item][1]}`;
+                    let blockCounter2 = 0;
+                    let edibleThreat = 0;
+                    for(item1 in threatBy2){
+                        let piece = item1;
+                        let mystring = `${item1}-${threatBy2[item1][1]}`;
                         if(threateningPiece[mystring] == undefined) continue;
-                        if(!sliding.includes(item)) continue;
+                        if(!sliding.includes(item1)) continue;
                         for([index, object] of threateningPiece[mystring].entries()){
                             let thisTile = threateningPiece[mystring][index]
-                            for(item in currentTilesOnThreat){
+                            for(const item in currentTilesOnThreat){
                                 if(item != item.toUpperCase()){
+                                    // check if sliding piece can be blocked
                                     if(currentTilesOnThreat[item].includes(parseInt(thisTile)) && (item != piece) && (item != "k")){
                                         console.log("test");
                                         blockCounter2 += 1
                                         // return;
                                     }
+                                    
                                 }
                             }
                         }
-                        
+                        for(const item in currentTilesOnThreat){
+                            if(item != item.toUpperCase()){
+                                console.log("item: ", item);
+                                // check if it can be eaten by ally pieces of king
+                                // console.log(threatBy2[item1][0]);
+                                let pieceThreat = threatBy2[item1][0];
+                                if(currentTilesOnThreat[item].includes(parseInt(pieceThreat)) && (item != piece)){
+                                    edibleThreat += 1;
+                                    // continue;
+                                }
+                            }
+                        }
+                        if(edibleThreat == Object.keys(threatBy2).length) return;
                         if(blockCounter2 == nextMoveNoPieceNotSafe) return;
                     } 
                     console.log("checkmate");
@@ -1700,7 +1719,19 @@ async function drop(e) {
                                 }
                             }
                         }
-                        
+                        for(const item in currentTilesOnThreat){
+                            if(item == item.toUpperCase()){
+                                console.log("item: ", item);
+                                // check if it can be eaten by ally pieces of king
+                                // console.log(threatBy2[item1][0]);
+                                let pieceThreat = threatBy2[item1][0];
+                                if(currentTilesOnThreat[item].includes(parseInt(pieceThreat)) && (item != piece)){
+                                    edibleThreat += 1;
+                                    // continue;
+                                }
+                            }
+                        }
+                        if(edibleThreat == Object.keys(threatBy2).length) return;
                         if(blockCounter2 == nextMoveNoPieceNotSafe) return;
                     } 
                     console.log("checkmate");
