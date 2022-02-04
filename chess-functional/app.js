@@ -11,14 +11,14 @@ class Piece {
             b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
             q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
             k: {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
-            p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
+            p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16], captureMovement: [7, 9]},
 
             R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
             N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
             B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
             K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
             Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
-            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16]},
+            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16], captureMovement: [-7, -9]},
         }
         return pieces[_fenLetter];
     }
@@ -239,6 +239,7 @@ let isCanCastleLeftWhite    = false;
 
 let isCanCastleRightBlack   = false;
 let isCanCastleLeftBlack    = false;
+let pawnTest                = false;
 
 let tilesOnThreatBlackKing  = {};
 let tilesOnThreatWhiteKing  = {};
@@ -313,8 +314,8 @@ function changeTurn(){
 
 
 
-function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
-
+function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThreat = false){
+    console.log(isThreat);
     let checking = forChecking;
 
     // check if piece is near edge
@@ -346,14 +347,14 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
         if(piece == "P" || piece == "p"){
             let pieceClass = new Piece();
 
-
-
             // check piece color
             if(piece == "P"){
                 // initial behavior
                 if(pawnStartingPositionWhite.includes(parseInt(_homeTile))){
-                    if(!checking){
-                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    if (!isThreat) {
+                        if (!checking) {
+                            pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                        }
                     }
                 }
                 // capture behavior
@@ -393,6 +394,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                         pieceMovement.splice(indexOfToRemove, 1);
                     }
                 }
+
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
@@ -586,25 +588,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
 
             // Store threats
-            if ((!tilesOnThreatBlackKing[validMove])
-                && (turn === `White`)
-                && (!(tilesOnThreatBlackKing[homeTile]))) {
-                tilesOnThreatBlackKing[validMove] = validMove;
-                console.log(tilesOnThreatBlackKing);
-
-            } else if ((!tilesOnThreatBlackKing[validMove])
-                && (turn === `White`)
-                && (!(tilesOnThreatBlackKing[homeTile]))) {
-                tilesOnThreatBlackKing[validMove] = validMove;
-                console.log(tilesOnThreatBlackKing);
-
-            }else if (!tilesOnThreatWhiteKing[validMove]
-                && (turn === `Black`)
-                && (!(tilesOnThreatWhiteKing[homeTile]))) {
-                tilesOnThreatWhiteKing[validMove] = validMove;
-                console.log(tilesOnThreatWhiteKing);
-            }
-
+            //
             if(validMove < 0){
                 continue;
             }
@@ -664,6 +648,20 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
         for(j = 0; j < pieceMovement.length; j++){
             let direction = pieceMovement[j];
+
+            // Store threats
+            // if ((!tilesOnThreatBlackKing[direction])
+            //     && (turn === `White`)
+            //     && (!(tilesOnThreatBlackKing[homeTile]))) {
+            //     tilesOnThreatBlackKing[direction] = direction;
+            //     console.log(tilesOnThreatBlackKing);
+
+            // }else if (!tilesOnThreatWhiteKing[direction]
+            //     && (turn === `Black`)
+            //     && (!(tilesOnThreatWhiteKing[homeTile]))) {
+            //     tilesOnThreatWhiteKing[direction] = direction;
+            // }
+
             if(direction == ""){
                 continue;
             }else{
@@ -893,6 +891,7 @@ async function dropAllow(e) {
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
     }
+
 }
 
 function drag(e) {
@@ -1244,8 +1243,6 @@ async function drop(e) {
 
     displayFEN()
 
-
-
     // checking
     if (turn === `Black`) {
 
@@ -1254,6 +1251,10 @@ async function drop(e) {
 
         const BlackPiece = {
             k: `k`,
+        }
+
+        const WhitePiece = {
+            P: `P`,
         }
 
         for (let i = 0; i < 64; i++) {
@@ -1273,15 +1274,19 @@ async function drop(e) {
             if (PieceCode === PieceCode.toLowerCase()) continue;
 
             let movement      = PieceObject.generatePiece(PieceCode).movement;
-            let sliding       = PieceObject.generatePiece(PieceCode).sliding;
+            let sliding       = PieceObject.generatePiece(PieceCode).sliding
             let pieceHomeTile = hasPiece
                 .parentElement
                 .getAttribute(`data-tilenumber`)
 
-            highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
+            if ((PieceCode === WhitePiece.P)) {
+                let captureMovement = PieceObject.generatePiece(PieceCode).captureMovement;
+                highlightTiles(pieceHomeTile, captureMovement, sliding, PieceCode, undefined, true);
+            } else {
+                highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
+            }
         }
 
-        console.log(tilesOnThreatBlackKing);
         // Get Black king pos
         for (let i = 0; i < 64; i++) {
             const BoardChildArr = Array
@@ -1306,7 +1311,6 @@ async function drop(e) {
                 .getAttribute(`data-tilenumber`)
         }
 
-        tilesOnThreatBlackKing = {};
 
     } else {
 
@@ -1368,8 +1372,9 @@ async function drop(e) {
 
         }
 
-        tilesOnThreatWhiteKing = {};
     }
+    tilesOnThreatBlackKing = {};
+    tilesOnThreatWhiteKing = {};
 
     dropValue = e.target;
 
