@@ -240,6 +240,9 @@ let isCanCastleLeftWhite    = false;
 let isCanCastleRightBlack   = false;
 let isCanCastleLeftBlack    = false;
 
+let tilesOnThreatBlackKing  = [];
+let tilesOnThreatWhiteKing  = [];
+
 let enPassantPiecesWhite = [];
 let enPassantPiecesBlack = [];
 
@@ -1221,101 +1224,46 @@ async function drop(e) {
 
     displayFEN()
 
-    // Implement check feature
-    // reset value of currentTilesOnThreat
-        currentTilesOnThreat = {};
-    // fill up currentTilesOnThreat
-        for(x = 0; x < 64; x++){
-            if(tiles[x].children[0]){
-                let currentPieceToEvaluate = tiles[x].children[0].id[0];
-                let pieceObj = new Piece();
-                let currentPiece = pieceObj.generatePiece(currentPieceToEvaluate);
-                highlightTiles(tiles[x].id, currentPiece.movement, currentPiece.sliding, currentPiece.code, true);
-            }
-        }
-    let checked = false;
 
-    // if piece is lightpiece
-    if(piece == piece.toUpperCase()){
-        // lightpiece
-        // get tile of darkpiece king
-        let darkKing = document.querySelector("#k");
-        let tileOfKing = darkKing.parentElement.id;
-        // iterate thru currentTilesOnThreat
-        for(item in currentTilesOnThreat){
-            // compare against possible capture of lightpieces
-            if(item == item.toUpperCase()){
-                if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
-                    let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `Black king is checked`;
-                    checked = true;
-                }
-            }
+
+    // checking
+    if (turn === `Black`) {
+
+
+        for (let i = 0; i < 64; i++) {
+            const BoardChildArr   = Array
+                .from(e
+                    .target
+                    .parentElement
+                    .children
+                );
+
+            // Skip empty cell
+            const hasPiece       = BoardChildArr[i].children[0];
+            if (!hasPiece) continue;
+
+
+            // White piece only
+            const WhitePieceCode = hasPiece.id[0];
+            if (WhitePieceCode
+                === WhitePieceCode.toLowerCase()) continue;
+
+            console.log(WhitePieceCode);
+
+
+
+
+
+
         }
 
-        // check if checkmate
-        let movements = [-8, 8, 1, -1, -7, -9, 9, 7]
-        let exemption = [];
-        if(boardEdges.includes(parseInt(tileOfKing))){
-            if(boardTopEdge.includes(parseInt(tileOfKing))){
-                exemption.push(...topEdge);
-            }
-            if(boardRightEdge.includes(parseInt(tileOfKing))){
-                exemption.push(...rightEdge);
-            }
-            if(boardBottomEdge.includes(parseInt(tileOfKing))){
-                exemption.push(...bottomEdge);
-            }
-            if(boardLeftEdge.includes(parseInt(tileOfKing))){
-                exemption.push(...leftEdge);
-            }
-        }
-        // check if all kings possible next move will be a potential capture by opponent
-        let kingNextMovements = movements.map((item)=>{
-            let tileNumber = parseInt(tileOfKing) + item;
-            if((tileNumber >= 0) && (tileNumber < 64)){
-                return parseInt(tileOfKing) + item;
-            }else{
-                return
-            }
-        });
+    } else {
 
-        function allMovesCheck(nextMove, index){
-            if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){
-                for(item in currentTilesOnThreat){
-                    // compare against possible capture of lightpieces
-                    if(item == item.toUpperCase()){
-                        return currentTilesOnThreat[item].includes(parseInt(nextMove));
-                    }
-                }
-            }else{
-                return true;
-            }
-        };
-        if(kingNextMovements.every(allMovesCheck)){
-            let checkInfo = document.querySelector(".checkInfo")
-            // checkInfo.innerHTML = `Black king is checkmate`;
-            checked = true;
-        }
-    }else{
-        // darkpiece
-        // get tile of lightpiece king
-        let lightKing = document.querySelector("#K");
-        let tileOfKing = lightKing.parentElement.id;
-        for(item in currentTilesOnThreat){
-            // compare against possible capture of lightpieces
-            if(item != item.toUpperCase()){
-                if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
-                    let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `White king is checked`;
-                    checked = true;
-                }
-            }
-        }
+
     }
-    if(!checked){
-            document.querySelector(".checkInfo").innerHTML = "";
-    }
+
+
+
 
     dropValue = e.target;
 
