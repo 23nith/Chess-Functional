@@ -1,9 +1,9 @@
 
 .hello {
 
-    width: 500px;
-    height: 500px;
-    background-color: crimson;
+    width:              500px;
+    height:             500px;
+    background-color:   crimson;
 
 }
 
@@ -21,13 +21,13 @@
 
 chess-board {
     position:           relative;
-    display:        block;
-    width:          30vw;
-    height:         30vw;
+    display:            block;
+    width:              45vw;
+    height:             45vw;
 }
 
 body {
-    display:        grid;
-    place-items:    center;
-    height:         100vh;
+    display:            grid;
+    place-items:        center;
+    height:             100vh;
 }
