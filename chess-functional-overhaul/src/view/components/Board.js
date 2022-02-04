@@ -18,7 +18,7 @@ export default class ChessBoard extends CustomElement {
         super();
 
         // future ref, for Board image
-        this.generateTemplate();
+        this.#generateTemplate();
 
         const { getById } = Element;
         const tmp         = getById(`chess-board-tmp`).content;
@@ -61,15 +61,15 @@ export default class ChessBoard extends CustomElement {
 
     }
 
-    connectedCallback() {
+    #connectedCallback() {
 
     }
 
-    attributeChangedCallback() {
+    #attributeChangedCallback() {
         this.#fen = this.getAttribute(`fen`);
     }
 
-    generateTemplate() {
+    #generateTemplate() {
         const { gen }                   = Element;
         const ChessBoardTemp            = gen(`template`);
         const ChessBoardNotif           = gen(`slot`);
