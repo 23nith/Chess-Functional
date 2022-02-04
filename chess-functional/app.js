@@ -1303,6 +1303,7 @@ async function drop(e) {
     } else {
 
         let whiteKingPos = 0;
+        let PieceObject  = new Piece();
 
         const WhitePiece = {
             K: `K`,
@@ -1323,6 +1324,14 @@ async function drop(e) {
             // Black piece only
             const PieceCode = hasPiece.id[0];
             if (PieceCode === PieceCode.toUpperCase()) continue;
+
+            let movement      = PieceObject.generatePiece(PieceCode).movement;
+            let sliding       = PieceObject.generatePiece(PieceCode).sliding;
+            let pieceHomeTile = hasPiece
+                .parentElement
+                .getAttribute(`data-tilenumber`)
+
+            highlightTiles(pieceHomeTile, movement, sliding, PieceCode);
 
         }
 
