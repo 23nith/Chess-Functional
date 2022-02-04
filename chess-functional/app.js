@@ -240,8 +240,8 @@ let isCanCastleLeftWhite    = false;
 let isCanCastleRightBlack   = false;
 let isCanCastleLeftBlack    = false;
 
-let tilesOnThreatBlackKing  = [];
-let tilesOnThreatWhiteKing  = [];
+let tilesOnThreatBlackKing  = {};
+let tilesOnThreatWhiteKing  = {};
 
 let enPassantPiecesWhite = [];
 let enPassantPiecesBlack = [];
@@ -584,6 +584,18 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
             }
             let validMove = parseInt(_homeTile)+pieceMovement[j];
 
+
+            if ((!tilesOnThreatBlackKing[validMove])
+                && turn === `White`) {
+                tilesOnThreatBlackKing[validMove] = validMove;
+                console.log(tilesOnThreatBlackKing);
+
+            }else if (!tilesOnThreatWhiteKing[validMove]
+                && turn === `Black`) {
+                tilesOnThreatWhiteKing[validMove] = validMove;
+                console.log(tilesOnThreatWhiteKing);
+            }
+
             if(validMove < 0){
                 continue;
             }
@@ -871,7 +883,6 @@ async function dropAllow(e) {
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
-
     }
 }
 
@@ -1277,6 +1288,8 @@ async function drop(e) {
                 .getAttribute(`data-tilenumber`)
         }
 
+        tilesOnThreatBlackKing = {};
+
     } else {
 
         let whiteKingPos = 0;
@@ -1326,12 +1339,10 @@ async function drop(e) {
                 .parentElement
                 .getAttribute(`data-tilenumber`)
 
-            console.log(whiteKingPos);
         }
+
+        tilesOnThreatWhiteKing = {};
     }
-
-
-
 
     dropValue = e.target;
 
