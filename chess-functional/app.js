@@ -1229,32 +1229,14 @@ async function drop(e) {
     // checking
     if (turn === `Black`) {
 
-        for (let i = 0; i < 64; i++) {
-            const BoardChildArr   = Array
-                .from(e
-                    .target
-                    .parentElement
-                    .children
-                );
+        let blackKingPos = 0;
 
-            // Skip empty cell
-            const hasPiece       = BoardChildArr[i].children[0];
-            if (!hasPiece) continue;
-
-
-            // Black piece only
-            const PieceCode = hasPiece.id[0];
-            if (PieceCode
-                === PieceCode.toLowerCase()) continue;
-
-            console.log(PieceCode);
-
+        const BlackPiece = {
+            k: `k`,
         }
 
-    } else {
-
         for (let i = 0; i < 64; i++) {
-            const BoardChildArr   = Array
+            const BoardChildArr = Array
                 .from(e
                     .target
                     .parentElement
@@ -1262,17 +1244,69 @@ async function drop(e) {
                 );
 
             // Skip empty cell
-            const hasPiece       = BoardChildArr[i].children[0];
+            const hasPiece = BoardChildArr[i].children[0];
             if (!hasPiece) continue;
 
 
             // White piece only
             const PieceCode = hasPiece.id[0];
-            if (PieceCode
-                === PieceCode.toUpperCase()) continue;
+            if (PieceCode === PieceCode.toUpperCase()) continue;
 
-            console.log(PieceCode);
+        }
 
+        // Get Black king pos
+        for (let i = 0; i < 64; i++) {
+            const BoardChildArr = Array
+                .from(e
+                    .target
+                    .parentElement
+                    .children
+                );
+
+            // Skip empty cell
+            const hasPiece = BoardChildArr[i].children[0];
+            if (!hasPiece) continue;
+
+            // Black piece only
+            const PieceCode = hasPiece.id[0];
+            if (PieceCode === PieceCode.toUpperCase()) continue;
+
+            if (PieceCode !== BlackPiece.k) continue;
+
+            // Get Black king current Pos
+            blackKingPos = hasPiece
+                .parentElement
+                .getAttribute(`data-tilenumber`)
+
+        }
+
+    } else {
+
+        let blackKingPos = 0;
+
+        const BlackPiece = {
+            k: `k`,
+        }
+
+        for (let i = 0; i < 64; i++) {
+            const BoardChildArr = Array
+                .from(e
+                    .target
+                    .parentElement
+                    .children
+                );
+
+            // Skip empty cell
+            const hasPiece = BoardChildArr[i].children[0];
+            if (!hasPiece) continue;
+
+            // Black piece only
+            const PieceCode = hasPiece.id[0];
+            if (PieceCode === PieceCode.toUpperCase()) continue;
+
+            if (PieceCode !== BlackPiece.k) continue;
+
+            console.log(hasPiece);
         }
 
     }
