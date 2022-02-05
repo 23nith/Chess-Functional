@@ -8,6 +8,7 @@ high prio
 
 
 normal prio
+-fix pawn not promoting when capturing a piece on promotion field.
 
 less prio
  -Add timer
