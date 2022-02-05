@@ -690,15 +690,14 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     if((piece == "p" || piece == "P") && (pieceMovement[j] != 16) && (pieceMovement[j] != -16)){
                         // validMove = parseInt(_homeTile)+pieceMovement[j]
                         if(capturemoves.includes(pieceMovement[j])){
-                            if(lightcapturemoves.includes(pieceMovement[j])){
+                            if(lightPiece){
                                 pieceMovement.push(-8)
                                 
                             }else{
                                 pieceMovement.push(8)
-
                             }
                         }else{
-                            // tiles[validMove].style.backgroundColor = "blue"; //**(b)
+                            tiles[validMove].style.backgroundColor = "blue"; //**(b)
                             if(pawnNonCaptureMoves[piece] == undefined){
                                 pawnNonCaptureMoves[piece] = [];
                             }
@@ -1557,7 +1556,7 @@ async function drop(e) {
                                         console.log("test");
                                         if(item == "p"){
                                             if(pawnNonCaptureMoves[item].includes(parseInt(thisTile)) && (item != piece) && (item != "k")){
-                                                blockCounter += 1;
+                                                blockCounter2 += 1;
                                             }
                                         }else{
                                             blockCounter2 += 1
@@ -1736,6 +1735,7 @@ async function drop(e) {
             console.log(blockCounter);
 
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
+                console.log(blockCounter)
                 if(blockCounter != kingNextMovements.length){
                     const sliding = ["Q", "q", "B", "b", "R", "r"]
                     blockCounter2 = 0;
@@ -1749,6 +1749,7 @@ async function drop(e) {
                             let thisTile = threateningPiece[mystring][index]
                             for(const item in currentTilesOnThreat){
                                 if(item == item.toUpperCase()){
+                                    // check if sliding piece can be blocked
                                     if(currentTilesOnThreat[item].includes(parseInt(thisTile)) && (item != piece) && (item != "K")){
                                         console.log("test");
                                         if(item == "P"){
@@ -1777,8 +1778,8 @@ async function drop(e) {
                             }
                         }
                     } 
-                    if(blockCounter2 == nextMoveNoPieceNotSafe) return;
                     if(edibleThreat == Object.keys(threatBy2).length) return;
+                    if(blockCounter2 == nextMoveNoPieceNotSafe) return;
                     console.log("checkmate");
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king has been checkmated`;
