@@ -269,6 +269,10 @@ let threateningPiece = {
 
 }
 
+let pawnNonCaptureMoves = {
+
+}
+
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -679,6 +683,30 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                         currentTilesOnThreat[piece] = [];
                     }
                     currentTilesOnThreat[piece].push(validMove);
+
+                    let capturemoves = [7, -7, 9, -9]
+                    let lightcapturemoves = [-7, -9]
+                    
+                    if((piece == "p" || piece == "P") && (pieceMovement[j] != 16) && (pieceMovement[j] != -16)){
+                        // validMove = parseInt(_homeTile)+pieceMovement[j]
+                        if(capturemoves.includes(pieceMovement[j])){
+                            if(lightcapturemoves.includes(pieceMovement[j])){
+                                pieceMovement.push(-8)
+                                
+                            }else{
+                                pieceMovement.push(8)
+
+                            }
+                        }else{
+                            // tiles[validMove].style.backgroundColor = "blue"; //**(b)
+                            if(pawnNonCaptureMoves[piece] == undefined){
+                                pawnNonCaptureMoves[piece] = [];
+                            }
+                            pawnNonCaptureMoves[piece].push(validMove);
+                        }
+                    }
+                    
+                    
                 }
             }
         }
@@ -1527,7 +1555,13 @@ async function drop(e) {
                                     // check if sliding piece can be blocked
                                     if(currentTilesOnThreat[item].includes(parseInt(thisTile)) && (item != piece) && (item != "k")){
                                         console.log("test");
-                                        blockCounter2 += 1
+                                        if(item == "p"){
+                                            if(pawnNonCaptureMoves[item].includes(parseInt(thisTile)) && (item != piece) && (item != "k")){
+                                                blockCounter += 1;
+                                            }
+                                        }else{
+                                            blockCounter2 += 1
+                                        }
                                         // return;
                                     }
                                     
@@ -1717,7 +1751,13 @@ async function drop(e) {
                                 if(item == item.toUpperCase()){
                                     if(currentTilesOnThreat[item].includes(parseInt(thisTile)) && (item != piece) && (item != "K")){
                                         console.log("test");
-                                        blockCounter2 += 1
+                                        if(item == "P"){
+                                            if(pawnNonCaptureMoves[item].includes(parseInt(thisTile)) && (item != piece) && (item != "K")){
+                                                blockCounter += 1;
+                                            }
+                                        }else{
+                                            blockCounter2 += 1
+                                        }
                                         // return;
                                     }
                                 }
