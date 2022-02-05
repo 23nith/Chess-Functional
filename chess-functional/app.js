@@ -696,8 +696,8 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             }else{
                                 pieceMovement.push(8)
                             }
-                        }else{
-                            tiles[validMove].style.backgroundColor = "blue"; //**(b)
+                        // }else{
+                        //     tiles[validMove].style.backgroundColor = "blue"; //**(b)
                             if(pawnNonCaptureMoves[piece] == undefined){
                                 pawnNonCaptureMoves[piece] = [];
                             }
