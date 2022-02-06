@@ -22,14 +22,14 @@ class Piece {
             b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
             q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
             k: {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
-            p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
+            p: {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16], cptrMvmnt: [7, 9]},
 
             R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
             N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
             B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
             K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
             Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
-            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16]},
+            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16], cptrMvmnt: [-7, -9]},
         }
         return pieces[_fenLetter];
     }
@@ -317,7 +317,12 @@ function getRook(sign, _tile_to_add, _homeTile) {
     }
 }
 
+
 // Checking
+function isPawn(pc) {
+    return pc.toLowerCase() === `p`;
+}
+
 // Fetch moves of all opponents piece on board
 function getEvryEnmyInfOnBrdOf(pClr) {
 
@@ -333,7 +338,7 @@ function getEvryEnmyInfOnBrdOf(pClr) {
         const pcEl   = BrdChldArr[i].children[0];
 
         // Skip if no piece found
-        if (!pieceEl) continue;
+        if (!pcEl) continue;
 
         const code      = pcEl.id[0];
         const blckCode  = code.toLowerCase();
@@ -355,6 +360,7 @@ function getEvryEnmyInfOnBrdOf(pClr) {
     return pcsOnBrd;
 }
 
+
 // Highlight opponent moves on board
 function hghLghtMvs(getPcsOnBrdInf, turn) {
 
@@ -372,16 +378,18 @@ function hghLghtMvs(getPcsOnBrdInf, turn) {
         homeTile = pcsOnBrdInf[i + 1];
 
         pc       = pcsOnBrdInf[i];
+        pcNwtrl  = pc.toLowerCase();
 
         isSldng  = PieceObject
             .generatePiece(pc)
             .sliding;
 
-        mvmnt    = PieceObject
-            .generatePiece(pc)
-            .movement;
+        console.log(isPawn(pc));
 
-        highlightTiles(homeTile, mvmnt, isSldng, pc);
+        if (isPawn(pc)) mvmnt = PieceObject.generatePiece(pc).cptrMvmnt;
+        else            mvmnt = PieceObject.generatePiece(pc).movement;
+
+        highlightTiles(homeTile, mvmnt, isSldng, pc, undefined, true);
     }
 }
 
@@ -394,7 +402,7 @@ function changeTurn(){
 
 
 
-function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
+function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThreat){
 
     let checking = forChecking;
 
@@ -433,8 +441,11 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
             if(piece == "P"){
                 // initial behavior
                 if(pawnStartingPositionWhite.includes(parseInt(_homeTile))){
-                    if(!checking){
-                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+
+                    if (!isThreat) {
+                        if (!checking) {
+                            pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                        }
                     }
                 }
                 // capture behavior
@@ -477,8 +488,10 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
             }else{
                 // initial behavior
                 if(pawnStartingPositionBlack.includes(parseInt(_homeTile))){
-                    if(!checking){
-                        pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                    if (!isThreat) {
+                        if (!checking) {
+                            pieceMovement = pieceClass.generatePiece(piece).initialMovement;
+                        }
                     }
                 }
                 // capture behavior
@@ -1401,9 +1414,11 @@ async function drop(e) {
     dropValue = e.target;
 
     if (turn === `Black`) {
+
         hghLghtMvs(getEvryEnmyInfOnBrdOf, turn);
 
     } else {
+
         hghLghtMvs(getEvryEnmyInfOnBrdOf, turn);
 
 
