@@ -14,8 +14,10 @@ body {
 
 .container {
     display: grid;
-    width: 650px;
-    height: 650px;
+    /* width: 650px;
+    height: 650px; */
+    width: 800px;
+    height: 800px;
     border: solid black 1px;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
@@ -88,6 +90,11 @@ p {
 
 .black-captured div, .white-captured div{
     margin-left: 15px;
+}
+
+.black-captured div img, .white-captured div img{
+    height: 90px;
+    width: auto;
 }
 
 

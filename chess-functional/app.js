@@ -1,4 +1,5 @@
 let highlightColor =  "rgba(66, 245, 72, .5)";
+let piecesHeight = "80px"
 
 const threatDirection = {
     0 : "North",
@@ -19,19 +20,19 @@ class Piece {
 
     generatePiece(_fenLetter){
         let pieces = {
-            r : {name: "black-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "r", sliding: true},
-            n : {name: "black-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "n", sliding: false},
-            b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
-            q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
-            k: {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
-            p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8, "", "", "", "", "", "", ""], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
+            r : {img: "./Chess_Pieces/Rook-Black.gif", name: "black-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "r", sliding: true},
+            n : {img: "./Chess_Pieces/Knight-Black.gif", name: "black-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "n", sliding: false},
+            b : {img: "./Chess_Pieces/Bishop-Black.gif", name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
+            q : {img: "./Chess_Pieces/Queen-Black.gif", name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
+            k : {img: "./Chess_Pieces/King-Black.gif", name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
+            p : {img: "./Chess_Pieces/Pawn-Black.gif", name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8, "", "", "", "", "", "", ""], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
 
-            R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
-            N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
-            B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
-            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
-            Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
-            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: ["", -8, "", "", "", "", "", ""], code: "P", sliding: false, initialMovement: [-8, -16]},
+            R : {img: "./Chess_Pieces/Rook-White.gif", name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
+            N : {img: "./Chess_Pieces/Knight-White.gif", name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
+            B : {img: "./Chess_Pieces/Bishop-White.gif", name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
+            K : {img: "./Chess_Pieces/King-White.gif", name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
+            Q : {img: "./Chess_Pieces/Queen-White.gif", name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
+            P : {img: "./Chess_Pieces/Pawn-White.gif", name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: ["", -8, "", "", "", "", "", ""], code: "P", sliding: false, initialMovement: [-8, -16]},
         }
         return pieces[_fenLetter];
     }
@@ -83,7 +84,9 @@ async function drawGrid(col, row, _fen){
 
                 // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}" ></i>`;
                 let theId = (piece.generatePiece(fenArr[i]).code == "k" || piece.generatePiece(fenArr[i]).code == "K")? piece.generatePiece(fenArr[i]).code : `${piece.generatePiece(fenArr[i]).code}-${i}`;
-                grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" ></i>`;
+                // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" ></i>`;
+                // <img src="./Chess_Pieces/Bishop-White.gif" alt="" style="height: 90px; width: auto">
+                grid[gridCounter].innerHTML = `<img src=${piece.generatePiece(fenArr[i]).img} style="height: ${piecesHeight}; width: auto" ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" />`;
                 if (character == character.toUpperCase()){
                     grid[gridCounter].children[0].classList.add("lightPiece")
                 }else{
