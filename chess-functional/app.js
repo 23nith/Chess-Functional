@@ -253,6 +253,9 @@ let isCanCastleLeftWhite    = false;
 let isCanCastleRightBlack   = false;
 let isCanCastleLeftBlack    = false;
 
+let crrntTlsOnThrtBlckKing  = {}
+let crrntTlsOnThrtBlckWhite = {}
+
 let enPassantPiecesWhite = [];
 let enPassantPiecesBlack = [];
 
@@ -439,8 +442,8 @@ function changeTurn(){
 
 function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThreat){
 
+    let homeTileTmp = _homeTile;
     let checking = forChecking;
-
     // check if piece is near edge
     let exemption = []
     let exemptedTiles = [];
@@ -780,6 +783,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
 
                     }
                 }
+
                 if(!checking){
                     tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
                     tiles[validMove].style.backgroundColor = "#F91F15";
@@ -848,11 +852,9 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
 
                                 if(lightPiece){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
-
                                         if(!checking && tileNumber != homeTile[0]){
                                             currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
 
-                                        // continue;
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
                                             currentTile.style.backgroundColor = "#F91F15";
                                         }
@@ -942,7 +944,11 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                             }
                             if(!checking && tileNumber != homeTile[0]){
                                 currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                currentTile.style.backgroundColor = "#F91F15";
+
+                                if (!(tileNumber === parseInt(homeTileTmp)))
+                                    currentTile.style.backgroundColor = "lightGreen";
+
+
                             }
                             if(checking && tileNumber != homeTile[0]){
                                 // currentTile.style.backgroundColor = "#48f542"; //*(b)
