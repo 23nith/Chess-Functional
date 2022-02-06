@@ -19,6 +19,12 @@ body {
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
     /* margin-top: 15px; */
+    /* background-image: url("background.PNG"); */
+    /* background-image: url("board-plain.PNG"); */
+    /* background-image: url("board-plain-cropped.png"); */
+    background-image: url("board-plain-resized.png");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .tile {
@@ -55,6 +61,10 @@ body {
 .lightPiece {
     /* color: #7E4B37; */
     color: white;
+}
+
+.darkPiece {
+    /* color: greenyellow; */
 }
 
 .tileHighlight {
