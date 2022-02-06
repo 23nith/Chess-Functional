@@ -278,7 +278,6 @@ const boardEdges = [0, 1, 2, 3, 4 , 5, 6, 7, 15, 23, 31, 39, 47, 55, 63, 56, 57,
 const pawnStartingPositionWhite = [48, 49, 50, 51, 52, 53, 54, 55];
 const pawnStartingPositionBlack = [8, 9, 10, 11, 12, 13, 14, 15];
 
-
 const whitePromotionField = [0, 1, 2, 3, 4, 5, 6, 7];
 const blackPromotionField = [56, 57, 58, 59, 60, 61, 62, 63];
 
@@ -298,6 +297,27 @@ const leftWhiteCastlingTile     = 58;
 const rightWhiteCastlingTile    = 62;
 
 
+const brdRghtEdg = {
+    7: 7,
+    15: 15,
+    23: 23,
+    31: 31,
+    39: 39,
+    47: 47,
+    55: 55,
+    63: 63
+};
+
+const brdLftEdg = {
+    0: 0,
+    8: 8,
+    16: 16,
+    24: 24,
+    32: 32,
+    40: 40,
+    48: 48,
+    56: 56,
+};
 
 
 // for castling
@@ -317,12 +337,28 @@ function getRook(sign, _tile_to_add, _homeTile) {
     }
 }
 
-
-// Checking
+// Utils
 function isPawn(pc) {
     return pc.toLowerCase() === `p`;
 }
 
+function isOnRghtEdg(homeTile) {
+    return brdRghtEdg[homeTile];
+}
+
+function isOnLftEdg() {
+    return brdLftEdg[homeTile];
+}
+
+function isBlckPwn(pc) {
+    return pc === `p`;
+}
+
+function isWhtPwn(pc) {
+    return pc === `P`;
+}
+
+// Checking
 // Fetch moves of all opponents piece on board
 function getEvryEnmyInfOnBrdOf(pClr) {
 
@@ -364,6 +400,15 @@ function getEvryEnmyInfOnBrdOf(pClr) {
 // Highlight opponent moves on board
 function hghLghtMvs(getPcsOnBrdInf, turn) {
 
+    function getPwnCptrMvmnt(tile, pc) {
+        const PieceObject = new Piece();
+        if      (isOnLftEdg (tile) && isWhtPwn (pc)) return [-7];
+        else if (isOnRghtEdg(tile) && isWhtPwn (pc)) return [-9];
+        else if (isOnLftEdg (tile) && isBlckPwn(pc)) return [9];
+        else if (isOnRghtEdg(tile) && isBlckPwn(pc)) return [7];
+        else return PieceObject.generatePiece(pc).cptrMvmnt
+    }
+
     const clr          = turn.toUpperCase();
     const pcsOnBrdInf  = getPcsOnBrdInf(clr);
     const PieceObject  = new Piece();
@@ -384,14 +429,13 @@ function hghLghtMvs(getPcsOnBrdInf, turn) {
             .generatePiece(pc)
             .sliding;
 
-        console.log(isPawn(pc));
-
-        if (isPawn(pc)) mvmnt = PieceObject.generatePiece(pc).cptrMvmnt;
+        if (isPawn(pc)) mvmnt = getPwnCptrMvmnt(homeTile, pc);
         else            mvmnt = PieceObject.generatePiece(pc).movement;
 
         highlightTiles(homeTile, mvmnt, isSldng, pc, undefined, true);
     }
 }
+
 
 // ************************************************** Functions called by drag drop events **************************************************
 
@@ -1424,7 +1468,6 @@ async function drop(e) {
     } else {
 
         hghLghtMvs(getEvryEnmyInfOnBrdOf, turn);
-
 
     }
 
