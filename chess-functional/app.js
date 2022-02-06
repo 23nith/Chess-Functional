@@ -1,3 +1,9 @@
+
+
+// logging for threats
+
+const doLogThrt = true;
+
 const threatDirection = {
     0 : "North",
     1 : "South",
@@ -246,15 +252,12 @@ let turn = "White";
 
 let whiteKingCastlingLimit  = 1;
 let blackKingCastlingLimit  = 1;
-
-let isCanCastleRightWhite   = false;
 let isCanCastleLeftWhite    = false;
-
 let isCanCastleRightBlack   = false;
 let isCanCastleLeftBlack    = false;
+let allPsblMvBlck           = {}
+let allPsblMvWht            = {}
 
-let crrntTlsOnThrtBlckKing  = {}
-let crrntTlsOnThrtBlckWhite = {}
 
 let enPassantPiecesWhite = [];
 let enPassantPiecesBlack = [];
@@ -720,6 +723,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
             }
             let validMove = parseInt(_homeTile)+pieceMovement[j];
 
+
             if(validMove < 0){
                 continue;
             }
@@ -728,8 +732,11 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                 continue;
             }
 
+
             if(validMove < 64){
+
                 if(tiles[validMove].children[0]){
+
 
                     if(lightPiece){
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
@@ -819,52 +826,62 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
 
                 }
             }
+
+                if (!(allPsblMvBlck[validMove]) && (turn === `White`)) {
+                    allPsblMvBlck[validMove] = validMove;
+                    delete allPsblMvBlck[parseInt((homeTileTmp))];
+                }
         }
-
-
 
     }else{
 
-        for(j = 0; j < pieceMovement.length; j++){
+        for (j = 0; j < pieceMovement.length; j++) {
             let direction = pieceMovement[j];
-            if(direction == ""){
+            if (direction == "") {
                 continue;
-            }else{
+            } else {
                 let desc = descending.includes(j);
 
                 loop1:
-                for(desc? tile = 63: tile = 0;  desc? tile >= 0: tile < 64;  desc? tile-- : tile++){
+                for (desc ? tile = 63 : tile = 0; desc ? tile >= 0 : tile < 64; desc ? tile-- : tile++) {
                     let currentTile = tiles[tile];
 
-                    if(!exemptedTiles.includes(currentTile.id) && !checking){
-                        currentTile.setAttribute("ondragover", "removeDrop(event)")
+
+
+                    if (isThreat) {
+                        if (!exemptedTiles.includes(currentTile.id) && !checking) {
+                            currentTile.setAttribute("ondragover", "removeDrop(event)")
+                        }
                     }
-                    for(n = 0; n < 64; n++){
+                    for (n = 0; n < 64; n++) {
                         tileNumber = parseInt(currentTile.id);
+
                         directionLine = (direction * n) + parseInt(_homeTile);
 
-                        if(tileNumber == 0 && directionLine == 0){
+                        if (tileNumber == 0 && directionLine == 0) {
+
                         }
 
-                        if(tileNumber == directionLine){
+                        if (tileNumber == directionLine) {
+
                             // if(tileNumber == homeTile[0]) continue;
-                            if(currentTile.children[0]){
-
-                                if(lightPiece){
-                                    if(currentTile.children[0].classList.contains("darkPiece")){
-                                        if(!checking && tileNumber != homeTile[0]){
-                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
-
-                                            currentTile.setAttribute("ondragover", "dropAllow(event)");
+                            if (currentTile.children[0]) {
+                                if (lightPiece) {
+                                    if (currentTile.children[0].classList.contains("darkPiece")) {
+                                        if (!checking && tileNumber != homeTile[0]) {
+                                            if (!isThreat) {
+                                                currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                                currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            }
                                             currentTile.style.backgroundColor = "#F91F15";
                                         }
-                                        if(checking && tileNumber != homeTile[0]){
+                                        if (checking && tileNumber != homeTile[0]) {
                                             // currentTile.style.backgroundColor = "#48f542";
                                             let mystring = `${piece}-${threatDirection[j]}`
-                                            if(currentTilesOnThreat[piece] == undefined){
+                                            if (currentTilesOnThreat[piece] == undefined) {
                                                 currentTilesOnThreat[piece] = [];
                                             }
-                                            if(threateningPiece[mystring] == undefined){
+                                            if (threateningPiece[mystring] == undefined) {
                                                 threateningPiece[mystring] = [];
                                             }
                                             currentTilesOnThreat[piece].push(tile);
@@ -873,11 +890,11 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                                         exemptedTiles.push(currentTile.id);
                                         break loop1;
                                     }
-                                    if(currentTile.children[0].classList.contains("lightPiece")){
-                                        if(checking && tileNumber != homeTile[0]){
-                                            if(currentTile.children[0].id[0] != "K"){
+                                    if (currentTile.children[0].classList.contains("lightPiece")) {
+                                        if (checking && tileNumber != homeTile[0]) {
+                                            if (currentTile.children[0].id[0] != "K") {
                                                 // currentTile.style.backgroundColor = "#48f542"; //*(a)
-                                                if(currentTilesOnThreat[piece] == undefined){
+                                                if (currentTilesOnThreat[piece] == undefined) {
                                                     currentTilesOnThreat[piece] = [];
                                                 }
                                                 // if(threateningPiece[mystring] == undefined){
@@ -888,24 +905,26 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                                             }
                                         }
 
-                                        if(tileNumber != parseInt(_homeTile)){
+                                        if (tileNumber != parseInt(_homeTile)) {
                                             break loop1;
                                         }
                                         // continue;
                                     }
 
-                                }else{ //friendly piece
-                                    if(currentTile.children[0].classList.contains("lightPiece")){
+                                } else { //friendly piece
+                                    if (currentTile.children[0].classList.contains("lightPiece")) {
 
-                                        if(!checking && tileNumber != homeTile[0]){
-                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                        if (!checking && tileNumber != homeTile[0]) {
+                                            if (!isThreat) {
+                                                currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                            }
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
                                             currentTile.style.backgroundColor = "#F91F15";
                                         }
-                                        if(checking && tileNumber != homeTile[0]){
+                                        if (checking && tileNumber != homeTile[0]) {
                                             // currentTile.style.backgroundColor = "#48f542";
                                             let mystring = `${piece}-${threatDirection[j]}`
-                                            if(currentTilesOnThreat[piece] == undefined){
+                                            if (currentTilesOnThreat[piece] == undefined) {
                                                 currentTilesOnThreat[piece] = [];
                                             }
                                             // if(threateningPiece[mystring] == undefined){
@@ -919,12 +938,12 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                                         break loop1;
                                         // continue;
                                     }
-                                    if(currentTile.children[0].classList.contains("darkPiece")){
-                                        if(checking && tileNumber != homeTile[0]){
-                                            if(currentTile.children[0].id[0] != "k"){
+                                    if (currentTile.children[0].classList.contains("darkPiece")) {
+                                        if (checking && tileNumber != homeTile[0]) {
+                                            if (currentTile.children[0].id[0] != "k") {
                                                 // currentTile.style.backgroundColor = "#48f542"; //*(a)
                                                 let mystring = `${piece}-${threatDirection[j]}`
-                                                if(currentTilesOnThreat[piece] == undefined){
+                                                if (currentTilesOnThreat[piece] == undefined) {
                                                     currentTilesOnThreat[piece] = [];
                                                 }
                                                 // if(threateningPiece[mystring] == undefined){
@@ -934,7 +953,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                                                 // threateningPiece[mystring].push(tile);
                                             }
                                         }
-                                        if(tileNumber != parseInt(_homeTile)){
+                                        if (tileNumber != parseInt(_homeTile)) {
                                             break loop1;
                                         }
                                         // continue;
@@ -942,21 +961,28 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
 
                                 }
                             }
-                            if(!checking && tileNumber != homeTile[0]){
-                                currentTile.setAttribute("ondragover", "dropAllow(event)");
 
-                                if (!(tileNumber === parseInt(homeTileTmp)))
-                                    currentTile.style.backgroundColor = "lightGreen";
-
+                            if (!(allPsblMvBlck[directionLine]) && (turn === `White`)) {
+                                allPsblMvBlck[directionLine] = directionLine;
+                                delete allPsblMvBlck[parseInt((homeTileTmp))];
 
                             }
-                            if(checking && tileNumber != homeTile[0]){
+
+                            if (!checking && tileNumber != homeTile[0]) {
+                                if (!isThreat) {
+                                    currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                }
+                                if (!(tileNumber === parseInt(homeTileTmp)))
+                                    currentTile.style.backgroundColor = "#F91F15";
+                            }
+
+                            if (checking && tileNumber != homeTile[0]) {
                                 // currentTile.style.backgroundColor = "#48f542"; //*(b)
                                 let mystring = `${piece}-${threatDirection[j]}`
-                                if(currentTilesOnThreat[piece] == undefined){
+                                if (currentTilesOnThreat[piece] == undefined) {
                                     currentTilesOnThreat[piece] = [];
                                 }
-                                if(threateningPiece[mystring] == undefined){
+                                if (threateningPiece[mystring] == undefined) {
                                     threateningPiece[mystring] = [];
                                 }
                                 currentTilesOnThreat[piece].push(tile);
@@ -964,28 +990,31 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                             }
                             exemptedTiles.push(currentTile.id);
 
-                            if(topEdge.includes(j)){
-                                if(boardTopEdge.includes(tileNumber)){
+                            if (topEdge.includes(j)) {
+                                if (boardTopEdge.includes(tileNumber)) {
                                     break loop1;
                                 }
                             }
 
-                            if(rightEdge.includes(j)){
-                                if(boardRightEdge.includes(tileNumber)){
+                            if (rightEdge.includes(j)) {
+                                if (boardRightEdge.includes(tileNumber)) {
                                     break loop1;
                                 }
                             }
 
-                            if(bottomEdge.includes(j)){
-                                if(boardBottomEdge.includes(tileNumber)){
+                            if (bottomEdge.includes(j)) {
+                                if (boardBottomEdge.includes(tileNumber)) {
                                     break loop1;
                                 }
                             }
 
-                            if(leftEdge.includes(j)){
-                                if(boardLeftEdge.includes(tileNumber)){
+                            if (leftEdge.includes(j)) {
+                                if (boardLeftEdge.includes(tileNumber)) {
                                     break loop1;
                                 }
+                            }
+                            if (!(allPsblMvBlck[j]) && (turn === `White`)) {
+                                console.log(j);
                             }
                         }
                     }
@@ -993,8 +1022,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
             }
         }
     }
-
-
 }
 
 function removeDrop(e){
@@ -1458,15 +1485,21 @@ async function drop(e) {
 
     dropValue = e.target;
 
-    if (turn === `Black`) {
+    allPsblMvBlck = {};
+    allPsblMvWht  = {};
 
-        hghLghtMvs(getEvryEnmyInfOnBrdOf, turn);
+    const clr = turn;
+    if (clr === `Black`) {
+
+        hghLghtMvs(getEvryEnmyInfOnBrdOf, clr);
+
 
     } else {
+        hghLghtMvs(getEvryEnmyInfOnBrdOf, clr);
 
-        hghLghtMvs(getEvryEnmyInfOnBrdOf, turn);
-
+        if (doLogThrt) {
+            console.log(allPsblMvBlck);
+        }
     }
-
 }
 
