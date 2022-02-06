@@ -105,7 +105,9 @@ p {
 
 .checkInfo {
     font-size: 25px;
-    color: white;
+    color: black;
+    margin: 0 30px;
+    font-size: 50px;
 }
 
 .wrapper-1{

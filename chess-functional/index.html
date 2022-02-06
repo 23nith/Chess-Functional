@@ -53,58 +53,68 @@
             <button class="promotion-white-knight">Knight</button>
         </div>
     </div>
-
-    <div class="wrapper-2">
-        <div class="wrapper-3">
-            <div class="corner"></div>
-            <div class="top-coordinate">
-                <div>A</div>
-                <div>B</div>
-                <div>C</div>
-                <div>D</div>
-                <div>E</div>
-                <div>F</div>
-                <div>G</div>
-                <div>H</div>
+    <div class="outer-container" style="display: flex; flex-direction: row;">
+        <div class="wrapper-2">
+            <div class="wrapper-3">
+                <div class="corner"></div>
+                <div class="top-coordinate">
+                    <div>A</div>
+                    <div>B</div>
+                    <div>C</div>
+                    <div>D</div>
+                    <div>E</div>
+                    <div>F</div>
+                    <div>G</div>
+                    <div>H</div>
+                </div>
+                <div class="corner"></div>
             </div>
-            <div class="corner"></div>
+            <div class="wrapper-1">
+                <div class="left-coordinate">
+                    <div>8</div>
+                    <div>7</div>
+                    <div>6</div>
+                    <div>5</div>
+                    <div>4</div>
+                    <div>3</div>
+                    <div>2</div>
+                    <div>1</div>
+                </div>
+                <div class="container"></div>
+                <div class="left-coordinate">
+                    <div>8</div>
+                    <div>7</div>
+                    <div>6</div>
+                    <div>5</div>
+                    <div>4</div>
+                    <div>3</div>
+                    <div>2</div>
+                    <div>1</div>
+                </div>
+            </div>
+            <div class="wrapper-3">
+                <div class="corner"></div>
+                <div class="top-coordinate">
+                    <div>A</div>
+                    <div>B</div>
+                    <div>C</div>
+                    <div>D</div>
+                    <div>E</div>
+                    <div>F</div>
+                    <div>G</div>
+                    <div>H</div>
+                </div>
+                <div class="corner"></div>
+            </div>
         </div>
-        <div class="wrapper-1">
-            <div class="left-coordinate">
-                <div>8</div>
-                <div>7</div>
-                <div>6</div>
-                <div>5</div>
-                <div>4</div>
-                <div>3</div>
-                <div>2</div>
-                <div>1</div>
-            </div>
-            <div class="container"></div>
-            <div class="left-coordinate">
-                <div>8</div>
-                <div>7</div>
-                <div>6</div>
-                <div>5</div>
-                <div>4</div>
-                <div>3</div>
-                <div>2</div>
-                <div>1</div>
-            </div>
-        </div>
-        <div class="wrapper-3">
-            <div class="corner"></div>
-            <div class="top-coordinate">
-                <div>A</div>
-                <div>B</div>
-                <div>C</div>
-                <div>D</div>
-                <div>E</div>
-                <div>F</div>
-                <div>G</div>
-                <div>H</div>
-            </div>
-            <div class="corner"></div>
+        <div style="margin-left: 30px">
+            <button type="submit"
+                onclick="undo()"
+                id="reset">undo</button>
+            <button type="submit"
+                onclick="reset()"
+                id="reset">reset</button>
+            <!-- <button type="submit" onclick="displayFEN()" id="getFen">get FEN</button> -->
         </div>
     </div>
 
@@ -122,15 +132,14 @@
     </div>
 
     <div class="white-captured"></div>
-    <div>
+    <!-- <div>
         <button type="submit"
             onclick="undo()"
             id="reset">undo</button>
         <button type="submit"
             onclick="reset()"
             id="reset">reset</button>
-        <!-- <button type="submit" onclick="displayFEN()" id="getFen">get FEN</button> -->
-    </div>
+    </div> -->
 
     <div class="fen-info">
         <p class="fen-display">

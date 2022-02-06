@@ -84,9 +84,8 @@ async function drawGrid(col, row, _fen){
 
                 // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}" ></i>`;
                 let theId = (piece.generatePiece(fenArr[i]).code == "k" || piece.generatePiece(fenArr[i]).code == "K")? piece.generatePiece(fenArr[i]).code : `${piece.generatePiece(fenArr[i]).code}-${i}`;
-                // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" ></i>`;
-                // <img src="./Chess_Pieces/Bishop-White.gif" alt="" style="height: 90px; width: auto">
-                grid[gridCounter].innerHTML = `<img src=${piece.generatePiece(fenArr[i]).img} style="height: ${piecesHeight}; width: auto" ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" />`;
+                grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" ></i>`;
+                // grid[gridCounter].innerHTML = `<img src=${piece.generatePiece(fenArr[i]).img} style="height: ${piecesHeight}; width: auto" ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" />`;
                 if (character == character.toUpperCase()){
                     grid[gridCounter].children[0].classList.add("lightPiece")
                 }else{
