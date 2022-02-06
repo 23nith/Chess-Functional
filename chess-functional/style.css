@@ -8,21 +8,23 @@ body {
     justify-content: center;
     align-items: center;
     user-select: none;
-    background-color: grey;
+    background-color: #BFBFBF;
+    font-family: 'Roboto', sans-serif;
 }
 
 .container {
     display: grid;
     width: 650px;
     height: 650px;
-    border: solid black 2px;
+    border: solid black 1px;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
     /* margin-top: 15px; */
     /* background-image: url("background.PNG"); */
     /* background-image: url("board-plain.PNG"); */
     /* background-image: url("board-plain-cropped.png"); */
-    background-image: url("board-plain-resized.png");
+    /* background-image: url("board-plain-resized.png"); */
+    background-image: url("newcolor.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -121,10 +123,12 @@ p {
     /* width: 654.5px; */
     display: flex;
     flex-direction: row;
-    margin-left: 20px;
+    /* margin-left: 20px; */
     /* align-content: flex-end;
     align-items: flex-end;
     justify-content: flex-end; */
+    flex-grow: 1;
+    width: 651px;
 }
 
 .left-coordinate div{
@@ -133,9 +137,11 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #31692b;
+    background-color: #404040;
     font-weight: 700;
     color: white;
+    max-width: 20px;
+    min-width: 20px;
 }
 
 .top-coordinate div{
@@ -144,7 +150,23 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #31692b;
+    background-color: #404040;
     font-weight: 700;
     color: white;
+    height: 20px;
+}
+
+.corner {
+    /* width: 20px; */
+    width: 19px;
+    height: 20px;
+    max-width: 20px;
+    max-height: 20px;
+    border: solid black 1px;
+    background-color: #404040;
+}
+
+.wrapper-3 {
+    display: flex;
+    flex-direction: row;
 }

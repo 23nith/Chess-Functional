@@ -1,3 +1,5 @@
+let highlightColor =  "rgba(66, 245, 72, .5)";
+
 const threatDirection = {
     0 : "North",
     1 : "South",
@@ -679,7 +681,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                 if(!checking){
                     tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
                     // tiles[validMove].style.backgroundColor = "#F91F15";
-                    tiles[validMove].style.backgroundColor = "rgb(255, 0, 0, .5)";
+                    tiles[validMove].style.backgroundColor = highlightColor;
                 }
                 if(checking){
                     // tiles[validMove].style.backgroundColor = "#f57842"; //**(b)
@@ -801,7 +803,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                         // continue;
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
                                             // currentTile.style.backgroundColor = "#F91F15";
-                                            currentTile.style.backgroundColor = "rgb(255, 0, 0, .5)";
+                                            currentTile.style.backgroundColor = highlightColor;
                                         }
                                         if(checking && tileNumber != parseInt(_homeTile)){
                                             // currentTile.style.backgroundColor = "#48f542";
@@ -852,7 +854,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                             // console.log("enemy piece");
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
                                             // currentTile.style.backgroundColor = "#F91F15";
-                                            currentTile.style.backgroundColor = "rgb(255, 0, 0, .5)";
+                                            currentTile.style.backgroundColor = highlightColor;
                                         }
                                         if(checking && tileNumber != parseInt(_homeTile)){
                                             // currentTile.style.backgroundColor = "#48f542";
@@ -902,7 +904,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             if(!checking && tileNumber != parseInt(_homeTile)){
                                 currentTile.setAttribute("ondragover", "dropAllow(event)");
                                 // currentTile.style.backgroundColor = "#F91F15";
-                                currentTile.style.backgroundColor = "rgb(255, 0, 0, .5)";
+                                currentTile.style.backgroundColor = highlightColor;
                             }
                             if(checking && tileNumber != parseInt(_homeTile)){
                                 // currentTile.style.backgroundColor = "#48f542"; //*(b)
