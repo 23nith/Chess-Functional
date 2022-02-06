@@ -401,7 +401,7 @@ function getEvryEnmyInfOnBrdOf(pClr) {
 
 
 // Highlight opponent moves on board
-function hghLghtMvs(getPcsOnBrdInf, turn) {
+function getAllPsblMvmntOf(getPcsOnBrdInf, turn) {
 
     function getPwnCptrMvmnt(tile, pc) {
         const PieceObject = new Piece();
@@ -412,7 +412,7 @@ function hghLghtMvs(getPcsOnBrdInf, turn) {
         else return PieceObject.generatePiece(pc).cptrMvmnt
     }
 
-    const clr          = turn.toUpperCase();
+    const clr          = turn;
     const pcsOnBrdInf  = getPcsOnBrdInf(clr);
     const PieceObject  = new Piece();
 
@@ -827,10 +827,33 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                 }
             }
 
-                if (!(allPsblMvBlck[validMove]) && (turn === `White`)) {
-                    allPsblMvBlck[validMove] = validMove;
-                    delete allPsblMvBlck[parseInt((homeTileTmp))];
-                }
+            const BlckPc = {
+                k: `k`,
+                q: `q`,
+                b: `b`,
+                n: `n`,
+                r: `r`,
+                p: `p`,
+            }
+
+            const WhtPc = {
+                K: `K`,
+                Q: `Q`,
+                B: `B`,
+                N: `N`,
+                R: `R`,
+                P: `P`,
+            }
+
+            if (!(allPsblMvBlck[validMove]) && BlckPc[piece]) {
+                allPsblMvBlck[validMove] = validMove;
+                delete allPsblMvBlck[parseInt((homeTileTmp))];
+            }
+            if (!(allPsblMvWht[validMove]) && WhtPc[piece]) {
+                allPsblMvWht[validMove] = validMove;
+                delete allPsblMvWht[parseInt((homeTileTmp))];
+            }
+
         }
 
     }else{
@@ -1489,15 +1512,18 @@ async function drop(e) {
 
     const clr = turn;
     if (clr === `Black`) {
-
-        hghLghtMvs(getEvryEnmyInfOnBrdOf, clr);
-
+        getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr);
+        if (doLogThrt) {
+            console.log(`Black all pos moves`,  allPsblMvBlck);
+            console.log(`White all pos moves`,  allPsblMvWht);
+        }
 
     } else {
-        hghLghtMvs(getEvryEnmyInfOnBrdOf, clr);
+        getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr);
 
         if (doLogThrt) {
-            console.log(allPsblMvBlck);
+            console.log(`Black all pos moves`,  allPsblMvBlck);
+            console.log(`White all pos moves`,  allPsblMvWht);
         }
     }
 }
