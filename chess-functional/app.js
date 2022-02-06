@@ -362,8 +362,8 @@ function isWhtPwn(pc) {
 // Fetch moves of all opponents piece on board
 function getEvryEnmyInfOnBrdOf(pClr) {
 
-    const cllNmbr  = 64;
-    const pcsOnBrd = [];
+    const cllNmbr     = 64;
+    const pcsOnBrdInf = [];
 
     for (let i = 0; i < cllNmbr; i++) {
 
@@ -371,14 +371,14 @@ function getEvryEnmyInfOnBrdOf(pClr) {
             .from(document
                 .querySelectorAll(`.container div`));
 
-        const pcEl   = BrdChldArr[i].children[0];
+        const pcEl = BrdChldArr[i].children[0];
 
         // Skip if no piece found
         if (!pcEl) continue;
 
-        const code      = pcEl.id[0];
-        const blckCode  = code.toLowerCase();
-        const whtCode   = code.toUpperCase();
+        const code     = pcEl.id[0];
+        const blckCode = code.toLowerCase();
+        const whtCode  = code.toUpperCase();
 
         // Filter opponent
         if ((pClr === `BLACK`) && (code === blckCode)) continue;
@@ -386,14 +386,11 @@ function getEvryEnmyInfOnBrdOf(pClr) {
 
         const cellEl = BrdChldArr[i];
 
-        pcsOnBrd
-            .push(
-                code,
-                cellEl.getAttribute(`data-tilenumber`)
-            );
+        pcsOnBrdInf
+            .push(code, cellEl.getAttribute(`data-tilenumber`));
     }
 
-    return pcsOnBrd;
+    return pcsOnBrdInf;
 }
 
 
@@ -419,15 +416,9 @@ function hghLghtMvs(getPcsOnBrdInf, turn) {
     let pc       = null;
 
     for (let i = 0; i < pcsOnBrdInf.length; i += 2) {
-
         homeTile = pcsOnBrdInf[i + 1];
-
         pc       = pcsOnBrdInf[i];
-        pcNwtrl  = pc.toLowerCase();
-
-        isSldng  = PieceObject
-            .generatePiece(pc)
-            .sliding;
+        isSldng  = PieceObject.generatePiece(pc).sliding;
 
         if (isPawn(pc)) mvmnt = getPwnCptrMvmnt(homeTile, pc);
         else            mvmnt = PieceObject.generatePiece(pc).movement;
