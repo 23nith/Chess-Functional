@@ -64,7 +64,8 @@ body {
 }
 
 .darkPiece {
-    /* color: greenyellow; */
+    color: greenyellow;
+    opacity: 0.7;
 }
 
 .tileHighlight {
