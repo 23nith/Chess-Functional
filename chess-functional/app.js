@@ -699,8 +699,10 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                             if(piece == "P" && pieceMovement[j] == -8){
                                 continue;
                             }
-                            if(!checking){
-                                tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                            if (!isThreat) {
+                                if (!checking) {
+                                    tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                                }
                             }
                             // continue;
                         }
@@ -722,8 +724,10 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                             if(piece == "p" && pieceMovement[j] == 8){
                                 continue;
                             }
-                            if(!checking){
-                                tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                            if (!isThreat) {
+                                if (!checking) {
+                                    tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                                }
                             }
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
