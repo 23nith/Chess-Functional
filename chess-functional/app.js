@@ -1014,7 +1014,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                                 }
                             }
                             if (!(allPsblMvBlck[j]) && (turn === `White`)) {
-                                console.log(j);
                             }
                         }
                     }
