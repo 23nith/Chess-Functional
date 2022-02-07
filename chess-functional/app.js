@@ -456,31 +456,65 @@ function getAllPsblMvmntOf(getPcsOnBrdInf, turn, rmvdHghlghtThrt) {
 }
 
 // @param object - board current info
-function logCrrntBrdInf(crrntBrdInf) {
+function logCrrntBrdInf(crrntBrdInf, crrntChckInf) {
     const {
         allPsblMvWht,
         allPsblMvBlck,
         blckKngAllPsbleMvmnt,
         whtKngAllPsbleMvmnt,
+
     } = crrntBrdInf;
+
+    const {
+        isBlckChckInf,
+        isWhtChckInf,
+    } = crrntChckInf
+
 
     console.log(`Black all pos moves`,  allPsblMvBlck);
     console.log(`White all pos moves`,  allPsblMvWht);
+
     console.log(`Black king all tiles`, blckKngAllPsbleMvmnt);
     console.log(`White king all tiles`, whtKngAllPsbleMvmnt);
+
+    console.log(`-----------Black king check info-------------`);
+    console.log(`is Black check \t\t\t ${isBlckChckInf[0]}`);
+    console.log(`Tile open for check \t ${isBlckChckInf[1]}`);
+
+    console.log(`-----------White king check info-------------`);
+    console.log(`is White check \t\t\t ${isWhtChckInf[0]}`);
+    console.log(`Tile open for check \t ${isWhtChckInf[1]}`);
+
+
+    console.log(`--------------------------------------------`)
+    console.log(`\n\n\n\n\n\n`)
 }
 
 
-// @param  object - black king all possible movement
-// @param  object - all possible moment of white
-// @return object - isCheck and tiles on threat
-function isBlckChck(blckKngAllPsbleMvmnt, allPsblMvWht) {
-        for (let blckKngTile in blckKngAllPsbleMvmnt) {
-            if (allPsblMvWht[parseInt(blckKngTile)]) {
-                return [true, blckKngTile];
+// @param  object - all possible movement of white/black
+// @param  object - all possible moment of white/black
+// @return object - isCheck and tile on threat
+function isChck(allPssbleMvmntOf, pssbleKngMvmntOf, clr) {
+
+    switch (clr.toUpperCase()) {
+        case `BLACK`:
+            for (let blckKngTile in pssbleKngMvmntOf) {
+                if (allPssbleMvmntOf[parseInt(blckKngTile)]) {
+                    return [true, blckKngTile];
+                }
             }
-        }
-    return [false, -1];
+            return [false, -1];
+        case `WHITE`:
+            for (let whtKngTile in pssbleKngMvmntOf) {
+                if (allPssbleMvmntOf[parseInt(whtKngTile)]) {
+                    return [true, whtKngTile];
+                }
+            }
+            return [false, -1];
+
+        default:
+            throw new Error(`Invalid color`);
+    }
 }
 
 // ************************************************** Functions called by drag drop events **************************************************
@@ -1707,24 +1741,53 @@ async function drop(e) {
         whtKngAllPsbleMvmnt,
     };
 
+
     if (clr === `Black`) {
+
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
+
+
         if (doLogThrt) {
+            const crrntChckInf = {
+                isBlckChckInf: isChck(
+                    allPsblMvWht,
+                    blckKngAllPsbleMvmnt,
+                    clr
+                ),
+                isWhtChckInf:  isChck(
+                    allPsblMvBlck,
+                    whtKngAllPsbleMvmnt,
+                    clr
+                ),
+            }
+
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
-            logCrrntBrdInf(crrntBrdInf);
+            logCrrntBrdInf(crrntBrdInf, crrntChckInf);
         }
 
-        const isBlckChckInf = isBlckChck(blckKngAllPsbleMvmnt, allPsblMvWht);
 
-        console.log(isBlckChckInf[0]);
-        console.log(isBlckChckInf[1]);
+
 
 
     } else {
+
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
+
         if (doLogThrt) {
+            const crrntChckInf = {
+                isBlckChckInf: isChck(
+                    allPsblMvWht,
+                    blckKngAllPsbleMvmnt,
+                    clr
+                ),
+                isWhtChckInf:  isChck(
+                    allPsblMvBlck,
+                    whtKngAllPsbleMvmnt,
+                    clr
+                ),
+            }
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
-            logCrrntBrdInf(crrntBrdInf);
+            logCrrntBrdInf(crrntBrdInf, crrntChckInf);
         }
     }
 }
