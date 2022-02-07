@@ -371,7 +371,7 @@ function isWhtPwn(pc) {
 
 // @param   string  - color
 // @param   boolean - do remove color for highlight?
-// @returno object  - all pieces on board
+// @retur   object  - all pieces on board and it's homeTile
 function getEvryEnmyInfOnBrdOf(pClr, rmvdHghlghtThrt) {
 
     const cllNmbr     = 64;
@@ -460,21 +460,20 @@ function getAllPsblMvmntOf(getPcsOnBrdInf, turn, rmvdHghlghtThrt) {
 // @return object - isCheck and tile on threat
 function isChck(allPssbleMvmntOf, pssbleKngMvmntOf, clr) {
 
+    function chckChck(allPssbleMvmntOf, pssbleKngMvmntOf) {
+        for (let kngTile in pssbleKngMvmntOf) {
+            if (allPssbleMvmntOf[parseInt(kngTile)]) {
+                return [true, kngTile];
+            }
+        }
+        return [false, -1];
+    }
+
     switch (clr.toUpperCase()) {
         case `BLACK`:
-            for (let blckKngTile in pssbleKngMvmntOf) {
-                if (allPssbleMvmntOf[parseInt(blckKngTile)]) {
-                    return [true, blckKngTile];
-                }
-            }
-            return [false, -1];
+            return chckChck(allPssbleMvmntOf, pssbleKngMvmntOf);
         case `WHITE`:
-            for (let whtKngTile in pssbleKngMvmntOf) {
-                if (allPssbleMvmntOf[parseInt(whtKngTile)]) {
-                    return [true, whtKngTile];
-                }
-            }
-            return [false, -1];
+            return chckChck(allPssbleMvmntOf, pssbleKngMvmntOf);
 
         default:
             throw new Error(`Invalid color`);
@@ -1735,8 +1734,7 @@ async function drop(e) {
     whtKngAllPsbleMvmnt  = {};
 
 
-    const clr            = turn;
-
+    const clr         = turn;
     const crrntBrdInf = {
         allPsblMvWht,
         allPsblMvBlck,
