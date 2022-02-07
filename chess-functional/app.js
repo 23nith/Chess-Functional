@@ -1794,7 +1794,7 @@ async function drop(e) {
 
         if (doLogThrt) {
 
-            // Highlight all possible moves on Black
+            // Highlight all possible moves on White
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
 
             // Show board current info and on checking attempt
