@@ -1734,53 +1734,67 @@ async function drop(e) {
     blckKngAllPsbleMvmnt = {};
     whtKngAllPsbleMvmnt  = {};
 
+
     const clr            = turn;
+
+    const crrntBrdInf = {
+        allPsblMvWht,
+        allPsblMvBlck,
+        blckKngAllPsbleMvmnt,
+        whtKngAllPsbleMvmnt,
+    };
 
     if (clr === `Black`) {
 
         // Get all possible movement of pieces on board
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
-        if (doLogThrt) {
-            const crrntChckInf = {
-                isBlckChckInf: isChck(
-                    allPsblMvWht,
-                    blckKngAllPsbleMvmnt,
-                    clr
-                ),
-                isWhtChckInf:  isChck(
-                    allPsblMvBlck,
-                    whtKngAllPsbleMvmnt,
-                    clr
-                ),
-            }
+        const crrntChckInf = {
+            isBlckChckInf: isChck(
+                allPsblMvWht,
+                blckKngAllPsbleMvmnt,
+                clr
+            ),
+            isWhtChckInf:  isChck(
+                allPsblMvBlck,
+                whtKngAllPsbleMvmnt,
+                clr
+            ),
+        }
 
+        if (doLogThrt) {
             // Highlight all possible moves on Black
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
 
             // Show board current info and on checking attempt
             logCrrntBrdInf(crrntBrdInf, crrntChckInf);
         }
+
+
+
+
+
     } else {
 
         // Get all possible movement of pieces on board
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
-        if (doLogThrt) {
-            const crrntChckInf = {
-                isBlckChckInf: isChck(
-                    allPsblMvWht,
-                    blckKngAllPsbleMvmnt,
-                    clr
-                ),
-                isWhtChckInf:  isChck(
-                    allPsblMvBlck,
-                    whtKngAllPsbleMvmnt,
-                    clr
-                ),
-            }
+        const crrntChckInf = {
+            isBlckChckInf: isChck(
+                allPsblMvWht,
+                blckKngAllPsbleMvmnt,
+                clr
+            ),
+            isWhtChckInf:  isChck(
+                allPsblMvBlck,
+                whtKngAllPsbleMvmnt,
+                clr
+            ),
+        }
 
-            // Highlight all possible moves on White
+        if (doLogThrt) {
+
+            // Highlight all possible moves on Black
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
 
             // Show board current info and on checking attempt
