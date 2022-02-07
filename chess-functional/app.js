@@ -1761,10 +1761,9 @@ async function drop(e) {
             // Show board current info and on checking attempt
             logCrrntBrdInf(crrntBrdInf, crrntChckInf);
         }
-
     } else {
 
-        // Get all possible movement of pieces on white
+        // Get all possible movement of pieces on board
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
         if (doLogThrt) {
@@ -1781,7 +1780,7 @@ async function drop(e) {
                 ),
             }
 
-            // Highlight all possible moves on Black
+            // Highlight all possible moves on White
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
 
             // Show board current info and on checking attempt
