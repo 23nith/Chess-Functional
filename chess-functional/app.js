@@ -1065,15 +1065,48 @@ function highlightTiles(
                                 }
                             }
 
+                            const BlckPc = {
+                               k: `k`,
+                               q: `q`,
+                               b: `b`,
+                               n: `n`,
+                               r: `r`,
+                               p: `p`,
+                            }
+
+                            const WhtPc = {
+                               K: `K`,
+                               Q: `Q`,
+                               B: `B`,
+                               N: `N`,
+                               R: `R`,
+                               P: `P`,
+                            }
+
+                            function toInt(numStr) {
+                               return parseInt(numStr);
+                            }
+
                             if (rmvdHghlghtThrt) {
-                                if (!(allPsblMvBlck[directionLine]) && (turn === `White`)) {
+                               if (piece === `k`) {
+                                   blckKngAllPsbleMvmnt[directionLine]         = directionLine;
+                                   blckKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
+                                }
+
+                                if (!(allPsblMvBlck[directionLine]) && BlckPc[piece]) {
                                     allPsblMvBlck[directionLine] = directionLine;
                                     delete allPsblMvBlck[parseInt((homeTileTmp))];
+                                }
 
-                                    if (piece === `k`) {
-                                        blckKngAllPsbleMvmnt[validMove] = validMove;
-                                    }
+                                if (piece === `K`) {
+                                    whtKngAllPsbleMvmnt[directionLine]         = directionLine;
+                                    whtKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
+                                }
 
+                                if (!(allPsblMvWht[directionLine])
+                                    && WhtPc[piece]) {
+                                    allPsblMvWht[directionLine] = directionLine;
+                                    delete allPsblMvWht[parseInt((homeTileTmp))];
                                 }
                             }
 
@@ -1636,6 +1669,9 @@ async function drop(e) {
             console.log(`White king all tiles`, whtKngAllPsbleMvmnt);
         }
 
+        console.log(isBlckChck(blckKngAllPsbleMvmnt, allPsblMvWht));
+
+
     } else {
 
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
@@ -1650,3 +1686,12 @@ async function drop(e) {
     }
 }
 
+
+function isBlckChck(blckKngAllPsbleMvmnt, allPsblMvWht) {
+        for (let blckKngTile in blckKngAllPsbleMvmnt) {
+            if (allPsblMvWht[parseInt(blckKngTile)]) {
+                return true
+            }
+        }
+    return false;
+}
