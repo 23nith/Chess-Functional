@@ -455,7 +455,34 @@ function getAllPsblMvmntOf(getPcsOnBrdInf, turn, rmvdHghlghtThrt) {
     }
 }
 
+// @param  object - all possible movement of white/black
+// @param  object - all possible moment of white/black
+// @return object - isCheck and tile on threat
+function isChck(allPssbleMvmntOf, pssbleKngMvmntOf, clr) {
+
+    switch (clr.toUpperCase()) {
+        case `BLACK`:
+            for (let blckKngTile in pssbleKngMvmntOf) {
+                if (allPssbleMvmntOf[parseInt(blckKngTile)]) {
+                    return [true, blckKngTile];
+                }
+            }
+            return [false, -1];
+        case `WHITE`:
+            for (let whtKngTile in pssbleKngMvmntOf) {
+                if (allPssbleMvmntOf[parseInt(whtKngTile)]) {
+                    return [true, whtKngTile];
+                }
+            }
+            return [false, -1];
+
+        default:
+            throw new Error(`Invalid color`);
+    }
+}
+
 // @param object - board current info
+// @param object - current check info on board
 function logCrrntBrdInf(crrntBrdInf, crrntChckInf) {
     const {
         allPsblMvWht,
@@ -490,32 +517,6 @@ function logCrrntBrdInf(crrntBrdInf, crrntChckInf) {
     console.log(`\n\n\n\n\n\n`)
 }
 
-
-// @param  object - all possible movement of white/black
-// @param  object - all possible moment of white/black
-// @return object - isCheck and tile on threat
-function isChck(allPssbleMvmntOf, pssbleKngMvmntOf, clr) {
-
-    switch (clr.toUpperCase()) {
-        case `BLACK`:
-            for (let blckKngTile in pssbleKngMvmntOf) {
-                if (allPssbleMvmntOf[parseInt(blckKngTile)]) {
-                    return [true, blckKngTile];
-                }
-            }
-            return [false, -1];
-        case `WHITE`:
-            for (let whtKngTile in pssbleKngMvmntOf) {
-                if (allPssbleMvmntOf[parseInt(whtKngTile)]) {
-                    return [true, whtKngTile];
-                }
-            }
-            return [false, -1];
-
-        default:
-            throw new Error(`Invalid color`);
-    }
-}
 
 // ************************************************** Functions called by drag drop events **************************************************
 
@@ -1726,6 +1727,9 @@ async function drop(e) {
 
     dropValue = e.target;
 
+    // Checking feature
+
+    // Clear all possbile moves info
     allPsblMvBlck        = {};
     allPsblMvWht         = {};
     blckKngAllPsbleMvmnt = {};
@@ -1744,8 +1748,8 @@ async function drop(e) {
 
     if (clr === `Black`) {
 
+        // Get all possible movement of pieces on board
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
-
 
         if (doLogThrt) {
             const crrntChckInf = {
@@ -1761,7 +1765,10 @@ async function drop(e) {
                 ),
             }
 
+            // Highlight all possible moves on Black
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
+
+            // Show board current info and on checking attempt
             logCrrntBrdInf(crrntBrdInf, crrntChckInf);
         }
 
@@ -1771,6 +1778,7 @@ async function drop(e) {
 
     } else {
 
+        // Get all possible movement of pieces on board
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
         if (doLogThrt) {
@@ -1786,7 +1794,11 @@ async function drop(e) {
                     clr
                 ),
             }
+
+            // Highlight all possible moves on Black
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
+
+            // Show board current info and on checking attempt
             logCrrntBrdInf(crrntBrdInf, crrntChckInf);
         }
     }
