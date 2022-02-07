@@ -848,7 +848,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                         // continue;
                                     }
 
-                                }else{ //friendly piece
+                                }else{ 
                                     if(currentTile.children[0].classList.contains("lightPiece")){
 
                                         if(!checking && tileNumber != parseInt(_homeTile)){
@@ -861,16 +861,16 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                         if(checking && tileNumber != parseInt(_homeTile)){
                                             // currentTile.style.backgroundColor = "#48f542";
                                             // currentTile.style.backgroundColor = "rgb(108, 229, 16, .5)";
-                                            let mystring = `${piece}-${threatDirection[j]}`
+                                            let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
                                             let thisString = `${piece}-${_homeTile}`
                                             if(currentTilesOnThreat[thisString] == undefined){
                                                 currentTilesOnThreat[thisString] = [];
                                             }
-                                            // if(threateningPiece[mystring] == undefined){
-                                            //     threateningPiece[mystring] = []; 
-                                            // }
+                                            if(threateningPiece[mystring] == undefined){
+                                                threateningPiece[mystring] = []; 
+                                            }
                                             currentTilesOnThreat[thisString].push(tile);
-                                            // threateningPiece[mystring].push(tile);
+                                            threateningPiece[mystring].push(tile);
                                         }
 
                                         exemptedTiles.push(currentTile.id);
@@ -1457,6 +1457,7 @@ async function drop(e) {
         currentTilesOnThreat = {};
         threateningPiece = {};
         currentThreatOnKing = [];
+        pawnNonCaptureMoves = {}
     // fill up currentTilesOnThreat
         for(x = 0; x < 64; x++){
             if(tiles[x].children[0]){
@@ -1567,7 +1568,7 @@ async function drop(e) {
                     loop1:
                     if(item[0] == item[0].toUpperCase()){
                         if(threateningPiece[item].includes(parseInt(tileOfKing))){
-                            for(const [element, value] of threateningPiece[item].entries()){
+                            for(value of threateningPiece[item]){
                                 for(object in currentTilesOnThreat){
                                     if(object[0] != object[0].toUpperCase()){
                                         if(object[0] == "p"){
@@ -1717,9 +1718,9 @@ async function drop(e) {
                     loop1:
                     if(item[0] != item[0].toUpperCase()){
                         if(threateningPiece[item].includes(parseInt(tileOfKing))){
-                            for(const [element, value] of threateningPiece[item].entries()){
+                            for(value of threateningPiece[item]){
                                 for(object in currentTilesOnThreat){
-                                    if(object[0] != object[0].toUpperCase()){
+                                    if(object[0] == object[0].toUpperCase()){
                                         if(object[0] == "P"){
                                             if(pawnNonCaptureMoves["P"].includes(value)){
                                                 blockedThreat += 1;
@@ -1786,4 +1787,5 @@ async function drop(e) {
     console.log("currentTilesOnThreat: ", currentTilesOnThreat)
     console.log("threateningPiece: ", threateningPiece)
     console.log("currentThreatOnKing: ", currentThreatOnKing)
+    console.log("pawnNonCaptureMoves: ", pawnNonCaptureMoves)
 }
