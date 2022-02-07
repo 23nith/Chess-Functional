@@ -969,6 +969,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.Q).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.Q).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.Q).code;
                         promotionUiChoices.style.display = "none"
@@ -981,6 +982,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.R).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.R).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.R).code;
                         promotionUiChoices.style.display = "none"
@@ -993,6 +995,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.B).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.B).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.B).code;
                         promotionUiChoices.style.display = "none"
@@ -1005,6 +1008,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.N).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.N).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.N).code;
                         promotionUiChoices.style.display = "none"
@@ -1045,7 +1049,8 @@ async function drop(e) {
                 queenPromotionBtn.addEventListener("click", () => {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.q).icon;
-                        targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.className = `${promotionPieceIcon} blackPiece`;
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.q).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.q).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.q).code;
                         promotionUiChoices.style.display = "none"
@@ -1058,6 +1063,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.r).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.r).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.r).code}-${targetPawn.parentElement.id}`
                         promotionUiChoices.style.display = "none"
                         piece = pawnPiece.generatePiece(promotionChoices.r).code;
@@ -1070,6 +1076,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.b).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.b).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.b).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.b).code;
                         promotionUiChoices.style.display = "none"
@@ -1082,6 +1089,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.n).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.n).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.n).code}-${targetPawn.parentElement.id}`
                         promotionUiChoices.style.display = "none"
                         piece = pawnPiece.generatePiece(promotionChoices.n).code;
