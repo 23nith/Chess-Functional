@@ -257,6 +257,8 @@ let isCanCastleRightBlack   = false;
 let isCanCastleLeftBlack    = false;
 let allPsblMvBlck           = {}
 let allPsblMvWht            = {}
+let whtKngAllPsbleMvmnt     = {}
+let blckKngAllPsbleMvmnt    = {}
 
 
 let enPassantPiecesWhite = [];
@@ -867,11 +869,8 @@ function highlightTiles(
                             pawnNonCaptureMoves[piece].push(validMove);
                         }
                     }
-
-
                 }
             }
-
             const BlckPc = {
                 k: `k`,
                 q: `q`,
@@ -889,12 +888,30 @@ function highlightTiles(
                 R: `R`,
                 P: `P`,
             }
+
+            function toInt(numStr) {
+                return parseInt(numStr);
+            }
+
             if (rmvdHghlghtThrt) {
+                if (piece === `k`) {
+                    blckKngAllPsbleMvmnt[validMove]             = validMove;
+                    blckKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
+                }
+
                 if (!(allPsblMvBlck[validMove]) && BlckPc[piece]) {
                     allPsblMvBlck[validMove] = validMove;
                     delete allPsblMvBlck[parseInt((homeTileTmp))];
+
                 }
-                if (!(allPsblMvWht[validMove]) && WhtPc[piece]) {
+
+                if (piece === `K`) {
+                    whtKngAllPsbleMvmnt[validMove]             = validMove;
+                    whtKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
+                }
+
+                if (!(allPsblMvWht[validMove])
+                    && WhtPc[piece]) {
                     allPsblMvWht[validMove] = validMove;
                     delete allPsblMvWht[parseInt((homeTileTmp))];
                 }
@@ -1052,6 +1069,10 @@ function highlightTiles(
                                 if (!(allPsblMvBlck[directionLine]) && (turn === `White`)) {
                                     allPsblMvBlck[directionLine] = directionLine;
                                     delete allPsblMvBlck[parseInt((homeTileTmp))];
+
+                                    if (piece === `k`) {
+                                        blckKngAllPsbleMvmnt[validMove] = validMove;
+                                    }
 
                                 }
                             }
@@ -1598,8 +1619,10 @@ async function drop(e) {
 
     dropValue = e.target;
 
-    allPsblMvBlck = {};
-    allPsblMvWht  = {};
+    allPsblMvBlck        = {};
+    allPsblMvWht         = {};
+    blckKngAllPsbleMvmnt = {};
+    whtKngAllPsbleMvmnt  = {};
 
     const clr = turn;
     if (clr === `Black`) {
@@ -1609,6 +1632,8 @@ async function drop(e) {
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
             console.log(`Black all pos moves`,  allPsblMvBlck);
             console.log(`White all pos moves`,  allPsblMvWht);
+            console.log(`Black king all tiles`, blckKngAllPsbleMvmnt);
+            console.log(`White king all tiles`, whtKngAllPsbleMvmnt);
         }
 
     } else {
@@ -1619,10 +1644,9 @@ async function drop(e) {
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
             console.log(`Black all pos moves`,  allPsblMvBlck);
             console.log(`White all pos moves`,  allPsblMvWht);
+            console.log(`Black king all tiles`, blckKngAllPsbleMvmnt);
+            console.log(`White king all tiles`, whtKngAllPsbleMvmnt);
         }
     }
-
-
-
 }
 
