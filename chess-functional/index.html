@@ -12,22 +12,31 @@
         href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"
         rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="info">
-        <div class="turn">White's turn</div>
-    </div>
-    <div class="checkInfo"></div>
-
-    <div>
-        <p>Sample FEN: 4k2r/6r1/8/8/8/8/3R4/R3K3</p>
-        <input placeholder="Enter FEN here"
+    <p style="font-size: 25px"> <span style="color: brown;">(Move pawn on E2 towards E3)</span></p>
+    <!-- <p style="font-size: 25px">Checkmate white king: rnb1kbnr/pppp1ppp/8/4p3/7K/5q2/PPPPP1PP/RNBQ1BNR <span style="color: brown;">(Move bishop from F8 towards E7)</span></p> -->
+    <div class="row">
+        <div class="info">
+            <div class="turn">White's turn</div>
+        </div>
+        <div class="checkInfo"></div>
+        
+        <div>
+            <!-- <p>Sample FEN: 4k2r/6r1/8/8/8/8/3R4/R3K3</p> -->
+            
+            <input placeholder="Enter FEN here"
             type="text"
             name=""
             id="fen">
-        <button type="submit"
+            <button type="submit"
             onclick="submitFEN()">Submit</button>
+            
+        </div>
     </div>
 
     <div class="black-captured"></div>
@@ -44,8 +53,70 @@
             <button class="promotion-white-knight">Knight</button>
         </div>
     </div>
-
-    <div class="container"></div>
+    <div class="outer-container" style="display: flex; flex-direction: row;">
+        <div class="wrapper-2">
+            <div class="wrapper-3">
+                <div class="corner"></div>
+                <div class="top-coordinate">
+                    <div>A</div>
+                    <div>B</div>
+                    <div>C</div>
+                    <div>D</div>
+                    <div>E</div>
+                    <div>F</div>
+                    <div>G</div>
+                    <div>H</div>
+                </div>
+                <div class="corner"></div>
+            </div>
+            <div class="wrapper-1">
+                <div class="left-coordinate">
+                    <div>8</div>
+                    <div>7</div>
+                    <div>6</div>
+                    <div>5</div>
+                    <div>4</div>
+                    <div>3</div>
+                    <div>2</div>
+                    <div>1</div>
+                </div>
+                <div class="container"></div>
+                <div class="left-coordinate">
+                    <div>8</div>
+                    <div>7</div>
+                    <div>6</div>
+                    <div>5</div>
+                    <div>4</div>
+                    <div>3</div>
+                    <div>2</div>
+                    <div>1</div>
+                </div>
+            </div>
+            <div class="wrapper-3">
+                <div class="corner"></div>
+                <div class="top-coordinate">
+                    <div>A</div>
+                    <div>B</div>
+                    <div>C</div>
+                    <div>D</div>
+                    <div>E</div>
+                    <div>F</div>
+                    <div>G</div>
+                    <div>H</div>
+                </div>
+                <div class="corner"></div>
+            </div>
+        </div>
+        <div style="margin-left: 30px">
+            <button type="submit"
+                onclick="undo()"
+                id="reset">undo</button>
+            <button type="submit"
+                onclick="reset()"
+                id="reset">reset</button>
+            <!-- <button type="submit" onclick="displayFEN()" id="getFen">get FEN</button> -->
+        </div>
+    </div>
 
     <div class="promotion-choices-black">
         <button class="promotion-black-queen">Queen</button>
@@ -61,16 +132,14 @@
     </div>
 
     <div class="white-captured"></div>
-
-    <div>
+    <!-- <div>
         <button type="submit"
             onclick="undo()"
             id="reset">undo</button>
         <button type="submit"
             onclick="reset()"
             id="reset">reset</button>
-        <!-- <button type="submit" onclick="displayFEN()" id="getFen">get FEN</button> -->
-    </div>
+    </div> -->
 
     <div class="fen-info">
         <p class="fen-display">

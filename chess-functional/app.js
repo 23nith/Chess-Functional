@@ -1,3 +1,6 @@
+let highlightColor =  "rgba(66, 245, 72, .5)";
+let piecesHeight = "80px"
+
 class Piece {
     constructor(piece){
         this.piece = piece
@@ -6,19 +9,19 @@ class Piece {
 
     generatePiece(_fenLetter){
         let pieces = {
-            r : {name: "black-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "r", sliding: true},
-            n : {name: "black-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "n", sliding: false},
-            b : {name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
-            q : {name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
-            k: {name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
-            p : {name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
+            r : {img: "./Chess_Pieces/Rook-Black.gif", name: "black-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "r", sliding: true},
+            n : {img: "./Chess_Pieces/Knight-Black.gif", name: "black-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "n", sliding: false},
+            b : {img: "./Chess_Pieces/Bishop-Black.gif", name: "black-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "b", sliding: true},
+            q : {img: "./Chess_Pieces/Queen-Black.gif", name: "black-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "q", sliding: true},
+            k : {img: "./Chess_Pieces/King-Black.gif", name: "black-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "k", sliding: false},
+            p : {img: "./Chess_Pieces/Pawn-Black.gif", name: "black-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [8, "", "", "", "", "", "", ""], code: "p", sliding: false, madeInitialMove: false, initialMovement: [8, 16]},
 
-            R : {name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
-            N : {name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
-            B : {name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
-            K : {name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
-            Q : {name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
-            P : {name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: [-8], code: "P", sliding: false, initialMovement: [-8, -16]},
+            R : {img: "./Chess_Pieces/Rook-White.gif", name: "white-rook", icon: "fas fa-chess-rook", unicode: "f447", movement: [-8, 8, 1, -1, "", "", "", ""], code: "R", sliding: true},
+            N : {img: "./Chess_Pieces/Knight-White.gif", name: "white-knight", icon: "fas fa-chess-knight", unicode: "f441", movement: ["", "", -6, -10, -15, -17, 17, 15, 10, 6], code: "N", sliding: false},
+            B : {img: "./Chess_Pieces/Bishop-White.gif", name: "white-bishop", icon: "fas fa-chess-bishop", unicode: "f43a", movement: ["", "", "", "", -7, -9, 9, 7], code: "B", sliding: true},
+            K : {img: "./Chess_Pieces/King-White.gif", name: "white-king", icon: "fas fa-chess-king", unicode: "f43f", movement: [-8, 8, 1, -1, -7, -9, 9, 7], initialMovement: [-8, 8, 1, -1, -7, -9, 9, 7, 2, -2], code: "K", sliding: false},
+            Q : {img: "./Chess_Pieces/Queen-White.gif", name: "white-queen", icon: "fas fa-chess-queen", unicode: "f445", movement: [-8, 8, 1, -1, -7, -9, 9, 7], code: "Q", sliding: true},
+            P : {img: "./Chess_Pieces/Pawn-White.gif", name: "white-pawn", icon: "fas fa-chess-pawn", unicode: "f443", movement: ["", -8, "", "", "", "", "", ""], code: "P", sliding: false, initialMovement: [-8, -16]},
         }
         return pieces[_fenLetter];
     }
@@ -43,7 +46,7 @@ async function drawGrid(col, row, _fen){
                 gridBox.setAttribute("ondragover", "dropAllow(event)");
                 gridBox.setAttribute("data-tilenumber", `${counter}`);
                 gridBox.id = counter;
-                gridBox.style.backgroundColor = isLightSquare ? "#A0785A" : "brown" ;
+                // gridBox.style.backgroundColor = isLightSquare ? "#A0785A" : "brown" ;
                 gridBox.classList.add(isLightSquare? "lightTiles": "darkTiles");
                 document.querySelector(".container").appendChild(gridBox);
                 counter+=1;
@@ -69,7 +72,8 @@ async function drawGrid(col, row, _fen){
 
                 // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}" ></i>`;
                 let theId = (piece.generatePiece(fenArr[i]).code == "k" || piece.generatePiece(fenArr[i]).code == "K")? piece.generatePiece(fenArr[i]).code : `${piece.generatePiece(fenArr[i]).code}-${i}`;
-                grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" ></i>`;
+                grid[gridCounter].innerHTML = `<img src=${piece.generatePiece(fenArr[i]).img} style="height: ${piecesHeight}; width: auto" ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" />`;
+                // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" ></i>`;
                 if (character == character.toUpperCase()){
                     grid[gridCounter].children[0].classList.add("lightPiece")
                 }else{
@@ -635,7 +639,8 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                 }
                 if(!checking){
                     tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                    tiles[validMove].style.backgroundColor = "#F91F15";
+                    // tiles[validMove].style.backgroundColor = "#F91F15";
+                    tiles[validMove].style.backgroundColor = highlightColor;
                 }
                 if(checking){
                     if(currentTilesOnThreat[piece] == undefined){
@@ -686,7 +691,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
                                         // continue;
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                            currentTile.style.backgroundColor = "#F91F15";
+                                            currentTile.style.backgroundColor = highlightColor;
                                         }
                                         if(checking){
                                             if(currentTilesOnThreat[piece] == undefined){
@@ -712,7 +717,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                             currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                             // console.log("enemy piece");
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                            currentTile.style.backgroundColor = "#F91F15";
+                                            currentTile.style.backgroundColor = highlightColor;
                                         }
                                         if(checking){
                                             if(currentTilesOnThreat[piece] == undefined){
@@ -737,7 +742,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             }
                             if(!checking){
                                 currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                currentTile.style.backgroundColor = "#F91F15";
+                                currentTile.style.backgroundColor = highlightColor;
                             }
                             if(checking){
                                 if(currentTilesOnThreat[piece] == undefined){
@@ -795,8 +800,10 @@ function returnDrop(){
 
 function returnTileColors(){
     for(i = 0; i < 32; i++){
-        lightTiles[i].style.backgroundColor = "#A0785A";
-        darkTiles[i].style.backgroundColor = "brown";
+        // lightTiles[i].style.backgroundColor = "#A0785A";
+        // darkTiles[i].style.backgroundColor = "brown";
+        lightTiles[i].style.backgroundColor = "rgba(0,0,0,0)";
+        darkTiles[i].style.backgroundColor = "rgba(0,0,0,0)";
     }
 }
 
@@ -962,6 +969,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.Q).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.Q).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.Q).code;
                         promotionUiChoices.style.display = "none"
@@ -974,6 +982,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.R).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.R).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.R).code;
                         promotionUiChoices.style.display = "none"
@@ -986,6 +995,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.B).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.B).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.B).code;
                         promotionUiChoices.style.display = "none"
@@ -998,6 +1008,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.N).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.N).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.N).code;
                         promotionUiChoices.style.display = "none"
@@ -1038,7 +1049,8 @@ async function drop(e) {
                 queenPromotionBtn.addEventListener("click", () => {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.q).icon;
-                        targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.className = `${promotionPieceIcon} blackPiece`;
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.q).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.q).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.q).code;
                         promotionUiChoices.style.display = "none"
@@ -1051,6 +1063,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.r).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.r).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.r).code}-${targetPawn.parentElement.id}`
                         promotionUiChoices.style.display = "none"
                         piece = pawnPiece.generatePiece(promotionChoices.r).code;
@@ -1063,6 +1076,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.b).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.b).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.b).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.b).code;
                         promotionUiChoices.style.display = "none"
@@ -1075,6 +1089,7 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.n).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
+                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.n).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.n).code}-${targetPawn.parentElement.id}`
                         promotionUiChoices.style.display = "none"
                         piece = pawnPiece.generatePiece(promotionChoices.n).code;
