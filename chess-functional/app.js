@@ -366,7 +366,7 @@ function isWhtPwn(pc) {
 
 // Checking
 // Fetch moves of all opponents piece on board
-function getEvryEnmyInfOnBrdOf(pClr) {
+function getEvryEnmyInfOnBrdOf(pClr, rmvdHghlghtThrt) {
 
     const cllNmbr     = 64;
     const pcsOnBrdInf = [];
@@ -387,8 +387,10 @@ function getEvryEnmyInfOnBrdOf(pClr) {
         const whtCode  = code.toUpperCase();
 
         // Filter opponent
-        if ((pClr === `BLACK`) && (code === blckCode)) continue;
-        if ((pClr === `WHITE`) && (code === whtCode))  continue;
+        if (!rmvdHghlghtThrt) {
+            if ((pClr === `BLACK`) && (code === blckCode)) continue;
+            if ((pClr === `WHITE`) && (code === whtCode)) continue;
+        }
 
         const cellEl = BrdChldArr[i];
 
@@ -401,7 +403,7 @@ function getEvryEnmyInfOnBrdOf(pClr) {
 
 
 // Highlight opponent moves on board
-function getAllPsblMvmntOf(getPcsOnBrdInf, turn) {
+function getAllPsblMvmntOf(getPcsOnBrdInf, turn, rmvdHghlghtThrt) {
 
     function getPwnCptrMvmnt(tile, pc) {
         const PieceObject = new Piece();
@@ -412,8 +414,8 @@ function getAllPsblMvmntOf(getPcsOnBrdInf, turn) {
         else return PieceObject.generatePiece(pc).cptrMvmnt
     }
 
-    const clr          = turn;
-    const pcsOnBrdInf  = getPcsOnBrdInf(clr);
+    const clr          = turn.toUpperCase();
+    const pcsOnBrdInf  = getPcsOnBrdInf(clr, rmvdHghlghtThrt);
     const PieceObject  = new Piece();
 
     let homeTile = null;
@@ -429,7 +431,15 @@ function getAllPsblMvmntOf(getPcsOnBrdInf, turn) {
         if (isPawn(pc)) mvmnt = getPwnCptrMvmnt(homeTile, pc);
         else            mvmnt = PieceObject.generatePiece(pc).movement;
 
-        highlightTiles(homeTile, mvmnt, isSldng, pc, undefined, true);
+        highlightTiles(
+            homeTile,
+            mvmnt,
+            isSldng,
+            pc,
+            undefined,
+            true,
+            rmvdHghlghtThrt
+        );
     }
 }
 
@@ -443,7 +453,15 @@ function changeTurn(){
 
 
 
-function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThreat){
+function highlightTiles(
+    _homeTile,
+    movement,
+    sliding,
+    piece,
+    forChecking,
+    isThreat,
+    rmvdHghlghtThrt
+) {
 
     let homeTileTmp = _homeTile;
     let checking = forChecking;
@@ -792,8 +810,35 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                 }
 
                 if(!checking){
+
+                    const BlckPc = {
+                         k: `k`,
+                         q: `q`,
+                         b: `b`,
+                         n: `n`,
+                         r: `r`,
+                         p: `p`,
+                    }
+
+                     const WhtPc = {
+                         K: `K`,
+                         Q: `Q`,
+                         B: `B`,
+                         N: `N`,
+                         R: `R`,
+                         P: `P`,
+                    }
+
+
                     tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                    tiles[validMove].style.backgroundColor = "#F91F15";
+                    if (!rmvdHghlghtThrt) {
+                        if (WhtPc[piece]) {
+                            tiles[validMove].style.backgroundColor = "#ffffffbb";
+                        } else if (BlckPc[piece]) {
+                            tiles[validMove].style.backgroundColor = "#444444bb";
+                        }
+                    }
+
                 }
                 if(checking){
                     // tiles[validMove].style.backgroundColor = "#f57842"; //**(b)
@@ -844,14 +889,15 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                 R: `R`,
                 P: `P`,
             }
-
-            if (!(allPsblMvBlck[validMove]) && BlckPc[piece]) {
-                allPsblMvBlck[validMove] = validMove;
-                delete allPsblMvBlck[parseInt((homeTileTmp))];
-            }
-            if (!(allPsblMvWht[validMove]) && WhtPc[piece]) {
-                allPsblMvWht[validMove] = validMove;
-                delete allPsblMvWht[parseInt((homeTileTmp))];
+            if (rmvdHghlghtThrt) {
+                if (!(allPsblMvBlck[validMove]) && BlckPc[piece]) {
+                    allPsblMvBlck[validMove] = validMove;
+                    delete allPsblMvBlck[parseInt((homeTileTmp))];
+                }
+                if (!(allPsblMvWht[validMove]) && WhtPc[piece]) {
+                    allPsblMvWht[validMove] = validMove;
+                    delete allPsblMvWht[parseInt((homeTileTmp))];
+                }
             }
 
         }
@@ -895,6 +941,23 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                                             if (!isThreat) {
                                                 currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                                 currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            }
+                                            const BlckPc = {
+                                               k: `k`,
+                                               q: `q`,
+                                               b: `b`,
+                                               n: `n`,
+                                               r: `r`,
+                                               p: `p`,
+                                            }
+
+                                            const WhtPc = {
+                                               K: `K`,
+                                               Q: `Q`,
+                                               B: `B`,
+                                               N: `N`,
+                                               R: `R`,
+                                               P: `P`,
                                             }
                                             currentTile.style.backgroundColor = "#F91F15";
                                         }
@@ -942,7 +1005,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                                                 currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                             }
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                            currentTile.style.backgroundColor = "#F91F15";
+                                            currentTile.style.backgroundColor = "F91F15";
                                         }
                                         if (checking && tileNumber != homeTile[0]) {
                                             // currentTile.style.backgroundColor = "#48f542";
@@ -985,18 +1048,46 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking, isThre
                                 }
                             }
 
-                            if (!(allPsblMvBlck[directionLine]) && (turn === `White`)) {
-                                allPsblMvBlck[directionLine] = directionLine;
-                                delete allPsblMvBlck[parseInt((homeTileTmp))];
+                            if (rmvdHghlghtThrt) {
+                                if (!(allPsblMvBlck[directionLine]) && (turn === `White`)) {
+                                    allPsblMvBlck[directionLine] = directionLine;
+                                    delete allPsblMvBlck[parseInt((homeTileTmp))];
 
+                                }
                             }
 
                             if (!checking && tileNumber != homeTile[0]) {
                                 if (!isThreat) {
                                     currentTile.setAttribute("ondragover", "dropAllow(event)");
                                 }
-                                if (!(tileNumber === parseInt(homeTileTmp)))
-                                    currentTile.style.backgroundColor = "#F91F15";
+                                if (!(tileNumber === parseInt(homeTileTmp))) {
+
+                                    const BlckPc = {
+                                        k: `k`,
+                                        q: `q`,
+                                        b: `b`,
+                                        n: `n`,
+                                        r: `r`,
+                                        p: `p`,
+                                    }
+
+                                    const WhtPc = {
+                                        K: `K`,
+                                        Q: `Q`,
+                                        B: `B`,
+                                        N: `N`,
+                                        R: `R`,
+                                        P: `P`,
+                                    }
+                                    // ditoColor
+                                    if (!rmvdHghlghtThrt) {
+                                        if (WhtPc[piece]) {
+                                            currentTile.style.backgroundColor = "#ffffffbb";
+                                        } else if (BlckPc[piece]) {
+                                            currentTile.style.backgroundColor = "#444444bb";
+                                        }
+                                    }
+                                }
                             }
 
                             if (checking && tileNumber != homeTile[0]) {
@@ -1512,19 +1603,26 @@ async function drop(e) {
 
     const clr = turn;
     if (clr === `Black`) {
-        getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr);
+        getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
+
         if (doLogThrt) {
+            getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
             console.log(`Black all pos moves`,  allPsblMvBlck);
             console.log(`White all pos moves`,  allPsblMvWht);
         }
 
     } else {
-        getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr);
+
+        getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
         if (doLogThrt) {
+            getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
             console.log(`Black all pos moves`,  allPsblMvBlck);
             console.log(`White all pos moves`,  allPsblMvWht);
         }
     }
+
+
+
 }
 
