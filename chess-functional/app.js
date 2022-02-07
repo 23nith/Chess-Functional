@@ -1742,8 +1742,8 @@ async function drop(e) {
         whtKngAllPsbleMvmnt,
     };
 
+    // Black info
     if (clr === `Black`) {
-
         // Get all possible movement of pieces on board
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
@@ -1767,13 +1767,10 @@ async function drop(e) {
             // Show board current info and on checking attempt
             logCrrntBrdInf(crrntBrdInf, crrntChckInf);
         }
+    }
 
-
-
-
-
-    } else {
-
+    // White turn
+    else {
         // Get all possible movement of pieces on board
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
