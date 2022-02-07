@@ -9,7 +9,8 @@ high prio
 
 normal prio
 -fix pawn not promoting when capturing a piece on promotion field.
--Ever since changing the pieces into images there has been a bug that enables users to, at times, drag pieces out of order and this would show highlighted tiles not corresponding to the piece's valid move. (not happening when svg version of pieces are used)
+-Ever since changing the pieces into images there has been a bug that enables users to, at times, drag pieces out of order and this would show highlighted tiles not
+corresponding to the piece's valid move. (not happening when svg version of pieces are used)
 
 less prio
  -Add timer
