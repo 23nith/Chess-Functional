@@ -1764,7 +1764,7 @@ async function drop(e) {
 
     } else {
 
-        // Get all possible movement of pieces on board
+        // Get all possible movement of pieces on white
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
         if (doLogThrt) {
