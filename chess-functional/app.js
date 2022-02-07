@@ -1782,6 +1782,7 @@ async function drop(e) {
         // Excluding capture tile except when checking a king
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
+        // Check for checked
         const crrntChckInf = {
             isBlckChckInf: isChck(
                 allPsblMvWht,
@@ -1794,6 +1795,21 @@ async function drop(e) {
                 clr
             ),
         }
+
+
+        // Check if checked can be block
+
+
+
+        // Check if checker can be capture
+
+
+
+
+        // Check if checker has support
+
+
+
 
         if (doLogThrt) {
             // Highlight all possible moves on Black
@@ -1810,6 +1826,7 @@ async function drop(e) {
         // Excluding capture tile except when checking a king
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
+        // Check for checked
         const crrntChckInf = {
             isBlckChckInf: isChck(
                 allPsblMvWht,
@@ -1822,6 +1839,23 @@ async function drop(e) {
                 clr
             ),
         }
+
+
+
+        // Check if checked can be block
+
+
+
+        // Check if checker can be capture
+
+
+
+
+        // Check if checker has support
+
+
+
+
 
         if (doLogThrt) {
 
