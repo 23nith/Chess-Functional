@@ -277,6 +277,9 @@ let pawnNonCaptureMoves = {
 
 }
 
+let whtKngHomTile = -1;
+let blckKngHomTile = -1;
+
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -366,6 +369,14 @@ function isWhtPwn(pc) {
     return pc === `P`;
 }
 
+function isBlckKng(pc) {
+    return pc === `k`;
+}
+
+function isWhtKng(pc) {
+    return pc === `K`;
+}
+
 // Checking
 // Fetch moves of all opponents piece on board
 
@@ -442,6 +453,9 @@ function getAllPsblMvmntOf(getPcsOnBrdInf, turn, rmvdHghlghtThrt) {
 
         if (isPawn(pc)) mvmnt = getPwnCptrMvmnt(homeTile, pc);
         else            mvmnt = PieceObject.generatePiece(pc).movement;
+
+        if (isBlckKng(pc)) blckKngHomTile = homeTile;
+        if (isWhtKng(pc))  whtKngHomTile  = homeTile;
 
         highlightTiles(
             homeTile,
@@ -1006,7 +1020,6 @@ function highlightTiles(
                     let currentTile = tiles[tile];
 
 
-
                     if (isThreat) {
                         if (!exemptedTiles.includes(currentTile.id) && !checking) {
                             currentTile.setAttribute("ondragover", "removeDrop(event)")
@@ -1014,7 +1027,6 @@ function highlightTiles(
                     }
                     for (n = 0; n < 64; n++) {
                         tileNumber = parseInt(currentTile.id);
-
                         directionLine = (direction * n) + parseInt(_homeTile);
 
                         if (tileNumber == 0 && directionLine == 0) {
@@ -1022,32 +1034,52 @@ function highlightTiles(
                         }
 
                         if (tileNumber == directionLine) {
-
                             // if(tileNumber == homeTile[0]) continue;
                             if (currentTile.children[0]) {
+                                 const BlckPc = {
+                                    k: `k`,
+                                    q: `q`,
+                                    b: `b`,
+                                    n: `n`,
+                                    r: `r`,
+                                    p: `p`,
+                                 }
+
+                                 const WhtPc = {
+                                    K: `K`,
+                                    Q: `Q`,
+                                    B: `B`,
+                                    N: `N`,
+                                    R: `R`,
+                                    P: `P`,
+                                 }
+
+                                 function toInt(numStr) {
+                                    return parseInt(numStr);
+                                 }
+
+                                 if (rmvdHghlghtThrt) {
+                                     if (directionLine === parseInt(blckKngHomTile)) {
+                                         if (!(allPsblMvWht[directionLine]) && WhtPc[piece]) {
+                                             allPsblMvWht[directionLine] = directionLine;
+                                             delete allPsblMvBlck[parseInt((homeTileTmp))];
+                                         }
+                                     }
+
+                                     if (directionLine === parseInt(whtKngHomTile) && BlckPc[piece]) {
+                                         if (!(allPsblMvBlck[directionLine])) {
+                                             allPsblMvBlck[directionLine] = directionLine;
+                                             delete allPsblMvWht[parseInt((homeTileTmp))];
+                                         }
+                                     }
+                                 }
+
                                 if (lightPiece) {
                                     if (currentTile.children[0].classList.contains("darkPiece")) {
                                         if (!checking && tileNumber != homeTile[0]) {
                                             if (!isThreat) {
                                                 currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                                 currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                            }
-                                            const BlckPc = {
-                                               k: `k`,
-                                               q: `q`,
-                                               b: `b`,
-                                               n: `n`,
-                                               r: `r`,
-                                               p: `p`,
-                                            }
-
-                                            const WhtPc = {
-                                               K: `K`,
-                                               Q: `Q`,
-                                               B: `B`,
-                                               N: `N`,
-                                               R: `R`,
-                                               P: `P`,
                                             }
                                             currentTile.style.backgroundColor = "#F91F15";
                                         }
@@ -1095,7 +1127,7 @@ function highlightTiles(
                                                 currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                             }
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                            currentTile.style.backgroundColor = "F91F15";
+                                            currentTile.style.backgroundColor = "blue";
                                         }
                                         if (checking && tileNumber != homeTile[0]) {
                                             // currentTile.style.backgroundColor = "#48f542";
@@ -1138,6 +1170,40 @@ function highlightTiles(
                                 }
                             }
 
+
+                            if (!checking && tileNumber != homeTile[0]) {
+                                if (!isThreat) {
+                                    currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                }
+                                if (!(tileNumber === parseInt(homeTileTmp))) {
+
+                                    const BlckPc = {
+                                        k: `k`,
+                                        q: `q`,
+                                        b: `b`,
+                                        n: `n`,
+                                        r: `r`,
+                                        p: `p`,
+                                    }
+
+                                    const WhtPc = {
+                                        K: `K`,
+                                        Q: `Q`,
+                                        B: `B`,
+                                        N: `N`,
+                                        R: `R`,
+                                        P: `P`,
+                                    }
+                                    // ditoColor
+                                    if (!rmvdHghlghtThrt) {
+                                        if (WhtPc[piece]) {
+                                            currentTile.style.backgroundColor = "#ffffffbb";
+                                        } else if (BlckPc[piece]) {
+                                            currentTile.style.backgroundColor = "#444444bb";
+                                        }
+                                    }
+                                }
+                            }
                             const BlckPc = {
                                k: `k`,
                                q: `q`,
@@ -1184,39 +1250,6 @@ function highlightTiles(
                                 }
                             }
 
-                            if (!checking && tileNumber != homeTile[0]) {
-                                if (!isThreat) {
-                                    currentTile.setAttribute("ondragover", "dropAllow(event)");
-                                }
-                                if (!(tileNumber === parseInt(homeTileTmp))) {
-
-                                    const BlckPc = {
-                                        k: `k`,
-                                        q: `q`,
-                                        b: `b`,
-                                        n: `n`,
-                                        r: `r`,
-                                        p: `p`,
-                                    }
-
-                                    const WhtPc = {
-                                        K: `K`,
-                                        Q: `Q`,
-                                        B: `B`,
-                                        N: `N`,
-                                        R: `R`,
-                                        P: `P`,
-                                    }
-                                    // ditoColor
-                                    if (!rmvdHghlghtThrt) {
-                                        if (WhtPc[piece]) {
-                                            currentTile.style.backgroundColor = "#ffffffbb";
-                                        } else if (BlckPc[piece]) {
-                                            currentTile.style.backgroundColor = "#444444bb";
-                                        }
-                                    }
-                                }
-                            }
 
                             if (checking && tileNumber != homeTile[0]) {
                                 // currentTile.style.backgroundColor = "#48f542"; //*(b)
@@ -1744,7 +1777,9 @@ async function drop(e) {
 
     // Black info
     if (clr === `Black`) {
+
         // Get all possible movement of pieces on board
+        // Excluding capture tile except when checking a king
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
         const crrntChckInf = {
@@ -1772,6 +1807,7 @@ async function drop(e) {
     // White turn
     else {
         // Get all possible movement of pieces on board
+        // Excluding capture tile except when checking a king
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
         const crrntChckInf = {
