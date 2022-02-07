@@ -368,6 +368,10 @@ function isWhtPwn(pc) {
 
 // Checking
 // Fetch moves of all opponents piece on board
+
+// @param   string  - color
+// @param   boolean - do remove color for highlight?
+// @returno object  - all pieces on board
 function getEvryEnmyInfOnBrdOf(pClr, rmvdHghlghtThrt) {
 
     const cllNmbr     = 64;
@@ -391,7 +395,7 @@ function getEvryEnmyInfOnBrdOf(pClr, rmvdHghlghtThrt) {
         // Filter opponent
         if (!rmvdHghlghtThrt) {
             if ((pClr === `BLACK`) && (code === blckCode)) continue;
-            if ((pClr === `WHITE`) && (code === whtCode)) continue;
+            if ((pClr === `WHITE`) && (code === whtCode))  continue;
         }
 
         const cellEl = BrdChldArr[i];
@@ -404,15 +408,21 @@ function getEvryEnmyInfOnBrdOf(pClr, rmvdHghlghtThrt) {
 }
 
 
-// Highlight opponent moves on board
+// @param function  - current pcs on board
+// @param string    - color
+// @param boolean   - do remove color for highlight?
 function getAllPsblMvmntOf(getPcsOnBrdInf, turn, rmvdHghlghtThrt) {
 
     function getPwnCptrMvmnt(tile, pc) {
         const PieceObject = new Piece();
+
+        // Storing pawn capture movement close to edge
         if      (isOnLftEdg (tile) && isWhtPwn (pc)) return [-7];
         else if (isOnRghtEdg(tile) && isWhtPwn (pc)) return [-9];
         else if (isOnLftEdg (tile) && isBlckPwn(pc)) return [9];
         else if (isOnRghtEdg(tile) && isBlckPwn(pc)) return [7];
+
+        // default pawn capture movement
         else return PieceObject.generatePiece(pc).cptrMvmnt
     }
 
@@ -445,6 +455,33 @@ function getAllPsblMvmntOf(getPcsOnBrdInf, turn, rmvdHghlghtThrt) {
     }
 }
 
+// @param object - board current info
+function logCrrntBrdInf(crrntBrdInf) {
+    const {
+        allPsblMvWht,
+        allPsblMvBlck,
+        blckKngAllPsbleMvmnt,
+        whtKngAllPsbleMvmnt,
+    } = crrntBrdInf;
+
+    console.log(`Black all pos moves`,  allPsblMvBlck);
+    console.log(`White all pos moves`,  allPsblMvWht);
+    console.log(`Black king all tiles`, blckKngAllPsbleMvmnt);
+    console.log(`White king all tiles`, whtKngAllPsbleMvmnt);
+}
+
+
+// @param  object - black king all possible movement
+// @param  object - all possible moment of white
+// @return object - isCheck and tiles on threat
+function isBlckChck(blckKngAllPsbleMvmnt, allPsblMvWht) {
+        for (let blckKngTile in blckKngAllPsbleMvmnt) {
+            if (allPsblMvWht[parseInt(blckKngTile)]) {
+                return [true, blckKngTile];
+            }
+        }
+    return [false, -1];
+}
 
 // ************************************************** Functions called by drag drop events **************************************************
 
@@ -911,7 +948,9 @@ function highlightTiles(
                 }
 
                 if (!(allPsblMvWht[validMove])
-                    && WhtPc[piece]) {
+                    && WhtPc[piece]
+                    && validMove < 64) {
+
                     allPsblMvWht[validMove] = validMove;
                     delete allPsblMvWht[parseInt((homeTileTmp))];
                 }
@@ -1102,6 +1141,7 @@ function highlightTiles(
                                     whtKngAllPsbleMvmnt[directionLine]         = directionLine;
                                     whtKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
                                 }
+
 
                                 if (!(allPsblMvWht[directionLine])
                                     && WhtPc[piece]) {
@@ -1657,41 +1697,36 @@ async function drop(e) {
     blckKngAllPsbleMvmnt = {};
     whtKngAllPsbleMvmnt  = {};
 
-    const clr = turn;
+
+    const clr            = turn;
+
+    const crrntBrdInf = {
+        allPsblMvWht,
+        allPsblMvBlck,
+        blckKngAllPsbleMvmnt,
+        whtKngAllPsbleMvmnt,
+    };
+
     if (clr === `Black`) {
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
-
         if (doLogThrt) {
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
-            console.log(`Black all pos moves`,  allPsblMvBlck);
-            console.log(`White all pos moves`,  allPsblMvWht);
-            console.log(`Black king all tiles`, blckKngAllPsbleMvmnt);
-            console.log(`White king all tiles`, whtKngAllPsbleMvmnt);
+            logCrrntBrdInf(crrntBrdInf);
         }
 
-        console.log(isBlckChck(blckKngAllPsbleMvmnt, allPsblMvWht));
+        const isBlckChckInf = isBlckChck(blckKngAllPsbleMvmnt, allPsblMvWht);
+
+        console.log(isBlckChckInf[0]);
+        console.log(isBlckChckInf[1]);
 
 
     } else {
-
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
-
         if (doLogThrt) {
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
-            console.log(`Black all pos moves`,  allPsblMvBlck);
-            console.log(`White all pos moves`,  allPsblMvWht);
-            console.log(`Black king all tiles`, blckKngAllPsbleMvmnt);
-            console.log(`White king all tiles`, whtKngAllPsbleMvmnt);
+            logCrrntBrdInf(crrntBrdInf);
         }
     }
 }
 
 
-function isBlckChck(blckKngAllPsbleMvmnt, allPsblMvWht) {
-        for (let blckKngTile in blckKngAllPsbleMvmnt) {
-            if (allPsblMvWht[parseInt(blckKngTile)]) {
-                return true
-            }
-        }
-    return false;
-}
