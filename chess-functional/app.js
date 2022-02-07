@@ -1724,7 +1724,6 @@ async function drop(e) {
     homeTile = [];
     fenArray.push(getFEN());
     displayFEN()
-
     dropValue = e.target;
 
     // Checking feature
@@ -1735,16 +1734,7 @@ async function drop(e) {
     blckKngAllPsbleMvmnt = {};
     whtKngAllPsbleMvmnt  = {};
 
-
     const clr            = turn;
-
-    const crrntBrdInf = {
-        allPsblMvWht,
-        allPsblMvBlck,
-        blckKngAllPsbleMvmnt,
-        whtKngAllPsbleMvmnt,
-    };
-
 
     if (clr === `Black`) {
 
@@ -1771,10 +1761,6 @@ async function drop(e) {
             // Show board current info and on checking attempt
             logCrrntBrdInf(crrntBrdInf, crrntChckInf);
         }
-
-
-
-
 
     } else {
 
