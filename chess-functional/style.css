@@ -9,6 +9,9 @@ body {
     align-items: center;
     user-select: none;
     background-color: #BFBFBF;
+    background-image: url("pageBG.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -66,6 +69,7 @@ body {
 .lightPiece {
     /* color: #7E4B37; */
     color: white;
+    /* opacity: 0.7; */
 }
 
 /* .darkPiece { 
@@ -80,7 +84,8 @@ body {
 p {
     user-select: text;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: #232222;
+    /* color: #232222; */
+    color: white;
 }
 
 .black-captured, .white-captured {
@@ -106,7 +111,8 @@ p {
 
 .checkInfo {
     font-size: 25px;
-    color: black;
+    /* color: black; */
+    color: white;
     margin: 0 30px;
     font-size: 50px;
 }

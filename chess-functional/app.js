@@ -276,6 +276,8 @@ let pawnNonCaptureMoves = {
 
 let currentThreatOnKing = []
 
+let slidingBeyondPieces = {};
+
 
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
@@ -354,8 +356,8 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
     // let bottomEdge = [1, 6, 7];
     // let leftEdge = [3, 5, 7, 9];
     let descending = [0,3,5,4];
-
-
+    
+    
     // highlight legal moves
     if(!sliding){
         // Knight, King, Pawn
@@ -769,6 +771,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
     }else{
         for(j = 0; j < pieceMovement.length; j++){
+            let seeThru = false;
             let direction = pieceMovement[j];
             if(direction == ""){
                 continue;
@@ -810,19 +813,32 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                         if(checking && tileNumber != parseInt(_homeTile)){
                                             // currentTile.style.backgroundColor = "#48f542";
                                             // currentTile.style.backgroundColor = "rgb(108, 229, 16, .5)";
-                                            let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
-                                            let thisString = `${piece}-${_homeTile}`
-                                            if(currentTilesOnThreat[thisString] == undefined){
-                                                currentTilesOnThreat[thisString] = [];
+                                            if(seeThru){
+                                                let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
+                                                if(slidingBeyondPieces[mystring] == undefined){
+                                                    slidingBeyondPieces[mystring] = []; 
+                                                }
+                                                slidingBeyondPieces[mystring].push(tile); 
+                                            }else{
+                                                let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
+                                                let thisString = `${piece}-${_homeTile}`
+                                                if(currentTilesOnThreat[thisString] == undefined){
+                                                    currentTilesOnThreat[thisString] = [];
+                                                }
+                                                if(threateningPiece[mystring] == undefined){
+                                                    threateningPiece[mystring] = []; 
+                                                }
+                                                currentTilesOnThreat[thisString].push(tile);
+                                                threateningPiece[mystring].push(tile); 
                                             }
-                                            if(threateningPiece[mystring] == undefined){
-                                                threateningPiece[mystring] = []; 
-                                            }
-                                            currentTilesOnThreat[thisString].push(tile);
-                                            threateningPiece[mystring].push(tile); 
+                                            
                                         }
                                         exemptedTiles.push(currentTile.id);
-                                        break loop1;
+                                        if(!checking){
+                                            break loop1;
+                                        }else{
+                                            seeThru = true;
+                                        }
                                     }
                                     if(currentTile.children[0].classList.contains("lightPiece")){
                                         // console.log("friendly piece");
@@ -861,20 +877,33 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                         if(checking && tileNumber != parseInt(_homeTile)){
                                             // currentTile.style.backgroundColor = "#48f542";
                                             // currentTile.style.backgroundColor = "rgb(108, 229, 16, .5)";
-                                            let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
-                                            let thisString = `${piece}-${_homeTile}`
-                                            if(currentTilesOnThreat[thisString] == undefined){
-                                                currentTilesOnThreat[thisString] = [];
+                                            if(seeThru){
+                                                let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
+                                                if(slidingBeyondPieces[mystring] == undefined){
+                                                    slidingBeyondPieces[mystring] = []; 
+                                                }
+                                                slidingBeyondPieces[mystring].push(tile); 
+                                            }else{
+                                                let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
+                                                let thisString = `${piece}-${_homeTile}`
+                                                if(currentTilesOnThreat[thisString] == undefined){
+                                                    currentTilesOnThreat[thisString] = [];
+                                                }
+                                                if(threateningPiece[mystring] == undefined){
+                                                    threateningPiece[mystring] = []; 
+                                                }
+                                                currentTilesOnThreat[thisString].push(tile);
+                                                threateningPiece[mystring].push(tile);
                                             }
-                                            if(threateningPiece[mystring] == undefined){
-                                                threateningPiece[mystring] = []; 
-                                            }
-                                            currentTilesOnThreat[thisString].push(tile);
-                                            threateningPiece[mystring].push(tile);
+                                            
                                         }
 
                                         exemptedTiles.push(currentTile.id);
-                                        break loop1;
+                                        if(!checking){
+                                            break loop1;
+                                        }else{
+                                            seeThru = true;
+                                        }
                                         // continue;
                                     }
                                     if(currentTile.children[0].classList.contains("darkPiece")){
@@ -911,16 +940,26 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             if(checking && tileNumber != parseInt(_homeTile)){
                                 // currentTile.style.backgroundColor = "#48f542"; //*(b)
                                 // currentTile.style.backgroundColor = "rgb(108, 229, 16, .5)"; //*(b)
-                                let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
-                                let thisString = `${piece}-${_homeTile}`
-                                if(currentTilesOnThreat[thisString] == undefined){
-                                    currentTilesOnThreat[thisString] = [];
+                                if(seeThru){
+                                    let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
+                                    if(slidingBeyondPieces[mystring] == undefined){
+                                        slidingBeyondPieces[mystring] = []; 
+                                    }
+                                    slidingBeyondPieces[mystring].push(tile); 
+                                }else{
+                                    let mystring = `${piece}-${_homeTile}-${threatDirection[j]}`
+                                    let thisString = `${piece}-${_homeTile}`
+                                    if(currentTilesOnThreat[thisString] == undefined){
+                                        currentTilesOnThreat[thisString] = [];
+                                    }
+                                    if(threateningPiece[mystring] == undefined){
+                                        threateningPiece[mystring] = []; 
+                                    }
+                                    currentTilesOnThreat[thisString].push(tile);
+                                    threateningPiece[mystring].push(tile);
                                 }
-                                if(threateningPiece[mystring] == undefined){
-                                    threateningPiece[mystring] = []; 
-                                }
-                                currentTilesOnThreat[thisString].push(tile);
-                                threateningPiece[mystring].push(tile);
+                                
+
                             }
                             exemptedTiles.push(currentTile.id);
 
@@ -1525,6 +1564,7 @@ async function drop(e) {
             });
 
             // check if all king's possible next move will be a potential capture by opponent
+            let safeTiles = []
             function allMovesCheck(nextMove, index){
                 if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
                     for(item in currentTilesOnThreat){
@@ -1534,7 +1574,7 @@ async function drop(e) {
                             }
                         }
                     }
-
+                    safeTiles.push(nextMove);
                 }else if(!exemption.includes(index) && tiles[nextMove].children[0].classList.contains("lightPiece")){ // if tile has ally piece
                     for(item in currentTilesOnThreat){
                         if(item[0] == item[0].toUpperCase()){
@@ -1561,6 +1601,35 @@ async function drop(e) {
                     }
                 }
 
+                // check if there is a sliding piece that has only one piece between it and the king
+                let cannotBlock = [];
+                for(item in slidingBeyondPieces){
+                    loop2:
+                    if(item[0] == item[0].toUpperCase()){
+                        if(slidingBeyondPieces[item].includes(parseInt(tileOfKing))){
+                            let thisString = item.split("-");
+                            let myString = `${thisString[0]}-${thisString[1]}`
+                            for(object of currentThreatOnKing){
+                                if(object == myString){
+                                    break loop2;
+                                }
+                            }
+                            let kingAlliesBetweenThisPiece = [];
+                            slidingBeyondPieces[item].push(4);
+                            for(element of slidingBeyondPieces[item]){
+                                if(element == parseInt(tileOfKing)) break;
+                                let thisTile = document.getElementById(`${element}`);
+                                let child = thisTile.children[0];
+                                if(child.classList.contains('darkPiece')){
+                                    kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                                }
+                            }
+                            if(kingAlliesBetweenThisPiece.length == 1){
+                                cannotBlock.push(kingAlliesBetweenThisPiece[0]);
+                            }
+                        }
+                    }
+                }
 
                 // check if sliding moves directed at king can be blocked
                 let blockedThreat = 0;
@@ -1574,12 +1643,22 @@ async function drop(e) {
                                         if(object[0] == "p"){
                                             if(pawnNonCaptureMoves["p"].includes(value)){
                                                 blockedThreat += 1;
+                                                for(element of cannotBlock){
+                                                    if(element == object){
+                                                        blockedThreat -= 1;
+                                                    }
+                                                }
                                                 break loop1;
                                             }
                                             
                                         }else{
                                             if(currentTilesOnThreat[object].includes(value) && object[0] != "k"){
                                                 blockedThreat += 1;
+                                                for(element of cannotBlock){
+                                                    if(element == object){
+                                                        blockedThreat -= 1;
+                                                    }
+                                                }
                                                 break loop1;
                                             }
                                         }
@@ -1611,11 +1690,31 @@ async function drop(e) {
                     }
                 }
 
+                
+
                 if(threatsOnKing == blockedThreat) return;
                 if(threatsOnKing == canBeCaptured) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `Black king has been checkmated`;
                 checked = true;
+                
+            }else{
+                kingNextMovements.forEach(allMovesCheck);
+                noDuplicateSafeTiles = [...new Set(safeTiles)];
+                for([index, tile] of noDuplicateSafeTiles.entries()){
+                    for(item in slidingBeyondPieces){
+                        if(item[0] == item[0].toUpperCase()){
+                            if(slidingBeyondPieces[item].includes(parseInt(tileOfKing)) && slidingBeyondPieces[item].includes(tile)){
+                                noDuplicateSafeTiles.splice(index, 1);
+                            }
+                        }
+                    }
+                }
+                if(noDuplicateSafeTiles.length == 0){
+                    let checkInfo = document.querySelector(".checkInfo")
+                    checkInfo.innerHTML = `Black king has been checkmated`;
+                    checked = true;
+                }
                 
             }
 
@@ -1674,6 +1773,7 @@ async function drop(e) {
             });
 
             // check if all king's possible next move will be a potential capture by opponent
+            let safeTiles = [];
             function allMovesCheck(nextMove, index){
                 if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
                     for(item in currentTilesOnThreat){
@@ -1683,7 +1783,7 @@ async function drop(e) {
                             }
                         }
                     }
-
+                    safeTiles.push(nextMove);
                 }else if(!exemption.includes(index) && tiles[nextMove].children[0].classList.contains("darkPiece")){ // if tile has ally piece
                     for(item in currentTilesOnThreat){
                         if(item[0] != item[0].toUpperCase()){
@@ -1711,6 +1811,36 @@ async function drop(e) {
                     }
                 }
 
+                // check if there is a sliding piece that has only one piece between it and the king
+                let cannotBlock = [];
+                for(item in slidingBeyondPieces){
+                    loop2:
+                    if(item[0] != item[0].toUpperCase()){
+                        if(slidingBeyondPieces[item].includes(parseInt(tileOfKing))){
+                            let thisString = item.split("-");
+                            let myString = `${thisString[0]}-${thisString[1]}`
+                            for(object of currentThreatOnKing){
+                                if(object == myString){
+                                    break loop2;
+                                }
+                            }
+                            let kingAlliesBetweenThisPiece = [];
+                            slidingBeyondPieces[item].push(4);
+                            for(element of slidingBeyondPieces[item]){
+                                if(element == parseInt(tileOfKing)) break;
+                                let thisTile = document.getElementById(`${element}`);
+                                let child = thisTile.children[0];
+                                if(child.classList.contains('lightPiece')){
+                                    kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                                }
+                            }
+                            if(kingAlliesBetweenThisPiece.length == 1){
+                                cannotBlock.push(kingAlliesBetweenThisPiece[0]);
+                            }
+                        }
+                    }
+                }
+
 
                 // check if sliding moves directed at king can be blocked
                 let blockedThreat = 0;
@@ -1724,12 +1854,22 @@ async function drop(e) {
                                         if(object[0] == "P"){
                                             if(pawnNonCaptureMoves["P"].includes(value)){
                                                 blockedThreat += 1;
+                                                for(element of cannotBlock){
+                                                    if(element == object){
+                                                        blockedThreat -= 1;
+                                                    }
+                                                }
                                                 break loop1;
                                             }
                                             
                                         }else{
                                             if(currentTilesOnThreat[object].includes(value) && object[0] != "K"){
                                                 blockedThreat += 1;
+                                                for(element of cannotBlock){
+                                                    if(element == object){
+                                                        blockedThreat -= 1;
+                                                    }
+                                                }
                                                 break loop1;
                                             }
                                         }
@@ -1767,6 +1907,23 @@ async function drop(e) {
                 checkInfo.innerHTML = `White king has been checkmated`;
                 checked = true;
                 
+            }else{
+                kingNextMovements.forEach(allMovesCheck);
+                noDuplicateSafeTiles = [...new Set(safeTiles)];
+                for([index, tile] of noDuplicateSafeTiles.entries()){
+                    for(item in slidingBeyondPieces){
+                        if(item[0] != item[0].toUpperCase()){
+                            if(slidingBeyondPieces[item].includes(parseInt(tileOfKing)) && slidingBeyondPieces[item].includes(tile)){
+                                noDuplicateSafeTiles.splice(index, 1);
+                            }
+                        }
+                    }
+                }
+                if(noDuplicateSafeTiles.length == 0){
+                    let checkInfo = document.querySelector(".checkInfo")
+                    checkInfo.innerHTML = `White king has been checkmated`;
+                    checked = true;
+                }
             }
 
             ;
