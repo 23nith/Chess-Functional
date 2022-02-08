@@ -612,7 +612,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                 continue;
                             }
                             if(!checking){
-                                tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                                // tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             }
                             // continue;
                         }
@@ -628,7 +628,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                 continue;
                             }
                             if(!checking){
-                                tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                                // tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             }
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
@@ -688,7 +688,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
                                         // console.log("enemy piece");
                                         if(!checking){
-                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                            // currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
 
                                         // continue;
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
@@ -715,7 +715,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                     if(currentTile.children[0].classList.contains("lightPiece")){
 
                                         if(!checking){
-                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                            // currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                             // console.log("enemy piece");
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
                                             currentTile.style.backgroundColor = highlightColor;
@@ -1191,28 +1191,7 @@ async function drop(e) {
     }
 
 
-    // Capture pieces
 
-    if(e.target.children[1]){
-        console.log("capture");
-        let container = document.createElement("div");
-        if(e.target.children[0].classList.contains("lightPiece")){
-            blackCapturedHistory.push(e.target.children[0].id[0]);
-            container.appendChild(e.target.children[0]);
-            document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
-            whiteCapturedHistory.push("");
-        }else{
-            whiteCapturedHistory.push(e.target.children[0].id[0]);
-            container.appendChild(e.target.children[0]);
-            document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
-            blackCapturedHistory.push("");
-        }
-        // e.target.children[0].remove();
-    }
-    else{
-        whiteCapturedHistory.push("");
-        blackCapturedHistory.push("");
-    }
 
     if(homeTile){
         console.log(`${pieceColor} ${piece} moved`);
@@ -1420,5 +1399,50 @@ async function drop(e) {
 
     dropValue = e.target;
     // console.log("dropValue: ", dropValue);
+
+        let thisTileID;
+        // Capture pieces
+         if(!e.target.children[0].parentElement.classList.contains("tile")){
+            let thisTile = e.target.children[0].parentElement.parentElement;
+            thisTileID = thisTile.id;
+            thisTile.appendChild(e.target.children[0]);
+            thisTile = document.getElementById(`${thisTileID}`);
+            if(thisTile.children[1]){
+                console.log("test");
+                let container = document.createElement("div");
+                if(thisTile.children[0].classList.contains("lightPiece")){
+                    blackCapturedHistory.push(thisTile.children[0].id[0]);
+                    container.appendChild(thisTile.children[0]);
+                    document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+                    whiteCapturedHistory.push("");
+                }else{
+                    whiteCapturedHistory.push(thisTile.children[0].id[0]);
+                    container.appendChild(thisTile.children[0]);
+                    document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+                    blackCapturedHistory.push("");
+                }
+            }
+        }else{
+            if(e.target.children[1]){
+                console.log("capture");
+                let container = document.createElement("div");
+                if(e.target.children[0].classList.contains("lightPiece")){
+                    blackCapturedHistory.push(e.target.children[0].id[0]);
+                    container.appendChild(e.target.children[0]);
+                    document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+                    whiteCapturedHistory.push("");
+                }else{
+                    whiteCapturedHistory.push(e.target.children[0].id[0]);
+                    container.appendChild(e.target.children[0]);
+                    document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+                    blackCapturedHistory.push("");
+                }
+                // e.target.children[0].remove();
+            }
+            else{
+                whiteCapturedHistory.push("");
+                blackCapturedHistory.push("");
+            }
+        }
 
 }
