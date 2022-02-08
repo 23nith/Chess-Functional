@@ -238,7 +238,7 @@ let lightPieces;
 let darkPieces;
 let lightTiles;
 let darkTiles;
-let turn = "White";
+let turn = "lightPiece";
 
 
 let whiteKingCastlingLimit  = 1;
@@ -314,8 +314,9 @@ function getRook(sign, _tile_to_add, _homeTile) {
 // ************************************************** Functions called by drag drop events **************************************************
 
 function changeTurn(){
-    turn = turn == "White" ? "Black": "White";
-    document.querySelector(".turn").innerHTML = `${turn}'s turn`;
+    turn = turn == "lightPiece" ? "darkPiece": "lightPiece";
+    let showTurn = (turn =="lightPiece") ? "White": "Black";
+    document.querySelector(".turn").innerHTML = `${showTurn}'s turn`;
 }
 
 
@@ -841,8 +842,27 @@ function addDragFeatureLight(someNodeList){
 
 //************************************************************************************** Drag and drop events **************************************************************************************
 
+let movable;
+
 async function dropAllow(e) {
     e.preventDefault();
+
+    if(!e.target.classList.contains(turn)){
+        console.log(turn);
+        if(!movable){
+            console.log("triggered")
+            let turnInfo = document.querySelector(".turn");
+            turnInfo.classList.add("turn-emphasize");
+            function removeEmph(){
+                turnInfo.classList.remove("turn-emphasize");            
+            }
+            setTimeout(removeEmph, 300);
+            console.log("test");
+        }
+        return;
+    }
+    
+
 
     // Can King castles ?
     if (piece === "K" || piece === "k") {
@@ -899,7 +919,7 @@ async function dropAllow(e) {
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
-
+        movable = true;
     }
     // console.log("lifted: ", lifted);
     // console.log("homeTile: ", homeTile);
@@ -908,6 +928,8 @@ async function dropAllow(e) {
 
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
+
+    console.log(e.target);
 
     if(homeTile[0] != undefined){
         console.log("retract touchmove")
@@ -933,6 +955,7 @@ let dropValue = undefined;
 
 async function drop(e) {
     e.preventDefault();
+    movable = false;
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
 
