@@ -238,7 +238,7 @@ let lightPieces;
 let darkPieces;
 let lightTiles;
 let darkTiles;
-let turn = "White";
+let turn = "lightPiece";
 
 
 let whiteKingCastlingLimit  = 1;
@@ -314,8 +314,9 @@ function getRook(sign, _tile_to_add, _homeTile) {
 // ************************************************** Functions called by drag drop events **************************************************
 
 function changeTurn(){
-    turn = turn == "White" ? "Black": "White";
-    document.querySelector(".turn").innerHTML = `${turn}'s turn`;
+    turn = turn == "lightPiece" ? "darkPiece": "lightPiece";
+    let showTurn = (turn =="lightPiece") ? "White": "Black";
+    document.querySelector(".turn").innerHTML = `${showTurn}'s turn`;
 }
 
 
@@ -843,6 +844,12 @@ function addDragFeatureLight(someNodeList){
 
 async function dropAllow(e) {
     e.preventDefault();
+
+    if(!e.target.classList.contains(turn)){
+        return;
+    }
+    
+
 
     // Can King castles ?
     if (piece === "K" || piece === "k") {
