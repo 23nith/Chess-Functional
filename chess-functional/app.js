@@ -259,6 +259,10 @@ let allPsblMvBlck           = {}
 let allPsblMvWht            = {}
 let whtKngAllPsbleMvmnt     = {}
 let blckKngAllPsbleMvmnt    = {}
+let whtKngHomTile           = -1;
+let blckKngHomTile          = -1;
+let whtKngHomTileOnCheck    = -1;
+let blckKngHomTileOnCheck   = -1;
 
 
 let enPassantPiecesWhite = [];
@@ -277,8 +281,6 @@ let pawnNonCaptureMoves = {
 
 }
 
-let whtKngHomTile = -1;
-let blckKngHomTile = -1;
 
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
@@ -472,23 +474,24 @@ function getAllPsblMvmntOf(getPcsOnBrdInf, turn, rmvdHghlghtThrt) {
 // @param  object - all possible movement of white/black
 // @param  object - all possible moment of white/black
 // @return object - isCheck and tile on threat
-function isChck(allPssbleMvmntOf, pssbleKngMvmntOf, clr) {
+function isChckTlsOnThrt(allPssbleMvmntOf, pssbleKngMvmntOf, clr) {
 
+    const tlsOnThrt = [];
     function chckChck(allPssbleMvmntOf, pssbleKngMvmntOf) {
         for (let kngTile in pssbleKngMvmntOf) {
             if (allPssbleMvmntOf[parseInt(kngTile)]) {
-                return [true, kngTile];
+                tlsOnThrt.push(parseInt(kngTile));
             }
         }
-        return [false, -1];
     }
 
     switch (clr.toUpperCase()) {
         case `BLACK`:
-            return chckChck(allPssbleMvmntOf, pssbleKngMvmntOf);
+            chckChck(allPssbleMvmntOf, pssbleKngMvmntOf);
+            return tlsOnThrt;
         case `WHITE`:
-            return chckChck(allPssbleMvmntOf, pssbleKngMvmntOf);
-
+            chckChck(allPssbleMvmntOf, pssbleKngMvmntOf);
+            return tlsOnThrt;
         default:
             throw new Error(`Invalid color`);
     }
@@ -496,7 +499,7 @@ function isChck(allPssbleMvmntOf, pssbleKngMvmntOf, clr) {
 
 // @param object - board current info
 // @param object - current check info on board
-function logCrrntBrdInf(crrntBrdInf, crrntChckInf) {
+function logCrrntBrdInf(crrntBrdInf, crrntChckTlsOnThrtInf, isKngChckdInf) {
     const {
         allPsblMvWht,
         allPsblMvBlck,
@@ -506,10 +509,15 @@ function logCrrntBrdInf(crrntBrdInf, crrntChckInf) {
     } = crrntBrdInf;
 
     const {
-        isBlckChckInf,
-        isWhtChckInf,
-    } = crrntChckInf
+        isBlckChckTlsOnThrtInf,
+        isWhtChckTlsOnThrtInf,
+    } = crrntChckTlsOnThrtInf;
 
+
+    const {
+        isBlckKngChckd,
+        isWhtKngChckd,
+    } = isKngChckdInf;
 
     console.log(`Black all pos moves`,  allPsblMvBlck);
     console.log(`White all pos moves`,  allPsblMvWht);
@@ -518,12 +526,12 @@ function logCrrntBrdInf(crrntBrdInf, crrntChckInf) {
     console.log(`White king all tiles`, whtKngAllPsbleMvmnt);
 
     console.log(`-----------Black king check info-------------`);
-    console.log(`is Black check \t\t\t ${isBlckChckInf[0]}`);
-    console.log(`Tile open for check \t ${isBlckChckInf[1]}`);
+    console.log(`is Black king checked: \t\t ${isBlckKngChckd}`)
+    console.log(`Black king possible move on threat \t ${isBlckChckTlsOnThrtInf}`);
 
     console.log(`-----------White king check info-------------`);
-    console.log(`is White check \t\t\t ${isWhtChckInf[0]}`);
-    console.log(`Tile open for check \t ${isWhtChckInf[1]}`);
+    console.log(`is White king checked: \t\t ${isWhtKngChckd}`)
+    console.log(`White king possible move on threat \t ${isWhtChckTlsOnThrtInf}`);
 
 
     console.log(`--------------------------------------------`)
@@ -1019,7 +1027,6 @@ function highlightTiles(
                 for (desc ? tile = 63 : tile = 0; desc ? tile >= 0 : tile < 64; desc ? tile-- : tile++) {
                     let currentTile = tiles[tile];
 
-
                     if (isThreat) {
                         if (!exemptedTiles.includes(currentTile.id) && !checking) {
                             currentTile.setAttribute("ondragover", "removeDrop(event)")
@@ -1059,20 +1066,14 @@ function highlightTiles(
                                  }
 
                                  if (rmvdHghlghtThrt) {
-                                     if (directionLine === parseInt(blckKngHomTile)) {
-                                         if (!(allPsblMvWht[directionLine]) && WhtPc[piece]) {
-                                             allPsblMvWht[directionLine] = directionLine;
-                                             delete allPsblMvBlck[parseInt((homeTileTmp))];
-                                         }
+                                     if ((directionLine === parseInt(blckKngHomTile)) && (WhtPc[piece] === piece)) {
+                                         blckKngHomTileOnCheck = directionLine;
                                      }
 
-                                     if (directionLine === parseInt(whtKngHomTile) && BlckPc[piece]) {
-                                         if (!(allPsblMvBlck[directionLine])) {
-                                             allPsblMvBlck[directionLine] = directionLine;
-                                             delete allPsblMvWht[parseInt((homeTileTmp))];
-                                         }
+                                     if ((directionLine === parseInt(whtKngHomTile)) && (BlckPc[piece] === piece)) {
+                                         whtKngHomTileOnCheck = directionLine;
                                      }
-                                 }
+                                }
 
                                 if (lightPiece) {
                                     if (currentTile.children[0].classList.contains("darkPiece")) {
@@ -1135,11 +1136,7 @@ function highlightTiles(
                                             if (currentTilesOnThreat[piece] == undefined) {
                                                 currentTilesOnThreat[piece] = [];
                                             }
-                                            // if(threateningPiece[mystring] == undefined){
-                                            //     threateningPiece[mystring] = [];
-                                            // }
                                             currentTilesOnThreat[piece].push(tile);
-                                            // threateningPiece[mystring].push(tile);
                                         }
 
                                         exemptedTiles.push(currentTile.id);
@@ -1154,11 +1151,7 @@ function highlightTiles(
                                                 if (currentTilesOnThreat[piece] == undefined) {
                                                     currentTilesOnThreat[piece] = [];
                                                 }
-                                                // if(threateningPiece[mystring] == undefined){
-                                                //     threateningPiece[mystring] = [];
-                                                // }
                                                 currentTilesOnThreat[piece].push(tile);
-                                                // threateningPiece[mystring].push(tile);
                                             }
                                         }
                                         if (tileNumber != parseInt(_homeTile)) {
@@ -1782,41 +1775,48 @@ async function drop(e) {
         // Excluding capture tile except when checking a king
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
-        // Check for checked
-        const crrntChckInf = {
-            isBlckChckInf: isChck(
+        // Check tiles on threat
+        const crrntChckTlsOnThrtInf = {
+            isBlckChckTlsOnThrtInf: isChckTlsOnThrt(
                 allPsblMvWht,
                 blckKngAllPsbleMvmnt,
                 clr
             ),
-            isWhtChckInf:  isChck(
+            isWhtChckTlsOnThrtInf:  isChckTlsOnThrt(
                 allPsblMvBlck,
                 whtKngAllPsbleMvmnt,
                 clr
             ),
         }
 
+        // Check if king is checked
+        const isKngChckdInf = {
+            isWhtKngChckd:  isKngChckd(
+                whtKngHomTile,
+                whtKngHomTileOnCheck
+            ),
+            isBlckKngChckd: isKngChckd(
+                blckKngHomTile,
+                blckKngHomTileOnCheck
+            ),
+        };
 
         // Check if checked can be block
 
-
-
         // Check if checker can be capture
 
-
-
-
         // Check if checker has support
-
-
-
 
         if (doLogThrt) {
             // Highlight all possible moves on Black
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
 
             // Show board current info and on checking attempt
-            logCrrntBrdInf(crrntBrdInf, crrntChckInf);
+            logCrrntBrdInf(
+                crrntBrdInf,
+                crrntChckTlsOnThrtInf,
+                isKngChckdInf,
+            );
         }
     }
 
@@ -1826,36 +1826,37 @@ async function drop(e) {
         // Excluding capture tile except when checking a king
         getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, true);
 
-        // Check for checked
-        const crrntChckInf = {
-            isBlckChckInf: isChck(
+        // Check tiles on threat
+        const crrntChckTlsOnThrtInf = {
+            isBlckChckTlsOnThrtInf: isChckTlsOnThrt(
                 allPsblMvWht,
                 blckKngAllPsbleMvmnt,
                 clr
             ),
-            isWhtChckInf:  isChck(
+            isWhtChckTlsOnThrtInf:  isChckTlsOnThrt(
                 allPsblMvBlck,
                 whtKngAllPsbleMvmnt,
                 clr
             ),
         }
 
-
+        // Check if king is checked
+        const isKngChckdInf = {
+            isWhtKngChckd:  isKngChckd(
+                whtKngHomTile,
+                whtKngHomTileOnCheck
+            ),
+            isBlckKngChckd: isKngChckd(
+                blckKngHomTile,
+                blckKngHomTileOnCheck
+            ),
+        };
 
         // Check if checked can be block
 
-
-
         // Check if checker can be capture
 
-
-
-
         // Check if checker has support
-
-
-
-
 
         if (doLogThrt) {
 
@@ -1863,9 +1864,15 @@ async function drop(e) {
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
 
             // Show board current info and on checking attempt
-            logCrrntBrdInf(crrntBrdInf, crrntChckInf);
+            logCrrntBrdInf(
+                crrntBrdInf,
+                crrntChckTlsOnThrtInf,
+                isKngChckdInf,
+            );
         }
     }
 }
 
-
+function isKngChckd(crrntKngHomTl, kngHomTlOnChck) {
+    return parseInt(crrntKngHomTl) === kngHomTlOnChck;
+}
