@@ -65,13 +65,13 @@ body {
     background: white;
     font-size: 30px;
     color: black;
-    transition: 1s;
+    transition: .2s;
 }
 
 .turn-emphasize {
     background-color: black;
     color: white;
-    transform: scale(2, 2);
+    transform: scale(1.5, 1.5);
 }
 
 .lightPiece {

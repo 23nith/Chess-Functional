@@ -856,7 +856,7 @@ async function dropAllow(e) {
             function removeEmph(){
                 turnInfo.classList.remove("turn-emphasize");            
             }
-            setTimeout(removeEmph, 1000);
+            setTimeout(removeEmph, 300);
             console.log("test");
         }
         return;
