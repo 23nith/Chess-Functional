@@ -533,7 +533,6 @@ function logCrrntBrdInf(crrntBrdInf, crrntChckTlsOnThrtInf, isKngChckdInf) {
     console.log(`is White king checked: \t\t ${isWhtKngChckd}`)
     console.log(`White king possible move on threat \t ${isWhtChckTlsOnThrtInf}`);
 
-
     console.log(`--------------------------------------------`)
     console.log(`\n\n\n\n\n\n`)
 }
@@ -988,26 +987,25 @@ function highlightTiles(
 
             if (rmvdHghlghtThrt) {
                 if (piece === `k`) {
-                    blckKngAllPsbleMvmnt[validMove]             = validMove;
-                    blckKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
+                    blckKngAllPsbleMvmnt[validMove]             = [validMove, piece];
+                    blckKngAllPsbleMvmnt[parseInt(homeTileTmp)] = [toInt(homeTileTmp), piece];
                 }
 
                 if (!(allPsblMvBlck[validMove]) && BlckPc[piece]) {
-                    allPsblMvBlck[validMove] = validMove;
+                    allPsblMvBlck[validMove] = [validMove, piece];
                     delete allPsblMvBlck[parseInt((homeTileTmp))];
 
                 }
 
                 if (piece === `K`) {
-                    whtKngAllPsbleMvmnt[validMove]             = validMove;
-                    whtKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
+                    whtKngAllPsbleMvmnt[validMove]             = [validMove, piece];
+                    whtKngAllPsbleMvmnt[parseInt(homeTileTmp)] = [toInt(homeTileTmp), piece];
                 }
 
                 if (!(allPsblMvWht[validMove])
                     && WhtPc[piece]
                     && validMove < 64) {
-
-                    allPsblMvWht[validMove] = validMove;
+                    allPsblMvWht[validMove] = [validMove, piece];
                     delete allPsblMvWht[parseInt((homeTileTmp))];
                 }
             }
@@ -1221,24 +1219,24 @@ function highlightTiles(
 
                             if (rmvdHghlghtThrt) {
                                if (piece === `k`) {
-                                   blckKngAllPsbleMvmnt[directionLine]         = directionLine;
+                                   blckKngAllPsbleMvmnt[directionLine]         = [directionLine, piece];
                                    blckKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
                                 }
 
                                 if (!(allPsblMvBlck[directionLine]) && BlckPc[piece]) {
-                                    allPsblMvBlck[directionLine] = directionLine;
+                                    allPsblMvBlck[directionLine] = [directionLine, piece];
                                     delete allPsblMvBlck[parseInt((homeTileTmp))];
                                 }
 
                                 if (piece === `K`) {
-                                    whtKngAllPsbleMvmnt[directionLine]         = directionLine;
+                                    whtKngAllPsbleMvmnt[directionLine]         = [directionLine, piece];
                                     whtKngAllPsbleMvmnt[parseInt(homeTileTmp)] = toInt(homeTileTmp);
                                 }
 
 
                                 if (!(allPsblMvWht[directionLine])
                                     && WhtPc[piece]) {
-                                    allPsblMvWht[directionLine] = directionLine;
+                                    allPsblMvWht[directionLine] = [directionLine, piece];
                                     delete allPsblMvWht[parseInt((homeTileTmp))];
                                 }
                             }
@@ -1812,6 +1810,8 @@ async function drop(e) {
 
         // Check if checker has support
 
+        // checkmate
+
         if (doLogThrt) {
             // Highlight all possible moves on Black
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
@@ -1862,6 +1862,8 @@ async function drop(e) {
         // Check if checker can be capture
 
         // Check if checker has support
+
+        // checkmate
 
         if (doLogThrt) {
 
