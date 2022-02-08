@@ -687,7 +687,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
                                         // console.log("enemy piece");
                                         if(!checking){
-                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                            // currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
 
                                         // continue;
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
@@ -714,7 +714,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                     if(currentTile.children[0].classList.contains("lightPiece")){
 
                                         if(!checking){
-                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                            // currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                             // console.log("enemy piece");
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
                                             currentTile.style.backgroundColor = highlightColor;
