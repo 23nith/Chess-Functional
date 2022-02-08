@@ -1759,6 +1759,11 @@ async function drop(e) {
     blckKngAllPsbleMvmnt = {};
     whtKngAllPsbleMvmnt  = {};
 
+    // Clear kings hometile
+    whtKngHomTile           = -1;
+    blckKngHomTile          = -1;
+    whtKngHomTileOnCheck    = -1;
+    blckKngHomTileOnCheck   = -1;
 
     const clr         = turn;
     const crrntBrdInf = {
