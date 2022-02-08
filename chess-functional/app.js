@@ -1804,7 +1804,10 @@ async function drop(e) {
             ),
         };
 
+
         // Check if checked can be block
+
+        // Check if king can move somewhere else
 
         // Check if checker can be capture
 
@@ -1858,6 +1861,8 @@ async function drop(e) {
         };
 
         // Check if checked can be block
+
+        // Check if king can move somewhere else
 
         // Check if checker can be capture
 
