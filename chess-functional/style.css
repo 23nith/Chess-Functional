@@ -64,6 +64,14 @@ body {
     margin-right: 15px;
     background: white;
     font-size: 30px;
+    color: black;
+    transition: 1s;
+}
+
+.turn-emphasize {
+    background-color: black;
+    color: white;
+    transform: scale(2, 2);
 }
 
 .lightPiece {

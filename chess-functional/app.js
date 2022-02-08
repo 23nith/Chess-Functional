@@ -842,10 +842,23 @@ function addDragFeatureLight(someNodeList){
 
 //************************************************************************************** Drag and drop events **************************************************************************************
 
+let movable;
+
 async function dropAllow(e) {
     e.preventDefault();
 
     if(!e.target.classList.contains(turn)){
+        console.log(turn);
+        if(!movable){
+            console.log("triggered")
+            let turnInfo = document.querySelector(".turn");
+            turnInfo.classList.add("turn-emphasize");
+            function removeEmph(){
+                turnInfo.classList.remove("turn-emphasize");            
+            }
+            setTimeout(removeEmph, 1000);
+            console.log("test");
+        }
         return;
     }
     
@@ -906,7 +919,7 @@ async function dropAllow(e) {
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
-
+        movable = true;
     }
     // console.log("lifted: ", lifted);
     // console.log("homeTile: ", homeTile);
@@ -915,6 +928,8 @@ async function dropAllow(e) {
 
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
+
+    console.log(e.target);
 
     if(homeTile[0] != undefined){
         console.log("retract touchmove")
@@ -940,6 +955,7 @@ let dropValue = undefined;
 
 async function drop(e) {
     e.preventDefault();
+    movable = false;
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
 
