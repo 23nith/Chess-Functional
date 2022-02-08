@@ -9,7 +9,7 @@ high prio
 
 normal prio
 -fix pawn not promoting when capturing a piece on promotion field.
-
+-when undo is clicked up to the start of the game, the user will not be able to move white pieces
 
 less prio
  -Add timer
