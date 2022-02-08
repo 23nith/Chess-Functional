@@ -1216,6 +1216,10 @@ async function drop(e) {
 
     }
 
+    // reset recorded en passant vulnerabilities
+    enPassantPiecesWhite = []
+    enPassantPiecesBlack = []
+
     landed = e.target;
     // Detect pawn pieces vulnerable to En Passant
     landed = e.target.id;
