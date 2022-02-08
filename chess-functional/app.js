@@ -124,14 +124,16 @@ async function undo(){
     whiteCapturedHistory.map((item)=>{
         if(item != ""){
             let container = document.createElement("div");
-            container.innerHTML = `<i class="${piece.generatePiece(item).icon}"></i>`
+            // container.innerHTML = `<i class="${piece.generatePiece(item).icon}"></i>`
+            container.innerHTML = `<img src=${piece.generatePiece(item).img} />`
             document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
         }
     });
     blackCapturedHistory.map((item)=>{
         if(item != ""){
             let container = document.createElement("div");
-            container.innerHTML = `<i class="${piece.generatePiece(item).icon} lightPiece"></i>`
+            // container.innerHTML = `<i class="${piece.generatePiece(item).icon} lightPiece"></i>`
+            container.innerHTML = `<img src=${piece.generatePiece(item).img} />`
             document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
         }
     });
