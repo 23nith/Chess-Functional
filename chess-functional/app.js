@@ -970,7 +970,7 @@ async function drop(e) {
             const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
 
-
+            // look into capture piece when promoting
             const capturedPieceInfo = document.getElementById(e.target.id);
             const capturedPiece     = capturedPieceInfo.parentElement.id;
 
@@ -1051,7 +1051,10 @@ async function drop(e) {
         }
         else {
             // Blacks' pawn
-            //
+            // look into capture piece when promoting
+            const capturedPieceInfo = document.getElementById(e.target.id);
+            const capturedPiece     = capturedPieceInfo.parentElement.id;
+
             const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
 
