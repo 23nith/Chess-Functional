@@ -1620,7 +1620,7 @@ async function drop(e) {
                                 if(element == parseInt(tileOfKing)) break;
                                 let thisTile = document.getElementById(`${element}`);
                                 let child = thisTile.children[0];
-                                if(child.classList.contains('darkPiece')){
+                                if(child != undefined && child.classList.contains('darkPiece')){
                                     kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
                                 }
                             }
@@ -1638,6 +1638,7 @@ async function drop(e) {
                     if(item[0] == item[0].toUpperCase()){
                         if(threateningPiece[item].includes(parseInt(tileOfKing))){
                             for(value of threateningPiece[item]){
+                                // loop1:
                                 for(object in currentTilesOnThreat){
                                     if(object[0] != object[0].toUpperCase()){
                                         if(object[0] == "p"){
@@ -1830,7 +1831,7 @@ async function drop(e) {
                                 if(element == parseInt(tileOfKing)) break;
                                 let thisTile = document.getElementById(`${element}`);
                                 let child = thisTile.children[0];
-                                if(child.classList.contains('lightPiece')){
+                                if(child != undefined && child.classList.contains('lightPiece')){
                                     kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
                                 }
                             }
