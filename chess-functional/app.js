@@ -846,28 +846,11 @@ let movable;
 async function dropAllow(e) {
     e.preventDefault();
 
-    if(!e.target.classList.contains(turn)){
-        console.log(turn);
-        if(!movable){
-            console.log("triggered")
-            let turnInfo = document.querySelector(".turn");
-            turnInfo.classList.add("turn-emphasize");
-            function removeEmph(){
-                turnInfo.classList.remove("turn-emphasize");
-            }
-            setTimeout(removeEmph, 300);
-            console.log("test");
-        }
-        return;
-    }
-
-
-
     // Can King castles ?
     if (piece === "K" || piece === "k") {
         if (piece === "K") {
+            console.log(e.target.id);
             // White king
-
             // Is tile available for castling
             if (parseInt(e.target.id) === rightWhiteCastlingTile) {
                 isCanCastleRightWhite = true;
@@ -899,6 +882,21 @@ async function dropAllow(e) {
             }
         }
     }
+
+
+    if(!e.target.classList.contains(turn)){
+        if(!movable){
+            console.log("triggered")
+            let turnInfo = document.querySelector(".turn");
+            turnInfo.classList.add("turn-emphasize");
+            function removeEmph(){
+                turnInfo.classList.remove("turn-emphasize");
+            }
+            setTimeout(removeEmph, 300);
+        }
+        return;
+    }
+
 
 
     tiles = document.querySelectorAll(".container div");
