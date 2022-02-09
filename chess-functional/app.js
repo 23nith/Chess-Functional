@@ -1686,7 +1686,7 @@ async function drop(e) {
                             canBeCaptured += 1;
                             for(thing in currentTilesOnThreat){
                                 if(thing[0] == thing[0].toUpperCase()){
-                                    if(currentTilesOnThreat[thing].includes(parseInt(newArr)) && (thing[0] != "k")){ //check if king will be counter captured if it captured this piece
+                                    if(currentTilesOnThreat[thing].includes(parseInt(newArr)) && (thing[0] != "k") && object[0] == "k"){ //check if king will be counter captured if it captured this piece
                                         canBeCaptured -= 1;
                                         break loop1;
                                     }
@@ -1908,7 +1908,7 @@ async function drop(e) {
                             canBeCaptured += 1;
                             for(thing in currentTilesOnThreat){
                                 if(thing[0] != thing[0].toUpperCase()){
-                                    if(currentTilesOnThreat[thing].includes(parseInt(newArr)) && (thing[0] != "K")){ //check if king will be counter captured if it captured this piece
+                                    if(currentTilesOnThreat[thing].includes(parseInt(newArr)) && (thing[0] != "K") && object[0] == "K"){ //check if king will be counter captured if it captured this piece
                                         canBeCaptured -= 1;
                                         break loop1;
                                     }
