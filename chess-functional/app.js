@@ -1647,7 +1647,7 @@ async function drop(e) {
                                                     blockedThreat -= 1;
                                                 }
                                             }
-                                            break loop1;
+                                            // break loop1;
                                         }
                                         
                                     }else{
@@ -1658,7 +1658,7 @@ async function drop(e) {
                                                     blockedThreat -= 1;
                                                 }
                                             }
-                                            break loop1;
+                                            // break loop1;
                                         }
                                     }
                                 }
@@ -1703,7 +1703,7 @@ async function drop(e) {
 
                 
 
-                if(threatsOnKing == blockedThreat) return;
+                if(threatsOnKing <= blockedThreat) return;
                 if(threatsOnKing <= canBeCaptured) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `Black king has been checkmated`;
@@ -1869,7 +1869,7 @@ async function drop(e) {
                                                     blockedThreat -= 1;
                                                 }
                                             }
-                                            break loop1;
+                                            // break loop1;
                                         }
                                         
                                     }else{
@@ -1880,7 +1880,7 @@ async function drop(e) {
                                                     blockedThreat -= 1;
                                                 }
                                             }
-                                            break loop1;
+                                            // break loop1;
                                         }
                                     }
                                 }
@@ -1923,7 +1923,7 @@ async function drop(e) {
                 console.log("test")
                 // count the number of threats to the king
 
-                if(threatsOnKing == blockedThreat) return;
+                if(threatsOnKing <= blockedThreat) return;
                 if(threatsOnKing <= canBeCaptured) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `White king has been checkmated`;
