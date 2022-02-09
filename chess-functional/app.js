@@ -1681,9 +1681,17 @@ async function drop(e) {
                 console.log(newArr);
                 for(object in currentTilesOnThreat){
                     if(object[0] != object[0].toUpperCase()){
-                        if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "k")){
+                        // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "k")){
+                        if(currentTilesOnThreat[object].includes(parseInt(newArr))){
                             canBeCaptured += 1;
-                            break loop1;
+                            for(thing in currentTilesOnThreat){
+                                if(thing[0] == thing[0].toUpperCase()){
+                                    if(currentTilesOnThreat[thing].includes(parseInt(newArr)) && (thing[0] != "k")){ //check if king will be counter captured if it captured this piece
+                                        canBeCaptured -= 1;
+                                        break loop1;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -1895,9 +1903,17 @@ async function drop(e) {
                 console.log(newArr);
                 for(object in currentTilesOnThreat){
                     if(object[0] == object[0].toUpperCase()){
-                        if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "K")){
+                        // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "K")){
+                        if(currentTilesOnThreat[object].includes(parseInt(newArr))){
                             canBeCaptured += 1;
-                            break loop1;
+                            for(thing in currentTilesOnThreat){
+                                if(thing[0] != thing[0].toUpperCase()){
+                                    if(currentTilesOnThreat[thing].includes(parseInt(newArr)) && (thing[0] != "K")){ //check if king will be counter captured if it captured this piece
+                                        canBeCaptured -= 1;
+                                        break loop1;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
