@@ -959,13 +959,13 @@ async function drop(e) {
     if (piece === "P" || piece === "p") {
         // Whites' pawn
         if (piece === "P") {
+            // look into capture piece when promoting
+            const capturedPieceInfo = document.getElementById(e.target.id);
+            const capturedPiece     = capturedPieceInfo.parentElement.id;
 
             const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
 
-            // look into capture piece when promoting
-            const capturedPieceInfo = document.getElementById(e.target.id);
-            const capturedPiece     = capturedPieceInfo.parentElement.id;
 
             // White promotion check
             if ((whitePromotionField.includes(parseInt(e.target.id)))
@@ -1045,6 +1045,7 @@ async function drop(e) {
         else {
             // Blacks' pawn
             // look into capture piece when promoting
+
             const capturedPieceInfo = document.getElementById(e.target.id);
             const capturedPiece     = capturedPieceInfo.parentElement.id;
 
@@ -1053,7 +1054,7 @@ async function drop(e) {
 
             // Black promotion check
             if ((blackPromotionField.includes(parseInt(e.target.id)))
-                && blackPromotionField.includes(parseInt(capturedPiece))) {
+                || blackPromotionField.includes(parseInt(capturedPiece))) {
 
                 const promotionChoices = {
                     q: "q",
