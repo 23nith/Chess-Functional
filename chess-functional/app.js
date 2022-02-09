@@ -1583,6 +1583,7 @@ async function drop(e) {
                             }
                         }
                     }
+                    safeTiles.push(nextMove);
                 }else{
                     return true; // if tile has foe piece it will not be part of the evaluation thus will always return true (not safe)
                 }
@@ -1648,8 +1649,8 @@ async function drop(e) {
                                                 if(element == object){
                                                     // blockedThreat -= 1;
                                                     blockedThreat = [...new Set(blockedThreat)];
-                                                    let thisItem = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(thisItem);
+                                                    let itemIndex = blockedThreat.indexOf(item);
+                                                    blockedThreat.splice(itemIndex, 1);
                                                 }
                                             }
                                             // break loop1;
@@ -1664,8 +1665,8 @@ async function drop(e) {
                                                 if(element == object){
                                                     // blockedThreat -= 1;
                                                     blockedThreat = [...new Set(blockedThreat)];
-                                                    let thisItem = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(thisItem);
+                                                    let itemIndex = blockedThreat.indexOf(item);
+                                                    blockedThreat.splice(itemIndex, 1);
                                                 }
                                             }
                                             // break loop1;
@@ -1678,10 +1679,10 @@ async function drop(e) {
                 }
             }
 
-            let canBeCaptured = 0;
+            let canBeCaptured = [];
 
             // check if all threats can be captured by the defender
-            loop1:
+            // loop1:
             for(item of currentThreatOnKing){
                 console.log(item);
                 let arr = item.split("-");
@@ -1691,9 +1692,31 @@ async function drop(e) {
                 console.log(newArr);
                 for(object in currentTilesOnThreat){
                     if(object[0] != object[0].toUpperCase()){
-                        if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "k")){
-                            canBeCaptured += 1;
-                            break loop1;
+                        // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "k")){
+                        if(currentTilesOnThreat[object].includes(parseInt(newArr))){
+                            // canBeCaptured += 1;
+                            canBeCaptured.push(item);
+                            canBeCaptured = [...new Set(canBeCaptured)];
+                            if(object[0] == "k"){
+                                for(thing in currentTilesOnThreat){
+                                    if(thing[0] == thing[0].toUpperCase()){
+                                        if(currentTilesOnThreat[thing].includes(parseInt(newArr))){ //check if king will be counter captured if it captured this piece
+                                            // canBeCaptured -= 1;
+                                            canBeCaptured = [...new Set(canBeCaptured)];
+                                            let itemIndex = canBeCaptured.indexOf(item);
+                                            canBeCaptured.splice(itemIndex, 1);
+                                            // break loop1;
+                                        }
+                                    }
+                                }
+                            }
+                            for(element of cannotBlock){
+                                if(element == object){
+                                    canBeCaptured = [...new Set(canBeCaptured)];
+                                    let itemIndex = canBeCaptured.indexOf(item);
+                                    canBeCaptured.splice(itemIndex, 1);
+                                }
+                            }
                         }
                     }
                 }
@@ -1706,7 +1729,7 @@ async function drop(e) {
                 
 
                 if(threatsOnKing == blockedThreat.length) return;
-                if(threatsOnKing == canBeCaptured) return;
+                if(threatsOnKing == canBeCaptured.length) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `Black king has been checkmated`;
                 checked = true;
@@ -1725,7 +1748,7 @@ async function drop(e) {
                 }
                 if(noDuplicateSafeTiles.length == 0){
                     if(threatsOnKing == blockedThreat.length) return;
-                    if(threatsOnKing == canBeCaptured) return;
+                    if(threatsOnKing == canBeCaptured.length) return;
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king has been checkmated`;
                     checked = true;
@@ -1807,6 +1830,7 @@ async function drop(e) {
                             }
                         }
                     }
+                    safeTiles.push(nextMove);
                 }else{
                     return true; // if tile has foe piece it will not be part of the evaluation thus will always return true (not safe)
                 }
@@ -1855,7 +1879,7 @@ async function drop(e) {
 
 
             // check if sliding moves directed at king can be blocked
-            let blockedThreat = [];
+            let blockedThreat = 0;
             for(item in threateningPiece){
                 loop1:
                 if(item[0] != item[0].toUpperCase()){
@@ -1872,8 +1896,8 @@ async function drop(e) {
                                                 if(element == object){
                                                     // blockedThreat -= 1;
                                                     blockedThreat = [...new Set(blockedThreat)];
-                                                    let thisItem = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(thisItem);
+                                                    let itemIndex = blockedThreat.indexOf(item);
+                                                    blockedThreat.splice(itemIndex, 1);
                                                 }
                                             }
                                             // break loop1;
@@ -1888,8 +1912,8 @@ async function drop(e) {
                                                 if(element == object){
                                                     // blockedThreat -= 1;
                                                     blockedThreat = [...new Set(blockedThreat)];
-                                                    let thisItem = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(thisItem);
+                                                    let itemIndex = blockedThreat.indexOf(item);
+                                                    blockedThreat.splice(itemIndex, 1);
                                                 }
                                             }
                                             // break loop1;
@@ -1902,10 +1926,10 @@ async function drop(e) {
                 }
             }
 
-            let canBeCaptured = 0;
+            let canBeCaptured = [];
 
             // check if all threats can be captured by the defender
-            loop1:
+            // loop1:
             for(item of currentThreatOnKing){
                 console.log(item);
                 let arr = item.split("-");
@@ -1915,9 +1939,31 @@ async function drop(e) {
                 console.log(newArr);
                 for(object in currentTilesOnThreat){
                     if(object[0] == object[0].toUpperCase()){
-                        if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "K")){
-                            canBeCaptured += 1;
-                            break loop1;
+                        // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "K")){
+                        if(currentTilesOnThreat[object].includes(parseInt(newArr))){
+                            // canBeCaptured += 1;
+                            canBeCaptured.push(item);
+                            canBeCaptured = [...new Set(canBeCaptured)];
+                            if(object[0] == "K"){
+                                for(thing in currentTilesOnThreat){
+                                    if(thing[0] != thing[0].toUpperCase()){
+                                        if(currentTilesOnThreat[thing].includes(parseInt(newArr))){ //check if king will be counter captured if it captured this piece
+                                            // canBeCaptured -= 1;
+                                            canBeCaptured = [...new Set(canBeCaptured)];
+                                            let itemIndex = canBeCaptured.indexOf(item);
+                                            canBeCaptured.splice(itemIndex, 1);
+                                            // break loop1;
+                                        }
+                                    }
+                                }
+                            }
+                            for(element of cannotBlock){
+                                if(element == object){
+                                    canBeCaptured = [...new Set(canBeCaptured)];
+                                    let itemIndex = canBeCaptured.indexOf(item);
+                                    canBeCaptured.splice(itemIndex, 1);
+                                }
+                            }
                         }
                     }
                 }
@@ -1927,7 +1973,7 @@ async function drop(e) {
                 console.log("test")
                 // count the number of threats to the king
 
-                if(threatsOnKing == blockedThreat.length) return;
+                if(threatsOnKing == blockedThreat) return;
                 if(threatsOnKing == canBeCaptured) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `White king has been checkmated`;
@@ -1946,7 +1992,7 @@ async function drop(e) {
                     }
                 }
                 if(noDuplicateSafeTiles.length == 0){
-                    if(threatsOnKing == blockedThreat.length) return;
+                    if(threatsOnKing == blockedThreat) return;
                     if(threatsOnKing == canBeCaptured) return;
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king has been checkmated`;
