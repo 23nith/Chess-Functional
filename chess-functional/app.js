@@ -858,14 +858,14 @@ async function dropAllow(e) {
             let turnInfo = document.querySelector(".turn");
             turnInfo.classList.add("turn-emphasize");
             function removeEmph(){
-                turnInfo.classList.remove("turn-emphasize");            
+                turnInfo.classList.remove("turn-emphasize");
             }
             setTimeout(removeEmph, 300);
             console.log("test");
         }
         return;
     }
-    
+
 
 
     // Can King castles ?
@@ -970,8 +970,13 @@ async function drop(e) {
             const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
 
+
+            const capturedPieceInfo = document.getElementById(e.target.id);
+            const capturedPiece     = capturedPieceInfo.parentElement.id;
+
             // White promotion check
-            if (whitePromotionField.includes(parseInt(e.target.id))) {
+            if ((whitePromotionField.includes(parseInt(e.target.id)))
+                || whitePromotionField.includes(parseInt(capturedPiece))) {
 
                 const promotionChoices = {
                     Q: "Q",
@@ -1051,7 +1056,8 @@ async function drop(e) {
             let targetPawn = e.target.children[0];
 
             // Black promotion check
-            if (blackPromotionField.includes(parseInt(e.target.id))) {
+            if ((blackPromotionField.includes(parseInt(e.target.id)))
+                && blackPromotionField.includes(parseInt(capturedPiece))) {
 
                 const promotionChoices = {
                     q: "q",
@@ -1124,9 +1130,9 @@ async function drop(e) {
                     }
                 })
             }
-
         }
     }
+
 
     // Remove castling features if rook is move
 
