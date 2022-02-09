@@ -9,6 +9,7 @@ high prio
 
 normal prio
 - En passant should only work right after initial movement of pawn
+- Castling went missing on the main branch
 
 less prio
  -Add timer
