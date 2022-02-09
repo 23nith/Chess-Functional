@@ -8,7 +8,6 @@ high prio
 
 
 normal prio
--fix pawn not promoting when capturing a piece on promotion field.
 -fix en passant capture not working
 
 less prio
