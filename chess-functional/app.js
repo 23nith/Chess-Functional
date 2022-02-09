@@ -1704,7 +1704,7 @@ async function drop(e) {
                 
 
                 if(threatsOnKing == blockedThreat) return;
-                if(threatsOnKing == canBeCaptured) return;
+                if(threatsOnKing <= canBeCaptured) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `Black king has been checkmated`;
                 checked = true;
@@ -1723,7 +1723,7 @@ async function drop(e) {
                 }
                 if(noDuplicateSafeTiles.length == 0){
                     if(threatsOnKing == blockedThreat) return;
-                    if(threatsOnKing == canBeCaptured) return;
+                    if(threatsOnKing <= canBeCaptured) return;
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king has been checkmated`;
                     checked = true;
@@ -1924,7 +1924,7 @@ async function drop(e) {
                 // count the number of threats to the king
 
                 if(threatsOnKing == blockedThreat) return;
-                if(threatsOnKing == canBeCaptured) return;
+                if(threatsOnKing <= canBeCaptured) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `White king has been checkmated`;
                 checked = true;
@@ -1943,7 +1943,7 @@ async function drop(e) {
                 }
                 if(noDuplicateSafeTiles.length == 0){
                     if(threatsOnKing == blockedThreat) return;
-                    if(threatsOnKing == canBeCaptured) return;
+                    if(threatsOnKing <= canBeCaptured) return;
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king has been checkmated`;
                     checked = true;
