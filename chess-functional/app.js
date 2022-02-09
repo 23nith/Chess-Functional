@@ -1751,6 +1751,9 @@ async function drop(e) {
 
     // Checking feature
 
+
+    //  Reminder: change the name into something readable.
+
     // Clear all possbile moves info
     allPsblMvBlck        = {};
     allPsblMvWht         = {};
@@ -1764,6 +1767,7 @@ async function drop(e) {
     blckKngHomTileOnCheck   = -1;
 
     const clr         = turn;
+
     const crrntBrdInf = {
         allPsblMvWht,
         allPsblMvBlck,
@@ -1870,8 +1874,8 @@ async function drop(e) {
 
         // checkmate
 
-        if (doLogThrt) {
 
+        if (doLogThrt) {
             // Highlight all possible moves on White
             getAllPsblMvmntOf(getEvryEnmyInfOnBrdOf, clr, false);
 
@@ -1887,4 +1891,10 @@ async function drop(e) {
 
 function isKngChckd(crrntKngHomTl, kngHomTlOnChck) {
     return parseInt(crrntKngHomTl) === kngHomTlOnChck;
+}
+
+
+
+function test() {
+
 }
