@@ -108,6 +108,7 @@ let blackCapturedHistory = [];
 async function undo(){
     if((fenArray.length-1)<=0) return;
     document.querySelector(".container").innerHTML = "";
+    changeTurn();
     let submittedFen = fenArray[fenArray.length-2];
     // fenArray[fenArray.length-1]
     let drawGridFinished = await drawGrid(8,8, submittedFen);
@@ -116,7 +117,6 @@ async function undo(){
     whiteCapturedHistory.pop(whiteCapturedHistory.length -1);
     blackCapturedHistory.pop(whiteCapturedHistory.length -1);
     // console.log(fenArray);
-    changeTurn();
 
     let piece = new Piece();
     document.querySelector(".black-captured").innerHTML = "";
@@ -137,33 +137,25 @@ async function undo(){
             document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
         }
     });
-    //
-    let checkBoardDisplay = await document.querySelectorAll(".container div");
+
+    if (turn === WHITE) {
+        lightPieces = document.querySelectorAll(".lightPiece");
+        darkPieces = document.querySelectorAll(".darkPiece");
+
+        removeDragFeatureDark(darkPieces)
+        addDragFeatureLight(lightPieces)
 
 
-    console.log("test");
+    } else if (turn === BLACK) {
+        darkPieces = document.querySelectorAll(".darkPiece");
+        lightPieces = document.querySelectorAll(".lightPiece");
 
-    if(checkBoardDisplay){
-        if(turn == "White"){
-            lightPieces = document.querySelectorAll(".lightPiece");
-            darkPieces = document.querySelectorAll(".darkPiece");
-            removeDragFeatureDark(darkPieces)
+        removeDragFeatureLight(lightPieces);
+        addDragFeatureDark(darkPieces)
 
-            addDragFeatureLight(lightPieces)
-
-
-        }else{
-            darkPieces = document.querySelectorAll(".darkPiece");
-            lightPieces = document.querySelectorAll(".lightPiece");
-            removeDragFeatureLight(lightPieces);
-
-            addDragFeatureDark(darkPieces)
-
-
-        }
+    } else {
+        throw new Error(`Invalid Color Value:`, ERROR_TRACE);
     }
-
-
 }
 
 function getFEN(){
@@ -288,6 +280,9 @@ const leftBlackCastlingTile     = 2;
 const rightBlackCastlingTile    = 6;
 const leftWhiteCastlingTile     = 58;
 const rightWhiteCastlingTile    = 62;
+const WHITE                     = `lightPiece`;
+const BLACK                     = `darkPiece`;
+const ERROR_TRACE               = console.trace();
 
 
 
@@ -314,7 +309,7 @@ function getRook(sign, _tile_to_add, _homeTile) {
 
 
 // ************************************************** Functions called by drag drop events **************************************************
-
+let isTurnChange = false;
 function changeTurn(){
     turn = turn == "lightPiece" ? "darkPiece": "lightPiece";
     let showTurn = (turn =="lightPiece") ? "White": "Black";
