@@ -2004,13 +2004,13 @@ async function drop(e) {
                                     }
                                 }
                             }
-                            for(element of cannotBlock){
-                                if(element == object){
-                                    // canBeCaptured = [...new Set(canBeCaptured)];
-                                    let itemIndex = canBeCaptured.indexOf(item);
-                                    canBeCaptured.splice(itemIndex, 1);
-                                }
-                            }
+                            // for(element of cannotBlock){
+                            //     if(element == object){
+                            //         // canBeCaptured = [...new Set(canBeCaptured)];
+                            //         let itemIndex = canBeCaptured.indexOf(item);
+                            //         canBeCaptured.splice(itemIndex, 1);
+                            //     }
+                            // }
                         }
                     }
                 }
