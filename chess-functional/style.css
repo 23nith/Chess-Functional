@@ -30,7 +30,8 @@ body {
     /* background-image: url("board-plain-cropped.png"); */
     /* background-image: url("board-plain-resized.png"); */
     /* background-image: url("newcolor.png"); */
-    background-image: url("CustomBoard-Wood.png");
+    /* background-image: url("CustomBoard-Wood.png"); */
+    background-image: url("woodchessboard.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
