@@ -846,28 +846,11 @@ let movable;
 async function dropAllow(e) {
     e.preventDefault();
 
-    if(!e.target.classList.contains(turn)){
-        console.log(turn);
-        if(!movable){
-            console.log("triggered")
-            let turnInfo = document.querySelector(".turn");
-            turnInfo.classList.add("turn-emphasize");
-            function removeEmph(){
-                turnInfo.classList.remove("turn-emphasize");
-            }
-            setTimeout(removeEmph, 300);
-            console.log("test");
-        }
-        return;
-    }
-
-
-
     // Can King castles ?
     if (piece === "K" || piece === "k") {
         if (piece === "K") {
+            console.log(e.target.id);
             // White king
-
             // Is tile available for castling
             if (parseInt(e.target.id) === rightWhiteCastlingTile) {
                 isCanCastleRightWhite = true;
@@ -899,6 +882,21 @@ async function dropAllow(e) {
             }
         }
     }
+
+
+    if(!e.target.classList.contains(turn)){
+        if(!movable){
+            console.log("triggered")
+            let turnInfo = document.querySelector(".turn");
+            turnInfo.classList.add("turn-emphasize");
+            function removeEmph(){
+                turnInfo.classList.remove("turn-emphasize");
+            }
+            setTimeout(removeEmph, 300);
+        }
+        return;
+    }
+
 
 
     tiles = document.querySelectorAll(".container div");
@@ -961,13 +959,13 @@ async function drop(e) {
     if (piece === "P" || piece === "p") {
         // Whites' pawn
         if (piece === "P") {
+            // look into capture piece when promoting
+            const capturedPieceInfo = document.getElementById(e.target.id);
+            const capturedPiece     = capturedPieceInfo.parentElement.id;
 
             const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
 
-            // look into capture piece when promoting
-            const capturedPieceInfo = document.getElementById(e.target.id);
-            const capturedPiece     = capturedPieceInfo.parentElement.id;
 
             // White promotion check
             if ((whitePromotionField.includes(parseInt(e.target.id)))
@@ -1047,6 +1045,7 @@ async function drop(e) {
         else {
             // Blacks' pawn
             // look into capture piece when promoting
+
             const capturedPieceInfo = document.getElementById(e.target.id);
             const capturedPiece     = capturedPieceInfo.parentElement.id;
 
@@ -1055,7 +1054,7 @@ async function drop(e) {
 
             // Black promotion check
             if ((blackPromotionField.includes(parseInt(e.target.id)))
-                && blackPromotionField.includes(parseInt(capturedPiece))) {
+                || blackPromotionField.includes(parseInt(capturedPiece))) {
 
                 const promotionChoices = {
                     q: "q",
