@@ -1747,6 +1747,9 @@ async function drop(e) {
                         }
                     }
                 }
+
+                canBeCaptured = [...new Set(canBeCaptured)];
+
                 if(noDuplicateSafeTiles.length == 0){
                     if(threatsOnKing == blockedThreat.length) return;
                     if(threatsOnKing == canBeCaptured.length) return;
@@ -1994,6 +1997,9 @@ async function drop(e) {
                         }
                     }
                 }
+
+                canBeCaptured = [...new Set(canBeCaptured)];
+
                 if(noDuplicateSafeTiles.length == 0){
                     if(threatsOnKing == blockedThreat.length) return;
                     if(threatsOnKing == canBeCaptured.length) return;
