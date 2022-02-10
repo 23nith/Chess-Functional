@@ -1727,7 +1727,7 @@ async function drop(e) {
                 console.log("test")
 
 
-                
+                canBeCaptured = [...new Set(canBeCaptured)];
 
                 if(threatsOnKing == blockedThreat.length) return;
                 if(threatsOnKing == canBeCaptured.length) return;
@@ -1973,6 +1973,8 @@ async function drop(e) {
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                 console.log("test")
                 // count the number of threats to the king
+
+                canBeCaptured = [...new Set(canBeCaptured)];
 
                 if(threatsOnKing == blockedThreat.length) return;
                 if(threatsOnKing == canBeCaptured.length) return;
