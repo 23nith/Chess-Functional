@@ -1644,11 +1644,11 @@ async function drop(e) {
                                         if(pawnNonCaptureMoves["p"].includes(value)){
                                             // blockedThreat += 1;
                                             blockedThreat.push(item);
-                                            blockedThreat = [...new Set(blockedThreat)];
+                                            // blockedThreat = [...new Set(blockedThreat)];
                                             for(element of cannotBlock){
                                                 if(element == object){
                                                     // blockedThreat -= 1;
-                                                    blockedThreat = [...new Set(blockedThreat)];
+                                                    // blockedThreat = [...new Set(blockedThreat)];
                                                     let itemIndex = blockedThreat.indexOf(item);
                                                     blockedThreat.splice(itemIndex, 1);
                                                 }
@@ -1660,11 +1660,11 @@ async function drop(e) {
                                         if(currentTilesOnThreat[object].includes(value) && object[0] != "k"){
                                             // blockedThreat += 1;
                                             blockedThreat.push(item);
-                                            blockedThreat = [...new Set(blockedThreat)];
+                                            // blockedThreat = [...new Set(blockedThreat)];
                                             for(element of cannotBlock){
                                                 if(element == object){
                                                     // blockedThreat -= 1;
-                                                    blockedThreat = [...new Set(blockedThreat)];
+                                                    // blockedThreat = [...new Set(blockedThreat)];
                                                     let itemIndex = blockedThreat.indexOf(item);
                                                     blockedThreat.splice(itemIndex, 1);
                                                 }
@@ -1726,7 +1726,7 @@ async function drop(e) {
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                 console.log("test")
 
-
+                blockedThreat = [...new Set(blockedThreat)];
                 canBeCaptured = [...new Set(canBeCaptured)];
 
                 if(threatsOnKing == blockedThreat.length) return;
@@ -1748,6 +1748,7 @@ async function drop(e) {
                     }
                 }
 
+                blockedThreat = [...new Set(blockedThreat)];
                 canBeCaptured = [...new Set(canBeCaptured)];
 
                 if(noDuplicateSafeTiles.length == 0){
@@ -1895,11 +1896,11 @@ async function drop(e) {
                                         if(pawnNonCaptureMoves["P"].includes(value)){
                                             // blockedThreat += 1;
                                             blockedThreat.push(item);
-                                            blockedThreat = [...new Set(blockedThreat)];
+                                            // blockedThreat = [...new Set(blockedThreat)];
                                             for(element of cannotBlock){
                                                 if(element == object){
                                                     // blockedThreat -= 1;
-                                                    blockedThreat = [...new Set(blockedThreat)];
+                                                    // blockedThreat = [...new Set(blockedThreat)];
                                                     let itemIndex = blockedThreat.indexOf(item);
                                                     blockedThreat.splice(itemIndex, 1);
                                                 }
@@ -1911,11 +1912,11 @@ async function drop(e) {
                                         if(currentTilesOnThreat[object].includes(value) && object[0] != "K"){
                                             // blockedThreat += 1;
                                             blockedThreat.push(item);
-                                            blockedThreat = [...new Set(blockedThreat)];
+                                            // blockedThreat = [...new Set(blockedThreat)];
                                             for(element of cannotBlock){
                                                 if(element == object){
                                                     // blockedThreat -= 1;
-                                                    blockedThreat = [...new Set(blockedThreat)];
+                                                    // blockedThreat = [...new Set(blockedThreat)];
                                                     let itemIndex = blockedThreat.indexOf(item);
                                                     blockedThreat.splice(itemIndex, 1);
                                                 }
@@ -1977,6 +1978,7 @@ async function drop(e) {
                 console.log("test")
                 // count the number of threats to the king
 
+                blockedThreat = [...new Set(blockedThreat)];
                 canBeCaptured = [...new Set(canBeCaptured)];
 
                 if(threatsOnKing == blockedThreat.length) return;
@@ -1998,6 +2000,7 @@ async function drop(e) {
                     }
                 }
 
+                blockedThreat = [...new Set(blockedThreat)];
                 canBeCaptured = [...new Set(canBeCaptured)];
 
                 if(noDuplicateSafeTiles.length == 0){
