@@ -9,7 +9,7 @@ high prio
 
 normal prio
 - En passant should only work right after initial movement of pawn
-- Castling went missing on the main branch
+
 
 less prio
  -Add timer
@@ -29,6 +29,7 @@ User story
 Castling Bugs
 -fix castling issues when there are pieces between.
 -fix can castle even the rook moves already
+- Castling went missing on the main branch
 
 For function errors
 -fix uncaught promises errors that might affecting the flow of the code on drawgrid
