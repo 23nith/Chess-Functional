@@ -1633,7 +1633,7 @@ async function drop(e) {
             // check if sliding moves directed at king can be blocked
             let blockedThreat = [];
             for(item in threateningPiece){
-                loop1:
+                // loop1:
                 if(item[0] == item[0].toUpperCase()){
                     if(threateningPiece[item].includes(parseInt(tileOfKing))){
                         for(value of threateningPiece[item]){
@@ -1879,9 +1879,9 @@ async function drop(e) {
 
 
             // check if sliding moves directed at king can be blocked
-            let blockedThreat = 0;
+            let blockedThreat = [];
             for(item in threateningPiece){
-                loop1:
+                // loop1:
                 if(item[0] != item[0].toUpperCase()){
                     if(threateningPiece[item].includes(parseInt(tileOfKing))){
                         for(value of threateningPiece[item]){
