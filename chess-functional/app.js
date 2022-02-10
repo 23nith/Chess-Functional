@@ -1497,6 +1497,7 @@ async function drop(e) {
         threateningPiece = {};
         currentThreatOnKing = [];
         pawnNonCaptureMoves = {}
+        slidingBeyondPieces = {};
     // fill up currentTilesOnThreat
         for(x = 0; x < 64; x++){
             if(tiles[x].children[0]){
@@ -1602,9 +1603,14 @@ async function drop(e) {
             
             // check if there is a sliding piece that has only one piece between it and the king
             let cannotBlock = [];
+
+            direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
+            // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
+            
             for(item in slidingBeyondPieces){
                 loop2:
                 if(item[0] == item[0].toUpperCase()){
+                    slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
                     if(slidingBeyondPieces[item].includes(parseInt(tileOfKing))){
                         let thisString = item.split("-");
                         let myString = `${thisString[0]}-${thisString[1]}`
@@ -1614,13 +1620,25 @@ async function drop(e) {
                             }
                         }
                         let kingAlliesBetweenThisPiece = [];
-                        slidingBeyondPieces[item].push(4);
+                        
                         for(element of slidingBeyondPieces[item]){
-                            if(element == parseInt(tileOfKing)) break;
-                            let thisTile = document.getElementById(`${element}`);
-                            let child = thisTile.children[0];
-                            if(child != undefined && child.classList.contains('darkPiece')){
-                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                            // if(element == parseInt(tileOfKing)) break;
+                            if(direction1.includes(thisString[2])){
+                                if(element < parseInt(tileOfKing)){
+                                    let thisTile = document.getElementById(`${element}`);
+                                    let child = thisTile.children[0];
+                                    if(child != undefined && child.classList.contains('darkPiece')){
+                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                                    }
+                                }
+                            }else{
+                                if(element > parseInt(tileOfKing)){
+                                    let thisTile = document.getElementById(`${element}`);
+                                    let child = thisTile.children[0];
+                                    if(child != undefined && child.classList.contains('darkPiece')){
+                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                                    }
+                                }
                             }
                         }
                         if(kingAlliesBetweenThisPiece.length == 1){
@@ -1862,6 +1880,10 @@ async function drop(e) {
 
             // check if there is a sliding piece that has only one piece between it and the king
             let cannotBlock = [];
+
+            direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
+            // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
+
             for(item in slidingBeyondPieces){
                 loop2:
                 if(item[0] != item[0].toUpperCase()){
@@ -1874,13 +1896,25 @@ async function drop(e) {
                             }
                         }
                         let kingAlliesBetweenThisPiece = [];
-                        slidingBeyondPieces[item].push(4);
+
                         for(element of slidingBeyondPieces[item]){
-                            if(element == parseInt(tileOfKing)) break;
-                            let thisTile = document.getElementById(`${element}`);
-                            let child = thisTile.children[0];
-                            if(child != undefined && child.classList.contains('lightPiece')){
-                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                            // if(element == parseInt(tileOfKing)) break;
+                            if(direction1.includes(thisString[2])){
+                                if(element < parseInt(tileOfKing)){
+                                    let thisTile = document.getElementById(`${element}`);
+                                    let child = thisTile.children[0];
+                                    if(child != undefined && child.classList.contains('lightPiece')){
+                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                                    }
+                                }
+                            }else{
+                                if(element > parseInt(tileOfKing)){
+                                    let thisTile = document.getElementById(`${element}`);
+                                    let child = thisTile.children[0];
+                                    if(child != undefined && child.classList.contains('lightPiece')){
+                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                                    }
+                                }
                             }
                         }
                         if(kingAlliesBetweenThisPiece.length == 1){
