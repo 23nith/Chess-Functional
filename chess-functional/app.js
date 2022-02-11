@@ -1450,7 +1450,11 @@ async function drop(e) {
 
     }
 
-    
+
+    // reset recorded en passant vulnerabilities
+
+//     landed = e.target;
+
     // Detect pawn pieces vulnerable to En Passant
     landed = e.target.id;
 
@@ -1476,6 +1480,8 @@ async function drop(e) {
         if(pawnEnPassantBlack.includes(parseInt(landed))){
             let indexOfTileCapture = enPassantPiecesWhite.indexOf(parseInt(landed)+16);
             enPassantPiecesWhite.splice(indexOfTileCapture, 1);
+            enPassantPiecesWhite = []
+            enPassantPiecesBlack = []
         }
     }
 
@@ -1499,6 +1505,8 @@ async function drop(e) {
         if(pawnEnPassantWhite.includes(parseInt(landed))){
             let indexOfTileCapture = enPassantPiecesBlack.indexOf(parseInt(landed)-16);
             enPassantPiecesBlack.splice(indexOfTileCapture, 1);
+            enPassantPiecesWhite = []
+            enPassantPiecesBlack = []
         }
     }
 
