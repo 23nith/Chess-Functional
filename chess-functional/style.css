@@ -30,7 +30,8 @@ body {
     /* background-image: url("board-plain-cropped.png"); */
     /* background-image: url("board-plain-resized.png"); */
     /* background-image: url("newcolor.png"); */
-    background-image: url("CustomBoard-Wood.png");
+    /* background-image: url("CustomBoard-Wood.png"); */
+    background-image: url("woodchessboard.png");
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -64,11 +65,20 @@ body {
     margin-right: 15px;
     background: white;
     font-size: 30px;
+    color: black;
+    transition: .2s;
+}
+
+.turn-emphasize {
+    background-color: black;
+    color: white;
+    transform: scale(1.5, 1.5);
 }
 
 .lightPiece {
     /* color: #7E4B37; */
     color: white;
+    /* opacity: 0.7; */
 }
 
 /* .darkPiece { 
