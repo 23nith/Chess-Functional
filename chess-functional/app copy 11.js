@@ -1,7 +1,6 @@
 let highlightColor =  "rgba(66, 245, 72, .5)";
 let piecesHeight = "80px"
 
-
 const threatDirection = {
     0 : "North",
     1 : "South",
@@ -12,7 +11,6 @@ const threatDirection = {
     6 : "SouthEast",
     7 : "SouthWest"
 }
-
 
 class Piece {
     constructor(piece){
@@ -86,10 +84,8 @@ async function drawGrid(col, row, _fen){
 
                 // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${piece.generatePiece(fenArr[i]).code}-${i}" ></i>`;
                 let theId = (piece.generatePiece(fenArr[i]).code == "k" || piece.generatePiece(fenArr[i]).code == "K")? piece.generatePiece(fenArr[i]).code : `${piece.generatePiece(fenArr[i]).code}-${i}`;
-
-                grid[gridCounter].innerHTML = `<img src=${piece.generatePiece(fenArr[i]).img} style="height: ${piecesHeight}; width: auto" ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" />`;
                 // grid[gridCounter].innerHTML = `<i ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" ></i>`;
-
+                grid[gridCounter].innerHTML = `<img src=${piece.generatePiece(fenArr[i]).img} style="height: ${piecesHeight}; width: auto" ${capital ? 'draggable="true"' : ""} ${capital ? 'ondragstart="drag(event)"' : ""} class="${piece.generatePiece(fenArr[i]).icon}" id="${theId}" />`;
                 if (character == character.toUpperCase()){
                     grid[gridCounter].children[0].classList.add("lightPiece")
                 }else{
@@ -124,7 +120,6 @@ let blackCapturedHistory = [];
 async function undo(){
     if((fenArray.length-1)<=0) return;
     document.querySelector(".container").innerHTML = "";
-    changeTurn();
     let submittedFen = fenArray[fenArray.length-2];
     // fenArray[fenArray.length-1]
     let drawGridFinished = await drawGrid(8,8, submittedFen);
@@ -133,6 +128,7 @@ async function undo(){
     whiteCapturedHistory.pop(whiteCapturedHistory.length -1);
     blackCapturedHistory.pop(whiteCapturedHistory.length -1);
     // console.log(fenArray);
+    changeTurn();
 
     let piece = new Piece();
     document.querySelector(".black-captured").innerHTML = "";
@@ -140,39 +136,41 @@ async function undo(){
     whiteCapturedHistory.map((item)=>{
         if(item != ""){
             let container = document.createElement("div");
-            // container.innerHTML = `<i class="${piece.generatePiece(item).icon}"></i>`
-            container.innerHTML = `<img src=${piece.generatePiece(item).img} />`
+            container.innerHTML = `<i class="${piece.generatePiece(item).icon}"></i>`
             document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
         }
     });
     blackCapturedHistory.map((item)=>{
         if(item != ""){
             let container = document.createElement("div");
-            // container.innerHTML = `<i class="${piece.generatePiece(item).icon} lightPiece"></i>`
-            container.innerHTML = `<img src=${piece.generatePiece(item).img} />`
+            container.innerHTML = `<i class="${piece.generatePiece(item).icon} lightPiece"></i>`
             document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
         }
     });
+    //
+    let checkBoardDisplay = await document.querySelectorAll(".container div");
+
+    if(checkBoardDisplay){
+        if(turn == "White"){
+            lightPieces = document.querySelectorAll(".lightPiece");
+            darkPieces = document.querySelectorAll(".darkPiece");
+            removeDragFeatureDark(darkPieces)
+
+            addDragFeatureLight(lightPieces)
 
 
-    if (turn === WHITE) {
-        lightPieces = document.querySelectorAll(".lightPiece");
-        darkPieces = document.querySelectorAll(".darkPiece");
+        }else{
+            darkPieces = document.querySelectorAll(".darkPiece");
+            lightPieces = document.querySelectorAll(".lightPiece");
+            removeDragFeatureLight(lightPieces);
 
-        removeDragFeatureDark(darkPieces)
-        addDragFeatureLight(lightPieces)
+            addDragFeatureDark(darkPieces)
 
 
-    } else if (turn === BLACK) {
-        darkPieces = document.querySelectorAll(".darkPiece");
-        lightPieces = document.querySelectorAll(".lightPiece");
-
-        removeDragFeatureLight(lightPieces);
-        addDragFeatureDark(darkPieces)
-
-    } else {
-        throw new Error(`Invalid Color Value:`, ERROR_TRACE);
+        }
     }
+
+
 }
 
 function getFEN(){
@@ -248,7 +246,7 @@ let lightPieces;
 let darkPieces;
 let lightTiles;
 let darkTiles;
-let turn = "lightPiece";
+let turn = "White";
 
 
 let whiteKingCastlingLimit  = 1;
@@ -273,8 +271,7 @@ let threateningPiece = {
 }
 
 let pawnNonCaptureMoves = {
-    P: [],
-    p: []
+
 }
 
 let currentThreatOnKing = []
@@ -309,9 +306,6 @@ const leftBlackCastlingTile     = 2;
 const rightBlackCastlingTile    = 6;
 const leftWhiteCastlingTile     = 58;
 const rightWhiteCastlingTile    = 62;
-const WHITE                     = `lightPiece`;
-const BLACK                     = `darkPiece`;
-const ERROR_TRACE               = console.trace();
 
 
 
@@ -338,11 +332,10 @@ function getRook(sign, _tile_to_add, _homeTile) {
 
 
 // ************************************************** Functions called by drag drop events **************************************************
-let isTurnChange = false;
+
 function changeTurn(){
-    turn = turn == "lightPiece" ? "darkPiece": "lightPiece";
-    let showTurn = (turn =="lightPiece") ? "White": "Black";
-    document.querySelector(".turn").innerHTML = `${showTurn}'s turn`;
+    turn = turn == "White" ? "Black": "White";
+    document.querySelector(".turn").innerHTML = `${turn}'s turn`;
 }
 
 
@@ -573,12 +566,10 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
             }
             if(boardRightEdge.includes(parseInt(_homeTile))){
                 if(piece === "P" || piece === "p"){
-
-                    let capture1 = (pieceMovement.indexOf(9) != -1) ? pieceMovement.indexOf(9): false;
-                    let capture2 = (pieceMovement.indexOf(-7) != -1) ? pieceMovement.indexOf(-7): false;
-                    let removeCapture = capture1 || capture2;
-                    exemption.push(removeCapture);
-
+                        let capture1 = (pieceMovement.indexOf(9) != -1) ? pieceMovement.indexOf(9): false;
+                        let capture2 = (pieceMovement.indexOf(-7) != -1) ? pieceMovement.indexOf(-7): false;
+                        let removeCapture = capture1 || capture2;
+                        exemption.push(removeCapture);
                 }else{
                     exemption.push(...rightEdge);
                 }
@@ -643,7 +634,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                 continue;
                             }
                             if(!checking){
-                                // tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                                tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             }
                             // continue;
                         }
@@ -670,7 +661,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                 continue;
                             }
                             if(!checking){
-                                // tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
+                                tiles[validMove].children[0].setAttribute("ondragover", "removeDrop(event)");
                             }
                         }
                         if(tiles[validMove].children[0].classList.contains("darkPiece")){
@@ -811,12 +802,12 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                     if(currentTile.children[0].classList.contains("darkPiece")){
 
                                         // console.log("enemy piece");
-
                                         if(!checking && tileNumber != parseInt(_homeTile)){
-                                            // currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
 
                                         // continue;
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            // currentTile.style.backgroundColor = "#F91F15";
                                             currentTile.style.backgroundColor = highlightColor;
                                         }
                                         if(checking && tileNumber != parseInt(_homeTile)){
@@ -876,11 +867,11 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                 }else{ 
                                     if(currentTile.children[0].classList.contains("lightPiece")){
 
-
                                         if(!checking && tileNumber != parseInt(_homeTile)){
-                                            // currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
+                                            currentTile.children[0].setAttribute("ondragover", "removeDrop(event)");
                                             // console.log("enemy piece");
                                             currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                            // currentTile.style.backgroundColor = "#F91F15";
                                             currentTile.style.backgroundColor = highlightColor;
                                         }
                                         if(checking && tileNumber != parseInt(_homeTile)){
@@ -943,6 +934,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             }
                             if(!checking && tileNumber != parseInt(_homeTile)){
                                 currentTile.setAttribute("ondragover", "dropAllow(event)");
+                                // currentTile.style.backgroundColor = "#F91F15";
                                 currentTile.style.backgroundColor = highlightColor;
                             }
                             if(checking && tileNumber != parseInt(_homeTile)){
@@ -1064,16 +1056,14 @@ function addDragFeatureLight(someNodeList){
 
 //************************************************************************************** Drag and drop events **************************************************************************************
 
-let movable;
-
 async function dropAllow(e) {
     e.preventDefault();
 
     // Can King castles ?
     if (piece === "K" || piece === "k") {
         if (piece === "K") {
-            console.log(e.target.id);
             // White king
+
             // Is tile available for castling
             if (parseInt(e.target.id) === rightWhiteCastlingTile) {
                 isCanCastleRightWhite = true;
@@ -1107,21 +1097,6 @@ async function dropAllow(e) {
     }
 
 
-    if(!e.target.classList.contains(turn)){
-        if(!movable){
-            console.log("triggered")
-            let turnInfo = document.querySelector(".turn");
-            turnInfo.classList.add("turn-emphasize");
-            function removeEmph(){
-                turnInfo.classList.remove("turn-emphasize");
-            }
-            setTimeout(removeEmph, 300);
-        }
-        return;
-    }
-
-
-
     tiles = document.querySelectorAll(".container div");
     // console.log(tiles);
     lightTiles = document.querySelectorAll(".lightTiles");
@@ -1139,7 +1114,7 @@ async function dropAllow(e) {
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
         highlightTiles(homeTile[0], movement, sliding, piece);
-        movable = true;
+
     }
     // console.log("lifted: ", lifted);
     // console.log("homeTile: ", homeTile);
@@ -1148,8 +1123,6 @@ async function dropAllow(e) {
 
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
-
-    console.log(e.target);
 
     if(homeTile[0] != undefined){
         returnDrop();
@@ -1174,7 +1147,6 @@ let dropValue = undefined;
 
 async function drop(e) {
     e.preventDefault();
-    movable = false;
     let data = e.dataTransfer.getData("text");
     e.target.appendChild(document.getElementById(data));
     landed = e.target;
@@ -1182,17 +1154,12 @@ async function drop(e) {
     if (piece === "P" || piece === "p") {
         // Whites' pawn
         if (piece === "P") {
-            // look into capture piece when promoting
-            const capturedPieceInfo = document.getElementById(e.target.id);
-            const capturedPiece     = capturedPieceInfo.parentElement.id;
 
             const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
 
-
             // White promotion check
-            if ((whitePromotionField.includes(parseInt(e.target.id)))
-                || whitePromotionField.includes(parseInt(capturedPiece))) {
+            if (whitePromotionField.includes(parseInt(e.target.id))) {
 
                 const promotionChoices = {
                     Q: "Q",
@@ -1217,7 +1184,6 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.Q).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
-                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.Q).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.Q).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.Q).code;
                         promotionUiChoices.style.display = "none"
@@ -1230,7 +1196,6 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.R).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
-                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.R).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.R).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.R).code;
                         promotionUiChoices.style.display = "none"
@@ -1243,7 +1208,6 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.B).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
-                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.B).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.B).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.B).code;
                         promotionUiChoices.style.display = "none"
@@ -1256,7 +1220,6 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.N).icon;
                         targetPawn.className = `${promotionPieceIcon} lightPiece`
-                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.N).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.N).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.N).code;
                         promotionUiChoices.style.display = "none"
@@ -1267,17 +1230,12 @@ async function drop(e) {
         }
         else {
             // Blacks' pawn
-            // look into capture piece when promoting
-
-            const capturedPieceInfo = document.getElementById(e.target.id);
-            const capturedPiece     = capturedPieceInfo.parentElement.id;
-
+            //
             const pawnPiece = new Piece();
             let targetPawn = e.target.children[0];
 
             // Black promotion check
-            if ((blackPromotionField.includes(parseInt(e.target.id)))
-                || blackPromotionField.includes(parseInt(capturedPiece))) {
+            if (blackPromotionField.includes(parseInt(e.target.id))) {
 
                 const promotionChoices = {
                     q: "q",
@@ -1302,8 +1260,7 @@ async function drop(e) {
                 queenPromotionBtn.addEventListener("click", () => {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.q).icon;
-                        targetPawn.className = `${promotionPieceIcon} blackPiece`;
-                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.q).img);
+                        targetPawn.className = `${promotionPieceIcon} blackPiece`
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.q).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.q).code;
                         promotionUiChoices.style.display = "none"
@@ -1316,7 +1273,6 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.r).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
-                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.r).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.r).code}-${targetPawn.parentElement.id}`
                         promotionUiChoices.style.display = "none"
                         piece = pawnPiece.generatePiece(promotionChoices.r).code;
@@ -1329,7 +1285,6 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.b).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
-                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.b).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.b).code}-${targetPawn.parentElement.id}`
                         piece = pawnPiece.generatePiece(promotionChoices.b).code;
                         promotionUiChoices.style.display = "none"
@@ -1342,7 +1297,6 @@ async function drop(e) {
                     if (!(targetPawn.hasAttribute(`isPromoted`))) {
                         let promotionPieceIcon = pawnPiece.generatePiece(promotionChoices.n).icon;
                         targetPawn.className = `${promotionPieceIcon} blackPiece`
-                        targetPawn.setAttribute("src", pawnPiece.generatePiece(promotionChoices.n).img);
                         targetPawn.id = `${pawnPiece.generatePiece(promotionChoices.n).code}-${targetPawn.parentElement.id}`
                         promotionUiChoices.style.display = "none"
                         piece = pawnPiece.generatePiece(promotionChoices.n).code;
@@ -1350,9 +1304,9 @@ async function drop(e) {
                     }
                 })
             }
+
         }
     }
-
 
     // Remove castling features if rook is move
 
@@ -1421,9 +1375,28 @@ async function drop(e) {
     }
 
 
+    // Capture pieces
 
-
-
+    if(e.target.children[1]){
+        // console.log("capture");
+        let container = document.createElement("div");
+        if(e.target.children[0].classList.contains("lightPiece")){
+            blackCapturedHistory.push(e.target.children[0].id[0]);
+            container.appendChild(e.target.children[0]);
+            document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+            whiteCapturedHistory.push("");
+        }else{
+            whiteCapturedHistory.push(e.target.children[0].id[0]);
+            container.appendChild(e.target.children[0]);
+            document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
+            blackCapturedHistory.push("");
+        }
+        // e.target.children[0].remove();
+    }
+    else{
+        whiteCapturedHistory.push("");
+        blackCapturedHistory.push("");
+    }
 
     if(homeTile){
         // console.log(`${pieceColor} ${piece} moved`);
@@ -1523,12 +1496,7 @@ async function drop(e) {
         currentTilesOnThreat = {};
         threateningPiece = {};
         currentThreatOnKing = [];
-        // pawnNonCaptureMoves = {}
-        pawnNonCaptureMoves = {
-            P: [],
-            p: []
-        }
-        slidingBeyondPieces = {};
+        pawnNonCaptureMoves = {}
     // fill up currentTilesOnThreat
         for(x = 0; x < 64; x++){
             if(tiles[x].children[0]){
@@ -1615,7 +1583,6 @@ async function drop(e) {
                             }
                         }
                     }
-                    safeTiles.push(nextMove);
                 }else{
                     return true; // if tile has foe piece it will not be part of the evaluation thus will always return true (not safe)
                 }
@@ -1634,14 +1601,9 @@ async function drop(e) {
             
             // check if there is a sliding piece that has only one piece between it and the king
             let cannotBlock = [];
-
-            direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
-            // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
-            
             for(item in slidingBeyondPieces){
                 loop2:
                 if(item[0] == item[0].toUpperCase()){
-                    slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
                     if(slidingBeyondPieces[item].includes(parseInt(tileOfKing))){
                         let thisString = item.split("-");
                         let myString = `${thisString[0]}-${thisString[1]}`
@@ -1651,25 +1613,13 @@ async function drop(e) {
                             }
                         }
                         let kingAlliesBetweenThisPiece = [];
-                        
+                        slidingBeyondPieces[item].push(4);
                         for(element of slidingBeyondPieces[item]){
-                            // if(element == parseInt(tileOfKing)) break;
-                            if(direction1.includes(thisString[2])){
-                                if(element < parseInt(tileOfKing)){
-                                    let thisTile = document.getElementById(`${element}`);
-                                    let child = thisTile.children[0];
-                                    if(child != undefined && child.classList.contains('darkPiece')){
-                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                    }
-                                }
-                            }else{
-                                if(element > parseInt(tileOfKing)){
-                                    let thisTile = document.getElementById(`${element}`);
-                                    let child = thisTile.children[0];
-                                    if(child != undefined && child.classList.contains('darkPiece')){
-                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                    }
-                                }
+                            if(element == parseInt(tileOfKing)) break;
+                            let thisTile = document.getElementById(`${element}`);
+                            let child = thisTile.children[0];
+                            if(child != undefined && child.classList.contains('darkPiece')){
+                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
                             }
                         }
                         if(kingAlliesBetweenThisPiece.length == 1){
@@ -1680,9 +1630,9 @@ async function drop(e) {
             }
 
             // check if sliding moves directed at king can be blocked
-            let blockedThreat = [];
+            let blockedThreat = 0;
             for(item in threateningPiece){
-                // loop1:
+                loop1:
                 if(item[0] == item[0].toUpperCase()){
                     if(threateningPiece[item].includes(parseInt(tileOfKing))){
                         for(value of threateningPiece[item]){
@@ -1691,15 +1641,10 @@ async function drop(e) {
                                 if(object[0] != object[0].toUpperCase()){
                                     if(object[0] == "p"){
                                         if(pawnNonCaptureMoves["p"].includes(value)){
-                                            // blockedThreat += 1;
-                                            blockedThreat.push(item);
-                                            // blockedThreat = [...new Set(blockedThreat)];
+                                            blockedThreat += 1;
                                             for(element of cannotBlock){
                                                 if(element == object){
-                                                    // blockedThreat -= 1;
-                                                    // blockedThreat = [...new Set(blockedThreat)];
-                                                    let itemIndex = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(itemIndex, 1);
+                                                    blockedThreat -= 1;
                                                 }
                                             }
                                             // break loop1;
@@ -1707,15 +1652,10 @@ async function drop(e) {
                                         
                                     }else{
                                         if(currentTilesOnThreat[object].includes(value) && object[0] != "k"){
-                                            // blockedThreat += 1;
-                                            blockedThreat.push(item);
-                                            // blockedThreat = [...new Set(blockedThreat)];
+                                            blockedThreat += 1;
                                             for(element of cannotBlock){
                                                 if(element == object){
-                                                    // blockedThreat -= 1;
-                                                    // blockedThreat = [...new Set(blockedThreat)];
-                                                    let itemIndex = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(itemIndex, 1);
+                                                    blockedThreat -= 1;
                                                 }
                                             }
                                             // break loop1;
@@ -1728,10 +1668,10 @@ async function drop(e) {
                 }
             }
 
-            let canBeCaptured = [];
+            let canBeCaptured = 0;
 
             // check if all threats can be captured by the defender
-            // loop1:
+            loop1:
             for(item of currentThreatOnKing){
                 console.log(item);
                 let arr = item.split("-");
@@ -1743,28 +1683,13 @@ async function drop(e) {
                     if(object[0] != object[0].toUpperCase()){
                         // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "k")){
                         if(currentTilesOnThreat[object].includes(parseInt(newArr))){
-                            // canBeCaptured += 1;
-                            canBeCaptured.push(item);
-                            // canBeCaptured = [...new Set(canBeCaptured)];
-                            if(object[0] == "k"){
-                                for(thing in currentTilesOnThreat){
-                                    if(thing[0] == thing[0].toUpperCase()){
-                                        if(currentTilesOnThreat[thing].includes(parseInt(newArr))){ //check if king will be counter captured if it captured this piece
-                                            // canBeCaptured -= 1;
-                                            // canBeCaptured = [...new Set(canBeCaptured)];
-                                            let itemIndex = canBeCaptured.indexOf(item);
-                                            canBeCaptured.splice(itemIndex, 1);
-                                            // break loop1;
-                                        }
+                            canBeCaptured += 1;
+                            for(thing in currentTilesOnThreat){
+                                if(thing[0] == thing[0].toUpperCase()){
+                                    if(currentTilesOnThreat[thing].includes(parseInt(newArr)) && (thing[0] != "k") && object[0] == "k"){ //check if king will be counter captured if it captured this piece
+                                        canBeCaptured -= 1;
+                                        break loop1;
                                     }
-                                }
-                            }
-                            
-                            for(element of cannotBlock){
-                                if(element == object){
-                                    // canBeCaptured = [...new Set(canBeCaptured)];
-                                    let itemIndex = canBeCaptured.indexOf(item);
-                                    canBeCaptured.splice(itemIndex, 1);
                                 }
                             }
                         }
@@ -1772,22 +1697,14 @@ async function drop(e) {
                 }
             }
 
-            // for(element of cannotBlock){
-            //     if(element == object){
-            //         // canBeCaptured = [...new Set(canBeCaptured)];
-            //         let itemIndex = canBeCaptured.indexOf(item);
-            //         canBeCaptured.splice(itemIndex, 1);
-            //     }
-            // }
-
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                 console.log("test")
 
-                blockedThreat = [...new Set(blockedThreat)];
-                canBeCaptured = [...new Set(canBeCaptured)];
 
-                if(threatsOnKing == blockedThreat.length) return;
-                if(threatsOnKing == canBeCaptured.length) return;
+                
+
+                if(threatsOnKing == blockedThreat) return;
+                if(threatsOnKing <= canBeCaptured) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `Black king has been checkmated`;
                 checked = true;
@@ -1804,13 +1721,9 @@ async function drop(e) {
                         }
                     }
                 }
-
-                blockedThreat = [...new Set(blockedThreat)];
-                canBeCaptured = [...new Set(canBeCaptured)];
-
                 if(noDuplicateSafeTiles.length == 0){
-                    if(threatsOnKing == blockedThreat.length) return;
-                    if(threatsOnKing == canBeCaptured.length) return;
+                    if(threatsOnKing == blockedThreat) return;
+                    if(threatsOnKing <= canBeCaptured) return;
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king has been checkmated`;
                     checked = true;
@@ -1892,7 +1805,6 @@ async function drop(e) {
                             }
                         }
                     }
-                    safeTiles.push(nextMove);
                 }else{
                     return true; // if tile has foe piece it will not be part of the evaluation thus will always return true (not safe)
                 }
@@ -1911,10 +1823,6 @@ async function drop(e) {
 
             // check if there is a sliding piece that has only one piece between it and the king
             let cannotBlock = [];
-
-            direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
-            // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
-
             for(item in slidingBeyondPieces){
                 loop2:
                 if(item[0] != item[0].toUpperCase()){
@@ -1927,25 +1835,13 @@ async function drop(e) {
                             }
                         }
                         let kingAlliesBetweenThisPiece = [];
-
+                        slidingBeyondPieces[item].push(4);
                         for(element of slidingBeyondPieces[item]){
-                            // if(element == parseInt(tileOfKing)) break;
-                            if(direction1.includes(thisString[2])){
-                                if(element < parseInt(tileOfKing)){
-                                    let thisTile = document.getElementById(`${element}`);
-                                    let child = thisTile.children[0];
-                                    if(child != undefined && child.classList.contains('lightPiece')){
-                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                    }
-                                }
-                            }else{
-                                if(element > parseInt(tileOfKing)){
-                                    let thisTile = document.getElementById(`${element}`);
-                                    let child = thisTile.children[0];
-                                    if(child != undefined && child.classList.contains('lightPiece')){
-                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                    }
-                                }
+                            if(element == parseInt(tileOfKing)) break;
+                            let thisTile = document.getElementById(`${element}`);
+                            let child = thisTile.children[0];
+                            if(child != undefined && child.classList.contains('lightPiece')){
+                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
                             }
                         }
                         if(kingAlliesBetweenThisPiece.length == 1){
@@ -1957,9 +1853,9 @@ async function drop(e) {
 
 
             // check if sliding moves directed at king can be blocked
-            let blockedThreat = [];
+            let blockedThreat = 0;
             for(item in threateningPiece){
-                // loop1:
+                loop1:
                 if(item[0] != item[0].toUpperCase()){
                     if(threateningPiece[item].includes(parseInt(tileOfKing))){
                         for(value of threateningPiece[item]){
@@ -1967,15 +1863,10 @@ async function drop(e) {
                                 if(object[0] == object[0].toUpperCase()){
                                     if(object[0] == "P"){
                                         if(pawnNonCaptureMoves["P"].includes(value)){
-                                            // blockedThreat += 1;
-                                            blockedThreat.push(item);
-                                            // blockedThreat = [...new Set(blockedThreat)];
+                                            blockedThreat += 1;
                                             for(element of cannotBlock){
                                                 if(element == object){
-                                                    // blockedThreat -= 1;
-                                                    // blockedThreat = [...new Set(blockedThreat)];
-                                                    let itemIndex = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(itemIndex, 1);
+                                                    blockedThreat -= 1;
                                                 }
                                             }
                                             // break loop1;
@@ -1983,15 +1874,10 @@ async function drop(e) {
                                         
                                     }else{
                                         if(currentTilesOnThreat[object].includes(value) && object[0] != "K"){
-                                            // blockedThreat += 1;
-                                            blockedThreat.push(item);
-                                            // blockedThreat = [...new Set(blockedThreat)];
+                                            blockedThreat += 1;
                                             for(element of cannotBlock){
                                                 if(element == object){
-                                                    // blockedThreat -= 1;
-                                                    // blockedThreat = [...new Set(blockedThreat)];
-                                                    let itemIndex = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(itemIndex, 1);
+                                                    blockedThreat -= 1;
                                                 }
                                             }
                                             // break loop1;
@@ -2004,10 +1890,10 @@ async function drop(e) {
                 }
             }
 
-            let canBeCaptured = [];
+            let canBeCaptured = 0;
 
             // check if all threats can be captured by the defender
-            // loop1:
+            loop1:
             for(item of currentThreatOnKing){
                 console.log(item);
                 let arr = item.split("-");
@@ -2019,27 +1905,13 @@ async function drop(e) {
                     if(object[0] == object[0].toUpperCase()){
                         // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "K")){
                         if(currentTilesOnThreat[object].includes(parseInt(newArr))){
-                            // canBeCaptured += 1;
-                            canBeCaptured.push(item);
-                            // canBeCaptured = [...new Set(canBeCaptured)];
-                            if(object[0] == "K"){
-                                for(thing in currentTilesOnThreat){
-                                    if(thing[0] != thing[0].toUpperCase()){
-                                        if(currentTilesOnThreat[thing].includes(parseInt(newArr))){ //check if king will be counter captured if it captured this piece
-                                            // canBeCaptured -= 1;
-                                            // canBeCaptured = [...new Set(canBeCaptured)];
-                                            let itemIndex = canBeCaptured.indexOf(item);
-                                            canBeCaptured.splice(itemIndex, 1);
-                                            // break loop1;
-                                        }
+                            canBeCaptured += 1;
+                            for(thing in currentTilesOnThreat){
+                                if(thing[0] != thing[0].toUpperCase()){
+                                    if(currentTilesOnThreat[thing].includes(parseInt(newArr)) && (thing[0] != "K") && object[0] == "K"){ //check if king will be counter captured if it captured this piece
+                                        canBeCaptured -= 1;
+                                        break loop1;
                                     }
-                                }
-                            }
-                            for(element of cannotBlock){
-                                if(element == object){
-                                    // canBeCaptured = [...new Set(canBeCaptured)];
-                                    let itemIndex = canBeCaptured.indexOf(item);
-                                    canBeCaptured.splice(itemIndex, 1);
                                 }
                             }
                         }
@@ -2047,23 +1919,12 @@ async function drop(e) {
                 }
             }
 
-            // for(element of cannotBlock){
-            //     if(element == object){
-            //         // canBeCaptured = [...new Set(canBeCaptured)];
-            //         let itemIndex = canBeCaptured.indexOf(item);
-            //         canBeCaptured.splice(itemIndex, 1);
-            //     }
-            // }
-
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                 console.log("test")
                 // count the number of threats to the king
 
-                blockedThreat = [...new Set(blockedThreat)];
-                canBeCaptured = [...new Set(canBeCaptured)];
-
-                if(threatsOnKing == blockedThreat.length) return;
-                if(threatsOnKing == canBeCaptured.length) return;
+                if(threatsOnKing == blockedThreat) return;
+                if(threatsOnKing <= canBeCaptured) return;
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `White king has been checkmated`;
                 checked = true;
@@ -2080,13 +1941,9 @@ async function drop(e) {
                         }
                     }
                 }
-
-                blockedThreat = [...new Set(blockedThreat)];
-                canBeCaptured = [...new Set(canBeCaptured)];
-
                 if(noDuplicateSafeTiles.length == 0){
-                    if(threatsOnKing == blockedThreat.length) return;
-                    if(threatsOnKing == canBeCaptured.length) return;
+                    if(threatsOnKing == blockedThreat) return;
+                    if(threatsOnKing <= canBeCaptured) return;
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king has been checkmated`;
                     checked = true;
@@ -2108,51 +1965,8 @@ async function drop(e) {
 
     dropValue = e.target;
     // console.log("dropValue: ", dropValue);
-
-
-        let thisTileID;
-        // Capture pieces
-         if(!e.target.children[0].parentElement.classList.contains("tile")){
-            let thisTile = e.target.children[0].parentElement.parentElement;
-            thisTileID = thisTile.id;
-            thisTile.appendChild(e.target.children[0]);
-            thisTile = document.getElementById(`${thisTileID}`);
-            if(thisTile.children[1]){
-                console.log("test");
-                let container = document.createElement("div");
-                if(thisTile.children[0].classList.contains("lightPiece")){
-                    blackCapturedHistory.push(thisTile.children[0].id[0]);
-                    container.appendChild(thisTile.children[0]);
-                    document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
-                    whiteCapturedHistory.push("");
-                }else{
-                    whiteCapturedHistory.push(thisTile.children[0].id[0]);
-                    container.appendChild(thisTile.children[0]);
-                    document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
-                    blackCapturedHistory.push("");
-                }
-            }
-        }else{
-            if(e.target.children[1]){
-                console.log("capture");
-                let container = document.createElement("div");
-                if(e.target.children[0].classList.contains("lightPiece")){
-                    blackCapturedHistory.push(e.target.children[0].id[0]);
-                    container.appendChild(e.target.children[0]);
-                    document.querySelector(".black-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
-                    whiteCapturedHistory.push("");
-                }else{
-                    whiteCapturedHistory.push(e.target.children[0].id[0]);
-                    container.appendChild(e.target.children[0]);
-                    document.querySelector(".white-captured").innerHTML += `<div class="tile">${container.innerHTML}</div>`;
-                    blackCapturedHistory.push("");
-                }
-                // e.target.children[0].remove();
-            }
-            else{
-                whiteCapturedHistory.push("");
-                blackCapturedHistory.push("");
-            }
-        }
-
+    console.log("currentTilesOnThreat: ", currentTilesOnThreat)
+    console.log("threateningPiece: ", threateningPiece)
+    console.log("currentThreatOnKing: ", currentThreatOnKing)
+    console.log("pawnNonCaptureMoves: ", pawnNonCaptureMoves)
 }
