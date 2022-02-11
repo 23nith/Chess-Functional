@@ -2,9 +2,9 @@ let highlightColor =  "rgba(66, 245, 72, .5)";
 let piecesHeight = "80px"
 
 let winnerMsg = document.querySelector(".winner-msg");
-// winnerMsg.style.display = "none";
+winnerMsg.style.display = "none";
 let whiteWin = document.querySelector("#white-win");
-// whiteWin.style.display = "none";
+whiteWin.style.display = "none";
 let blackWin = document.querySelector("#black-win");
 blackWin.style.display = "none";
 // winnerMsg.style.display = "block";
@@ -1579,7 +1579,7 @@ async function drop(e) {
             }
 
             if(thereIsWinner){
-                winnerMsg.style.display = "block";
+                winnerMsg.style.display = "flex";
             }
 
         }else{
