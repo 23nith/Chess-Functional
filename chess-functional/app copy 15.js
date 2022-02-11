@@ -271,8 +271,7 @@ let threateningPiece = {
 }
 
 let pawnNonCaptureMoves = {
-    P: [],
-    p: []
+
 }
 
 let currentThreatOnKing = []
@@ -1497,11 +1496,7 @@ async function drop(e) {
         currentTilesOnThreat = {};
         threateningPiece = {};
         currentThreatOnKing = [];
-        // pawnNonCaptureMoves = {}
-        pawnNonCaptureMoves = {
-            P: [],
-            p: []
-        }
+        pawnNonCaptureMoves = {}
         slidingBeyondPieces = {};
     // fill up currentTilesOnThreat
         for(x = 0; x < 64; x++){
@@ -1734,25 +1729,25 @@ async function drop(e) {
                                 }
                             }
                             
-                            for(element of cannotBlock){
-                                if(element == object){
-                                    // canBeCaptured = [...new Set(canBeCaptured)];
-                                    let itemIndex = canBeCaptured.indexOf(item);
-                                    canBeCaptured.splice(itemIndex, 1);
-                                }
-                            }
+                            // for(element of cannotBlock){
+                            //     if(element == object){
+                            //         // canBeCaptured = [...new Set(canBeCaptured)];
+                            //         let itemIndex = canBeCaptured.indexOf(item);
+                            //         canBeCaptured.splice(itemIndex, 1);
+                            //     }
+                            // }
                         }
                     }
                 }
             }
 
-            // for(element of cannotBlock){
-            //     if(element == object){
-            //         // canBeCaptured = [...new Set(canBeCaptured)];
-            //         let itemIndex = canBeCaptured.indexOf(item);
-            //         canBeCaptured.splice(itemIndex, 1);
-            //     }
-            // }
+            for(element of cannotBlock){
+                if(element == object){
+                    // canBeCaptured = [...new Set(canBeCaptured)];
+                    let itemIndex = canBeCaptured.indexOf(item);
+                    canBeCaptured.splice(itemIndex, 1);
+                }
+            }
 
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                 console.log("test")
@@ -2009,25 +2004,25 @@ async function drop(e) {
                                     }
                                 }
                             }
-                            for(element of cannotBlock){
-                                if(element == object){
-                                    // canBeCaptured = [...new Set(canBeCaptured)];
-                                    let itemIndex = canBeCaptured.indexOf(item);
-                                    canBeCaptured.splice(itemIndex, 1);
-                                }
-                            }
+                            // for(element of cannotBlock){
+                            //     if(element == object){
+                            //         // canBeCaptured = [...new Set(canBeCaptured)];
+                            //         let itemIndex = canBeCaptured.indexOf(item);
+                            //         canBeCaptured.splice(itemIndex, 1);
+                            //     }
+                            // }
                         }
                     }
                 }
             }
 
-            // for(element of cannotBlock){
-            //     if(element == object){
-            //         // canBeCaptured = [...new Set(canBeCaptured)];
-            //         let itemIndex = canBeCaptured.indexOf(item);
-            //         canBeCaptured.splice(itemIndex, 1);
-            //     }
-            // }
+            for(element of cannotBlock){
+                if(element == object){
+                    // canBeCaptured = [...new Set(canBeCaptured)];
+                    let itemIndex = canBeCaptured.indexOf(item);
+                    canBeCaptured.splice(itemIndex, 1);
+                }
+            }
 
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                 console.log("test")
