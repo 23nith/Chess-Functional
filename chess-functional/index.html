@@ -27,7 +27,7 @@
         <button type="submit" onclick="reset()" id="reset">Play again</button>
         <button type="submit" onclick="inspectBoard()" id="reset">Inspect the board</button>
     </div>
-    <p style="font-size: 15px"> </p>
+    <!-- <p style="font-size: 15px"> </p> -->
     <!-- <p style="font-size: 25px">Checkmate white king: rnb1kbnr/pppp1ppp/8/4p3/7K/5q2/PPPPP1PP/RNBQ1BNR <span style="color: brown;">(Move bishop from F8 towards E7)</span></p> -->
     <div class="row">
         <!-- <div class="info">
@@ -38,12 +38,12 @@
         <div>
             <!-- <p>Sample FEN: 4k2r/6r1/8/8/8/8/3R4/R3K3</p> -->
 
-            <input placeholder="Enter FEN here"
+            <!-- <input placeholder="Enter FEN here"
                 type="text"
                 name=""
                 id="fen">
             <button type="submit"
-                onclick="submitFEN()">Submit</button>
+                onclick="submitFEN()">Submit</button> -->
         </div>
     </div>
 
@@ -113,14 +113,24 @@
                 <div class="corner"></div>
             </div>
         </div>
-        <div style="margin-left: 30px">
-            <button type="submit"
-                onclick="undo()"
-                id="reset">undo</button>
-            <button type="submit"
-                onclick="reset()"
-                id="reset">reset</button>
-            <!-- <button type="submit" onclick="displayFEN()" id="getFen">get FEN</button> -->
+        <div style="display: flex; flex-direction: column; margin-left: 30px">
+            <div style="margin-left: 30px">
+                <button type="submit"
+                    onclick="undo()"
+                    id="reset">undo</button>
+                <button type="submit"
+                    onclick="reset()"
+                    id="reset">reset</button>
+                <!-- <button type="submit" onclick="displayFEN()" id="getFen">get FEN</button> -->
+            </div>
+            <div>
+                <input placeholder="Enter FEN here"
+                    type="text"
+                    name=""
+                    id="fen">
+                <button type="submit"
+                    onclick="submitFEN()">Submit</button>
+            </div>
         </div>
     </div>
 
@@ -146,7 +156,8 @@
         </p>
     </div>
 
-
+    <p style="font-size: 15px"> </p>
+    
     <script src="app.js"></script>
 </body>
 

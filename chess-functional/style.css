@@ -80,6 +80,7 @@ button {
 }
 
 .turn {
+    width: 185px;
     padding: 7px 14px;
     border: 1px solid black;
     /* margin-bottom: 15px; */
@@ -89,6 +90,7 @@ button {
     font-size: 30px;
     color: black;
     transition: .2s;
+    text-align: center;
 }
 
 .turn-emphasize {
@@ -117,12 +119,17 @@ p {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     /* color: #232222; */
     color: white;
+    /* position: fixed; */
+    width: 600px;
+    margin: 0 auto;
+    height: 19px;
 }
 
 .black-captured, .white-captured {
     display: flex;
     flex-direction: row;
     margin: 15px;
+    height: 80px;
 }
 
 .black-captured div, .white-captured div{
@@ -141,11 +148,12 @@ p {
 }
 
 .checkInfo {
-    font-size: 25px;
+    /* font-size: 25px; */
     /* color: black; */
     color: white;
     margin: 0 30px;
     font-size: 50px;
+    height: 60px;
 }
 
 .wrapper-1{
