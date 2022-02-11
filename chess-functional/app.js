@@ -242,6 +242,10 @@ function reset(){
     // drawGrid(8,8, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 }
 
+function inspectBoard(){
+    winnerMsg.style.display = "none";
+}
+
 //************************************************************************************** Drag and drop feature **************************************************************************************
 
 
@@ -1588,9 +1592,11 @@ async function drop(e) {
                 console.log("capture");
                 if(e.target.children[0].id[0] == "k"){
                     console.log("White wins");
+                    whiteWin.style.display = "block";
                     thereIsWinner = true;
                 }else if(e.target.children[0].id[0] == "K"){
                     console.log("Black wins");
+                    blackWin.style.display = "block";
                     thereIsWinner = true;
                 }
                 let container = document.createElement("div");
@@ -1607,7 +1613,7 @@ async function drop(e) {
                 }
                 // e.target.children[0].remove();
                 if(thereIsWinner){
-                    winnerMsg.style.display = "block";
+                    winnerMsg.style.display = "flex";
                 }
             }
             else{
@@ -1899,7 +1905,8 @@ async function drop(e) {
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `Black king has been checkmated`;
                 checked = true;
-                
+                winnerMsg.style.display = "flex";
+                whiteWin.style.display = "block";
             }else{
                 kingNextMovements.forEach(allMovesCheck);
                 noDuplicateSafeTiles = [...new Set(safeTiles)];
@@ -1922,6 +1929,8 @@ async function drop(e) {
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king has been checkmated`;
                     checked = true;
+                    winnerMsg.style.display = "flex";
+                    whiteWin.style.display = "block";
                 }
                 
             }
@@ -2175,7 +2184,9 @@ async function drop(e) {
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `White king has been checkmated`;
                 checked = true;
-                
+                winnerMsg.style.display = "flex";
+                blackWin.style.display = "block";
+
             }else{
                 kingNextMovements.forEach(allMovesCheck);
                 noDuplicateSafeTiles = [...new Set(safeTiles)];
@@ -2198,6 +2209,8 @@ async function drop(e) {
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king has been checkmated`;
                     checked = true;
+                    winnerMsg.style.display = "flex";
+                    blackWin.style.display = "block";
                 }
             }
 

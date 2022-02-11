@@ -20,16 +20,16 @@ body {
     flex-direction: column;
     position: absolute;
     /* opacity: 0.5; */
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0, 0.1);
     width: 100vw;
     height: 100vh;
     justify-content: center;
     align-items: center;
 }
 
-/* .winner-msg div {
-    opacity: 1;
-} */
+button {
+    font-size: 20px;
+}
 
 #white-win, #black-win {
     font-size: 100px;
