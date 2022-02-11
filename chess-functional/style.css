@@ -15,6 +15,28 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+.winner-msg {
+    display: flex;
+    position: absolute;
+    opacity: 0.5;
+    width: 100vw;
+    height: 100vh;
+    background-color: grey;
+    justify-content: center;
+    align-items: center;
+}
+
+/* .winner-msg div {
+    width: 50%;
+    height: 50%;
+} */
+
+#white-win, #black-win {
+    font-size: 100px;
+    color: white;
+    opacity: 1 !important;
+}
+
 .container {
     display: grid;
     /* width: 650px;
