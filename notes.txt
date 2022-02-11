@@ -8,6 +8,8 @@ high prio
 
 
 normal prio
+- En passant should only work right after initial movement of pawn
+
 
 less prio
  -Add timer
@@ -27,6 +29,7 @@ User story
 Castling Bugs
 -fix castling issues when there are pieces between.
 -fix can castle even the rook moves already
+- Castling went missing on the main branch
 
 For function errors
 -fix uncaught promises errors that might affecting the flow of the code on drawgrid
@@ -55,6 +58,9 @@ For Dragging
 -figure out how to remove the changing of homeTile value when dragging pieces
 -figure out how to disable allow drop for tile illegal moves
 -fix can't change piece to move once click piece, sometimes you can change a piece but it uses the previous piece move behavior
+-Capture will only register when pieces are dragged into the tile beside the other piece being captured but not on top of the other piece.
+-Ever since changing the pieces into images there has been a bug that enables users to, at times, drag pieces out of order and this would show highlighted tiles not
+corresponding to the piece's valid move. (not happening when svg version of pieces are used).
 
 for Pieces
 -avoid ending color's turn when piece is returned to homeTile
