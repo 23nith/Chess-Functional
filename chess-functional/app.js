@@ -222,7 +222,7 @@ function getFEN(){
 }
 
 function displayFEN(){
-    document.querySelector("p").innerHTML = `Current FEN: ${fenArray[fenArray.length-1]}`;
+    document.querySelector("p").innerHTML = `<span style="user-select: none">Current FEN: </span> ${fenArray[fenArray.length-1]}`;
 }
 
 // Initiate default chessboard
