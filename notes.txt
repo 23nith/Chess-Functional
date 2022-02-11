@@ -4,7 +4,6 @@
 
 high prio
  User stories
- -Implement Checkmate
 
 
 normal prio
@@ -19,6 +18,7 @@ less prio
 ************************************************************************************************************************
 
 User story
+-Implement Checkmate
 -Implement En passant
 -Implement Castling
 -Implement pawn promotion
