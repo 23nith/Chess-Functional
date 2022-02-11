@@ -1,3 +1,4 @@
+document.body.style.zoom=.75
 let highlightColor =  "rgba(66, 245, 72, .5)";
 let piecesHeight = "80px"
 
