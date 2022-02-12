@@ -1224,7 +1224,12 @@ async function drop(e) {
     e.preventDefault();
     movable = false;
     let data = e.dataTransfer.getData("text");
-    e.target.appendChild(document.getElementById(data));
+    // disable changing turn when piece is returned to its home tile
+    if(!(e.target == document.getElementById(data))){
+        e.target.appendChild(document.getElementById(data));
+    }else{
+        return;
+    }
     landed = e.target;
 
     if (piece === "P" || piece === "p") {
