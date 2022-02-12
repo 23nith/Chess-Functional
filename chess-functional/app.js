@@ -714,7 +714,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     }
                 }
                 if(!checking){
-                    if((piece == "k" || piece == "K" ) && unsafeTiles.length != 0){
+                    if((piece == "k" || piece == "K" ) && (unsafeTiles.length != 0) && (unsafeTiles.includes(validMove)) ){
                         tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
                         tiles[validMove].style.backgroundColor = highlightCheckMove;
                     }else{
