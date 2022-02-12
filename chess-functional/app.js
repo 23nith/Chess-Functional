@@ -1,5 +1,6 @@
 document.body.style.zoom=.75
 let highlightColor =  "rgba(66, 245, 72, .5)";
+let highlightCheckMove = "rgba(232, 16, 16, 0.5)";
 let piecesHeight = "80px"
 
 let winnerMsg = document.querySelector(".winner-msg");
@@ -293,6 +294,10 @@ let currentThreatOnKing = []
 
 let slidingBeyondPieces = {};
 
+let unsafeTiles = [];
+
+let cannotBlock = [];
+
 
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
@@ -358,6 +363,7 @@ function changeTurn(){
 }
 
 
+let kingIsChecked = false;
 
 function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
@@ -704,9 +710,15 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     }
                 }
                 if(!checking){
-                    tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                    // tiles[validMove].style.backgroundColor = "#F91F15";
-                    tiles[validMove].style.backgroundColor = highlightColor;
+                    if((piece == "k" || piece == "K" ) && unsafeTiles.length != 0){
+                        tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
+                        tiles[validMove].style.backgroundColor = highlightCheckMove;
+                    }else{
+                        tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
+                        // tiles[validMove].style.backgroundColor = "#F91F15";
+                        tiles[validMove].style.backgroundColor = highlightColor;
+                    }
+                    
                 }
                 if(checking){
                     // tiles[validMove].style.backgroundColor = "#f57842"; //**(b)
@@ -1712,11 +1724,13 @@ async function drop(e) {
 
             // check if all king's possible next move will be a potential capture by opponent
             let safeTiles = []
+            
             function allMovesCheck(nextMove, index){
                 if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
                     for(item in currentTilesOnThreat){
                         if(item[0] == item[0].toUpperCase()){
                             if(currentTilesOnThreat[item].includes(nextMove)){
+                                unsafeTiles.push(nextMove);
                                 return true;
                             }
                         }
@@ -1726,6 +1740,7 @@ async function drop(e) {
                     for(item in currentTilesOnThreat){
                         if(item[0] == item[0].toUpperCase()){
                             if(currentTilesOnThreat[item].includes(nextMove)){
+                                unsafeTiles.push(nextMove);
                                 return true;
                             }
                         }
@@ -1748,7 +1763,7 @@ async function drop(e) {
             }
             
             // check if there is a sliding piece that has only one piece between it and the king
-            let cannotBlock = [];
+            // let cannotBlock = [];
 
             direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
             // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
@@ -1894,9 +1909,13 @@ async function drop(e) {
             //         canBeCaptured.splice(itemIndex, 1);
             //     }
             // }
-
+            kingNextMovements.forEach(allMovesCheck);
+            
             if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                 console.log("test")
+
+                unsafeTiles = [...new Set(unsafeTiles)];
+                console.log(unsafeTiles);
 
                 blockedThreat = [...new Set(blockedThreat)];
                 canBeCaptured = [...new Set(canBeCaptured)];
@@ -1909,7 +1928,7 @@ async function drop(e) {
                 winnerMsg.style.display = "flex";
                 whiteWin.style.display = "block";
             }else{
-                kingNextMovements.forEach(allMovesCheck);
+                // kingNextMovements.forEach(allMovesCheck);
                 noDuplicateSafeTiles = [...new Set(safeTiles)];
                 for([index, tile] of noDuplicateSafeTiles.entries()){
                     for(item in slidingBeyondPieces){
@@ -1997,6 +2016,7 @@ async function drop(e) {
                     for(item in currentTilesOnThreat){
                         if(item[0] != item[0].toUpperCase()){
                             if(currentTilesOnThreat[item].includes(nextMove)){
+                                unsafeTiles.push(nextMove);
                                 return true;
                             }
                         }
@@ -2006,6 +2026,7 @@ async function drop(e) {
                     for(item in currentTilesOnThreat){
                         if(item[0] != item[0].toUpperCase()){
                             if(currentTilesOnThreat[item].includes(nextMove)){
+                                unsafeTiles.push(nextMove);
                                 return true;
                             }
                         }
@@ -2218,7 +2239,11 @@ async function drop(e) {
             ;
         }
     }
+
+
     if(!checked){
             document.querySelector(".checkInfo").innerHTML = "";
+            unsafeTiles = [];
+            console.log("!checked");
     }
 }
