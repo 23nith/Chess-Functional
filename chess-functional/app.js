@@ -296,7 +296,13 @@ let slidingBeyondPieces = {};
 
 let unsafeTiles = [];
 
+let checkedColor = "White";
+
 let cannotBlock = [];
+
+let canCapture = [];
+
+let canCaptureTile = [];
 
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
@@ -1098,6 +1104,8 @@ async function dropAllow(e) {
         e.target.setAttribute("ondragover", "removeDrop(e)");
     }
 
+    
+
     // Can King castles ?
     if (piece === "K" || piece === "k") {
         if (piece === "K") {
@@ -1700,7 +1708,27 @@ async function drop(e) {
                     // console.log("check");
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king is checked`;
+                    
+                    darkPieces = document.querySelectorAll(".darkPiece");
+                    removeDragFeatureDark(darkPieces)
+
+                    document.getElementById(`${tileOfKing}`).children[0].setAttribute("draggable", "true");
+                    document.getElementById(`${tileOfKing}`).children[0].setAttribute("ondragstart", "drag(event)");
+                    document.getElementById(`${tileOfKing}`).children[0].setAttribute("ondragover", "dropAllow(event)");
+
+                    
+                    for(i = 0; i < darkPieces.length; i++){
+                        darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
+                    }
+
+                    for(i = 0; i < lightPieces.length; i++){
+                        lightPieces[i].setAttribute("ondragover", "removeDrop(e)");
+                    }
+
+                    
+                    
                     checked = true;
+                    checkedColor = "Black";
                 }
             }
         }
@@ -1875,6 +1903,7 @@ async function drop(e) {
             }
 
             let canBeCaptured = [];
+            
 
             // check if all threats can be captured by the defender
             // loop1:
@@ -1891,6 +1920,9 @@ async function drop(e) {
                         if(currentTilesOnThreat[object].includes(parseInt(newArr))){
                             // canBeCaptured += 1;
                             canBeCaptured.push(item);
+                            canCapture.push(object);
+                            let objectString = object.split("-");
+                            canCaptureTile.push(objectString[1]);
                             // canBeCaptured = [...new Set(canBeCaptured)];
                             if(object[0] == "k"){
                                 for(thing in currentTilesOnThreat){
@@ -1971,6 +2003,17 @@ async function drop(e) {
                 
             }
 
+            for(i = 0; i < darkPieces.length; i++){
+                let tile = darkPieces[i].parentElement.id;
+                // darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
+                
+                if(canCaptureTile.includes(tile)){
+                    darkPieces[i].setAttribute("draggable", "true");
+                    darkPieces[i].setAttribute("ondragstart", "drag(event)");
+                    darkPieces[i].setAttribute("ondragover", "dropAllow(event)");
+                }
+
+            }
         }
     }else{
         // let checked = false;
@@ -1988,6 +2031,7 @@ async function drop(e) {
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king is checked`;
                     checked = true;
+                    checkedColor = "White";
                     break;
                 }
             }
@@ -2160,6 +2204,7 @@ async function drop(e) {
             }
 
             let canBeCaptured = [];
+            
 
             // check if all threats can be captured by the defender
             // loop1:
@@ -2176,6 +2221,7 @@ async function drop(e) {
                         if(currentTilesOnThreat[object].includes(parseInt(newArr))){
                             // canBeCaptured += 1;
                             canBeCaptured.push(item);
+                            canCapture.push(object);
                             // canBeCaptured = [...new Set(canBeCaptured)];
                             if(object[0] == "K"){
                                 for(thing in currentTilesOnThreat){
@@ -2260,6 +2306,8 @@ async function drop(e) {
     if(!checked){
             document.querySelector(".checkInfo").innerHTML = "";
             unsafeTiles = [];
+            canCapture = [];
+            canCaptureTile = [];
             console.log("!checked");
     }
 }
