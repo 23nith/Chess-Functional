@@ -298,7 +298,6 @@ let unsafeTiles = [];
 
 let cannotBlock = [];
 
-
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -368,7 +367,6 @@ let kingIsChecked = false;
 function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
     let checking = forChecking;
-
     // check if piece is near edge
     let exemption = []
     let exemptedTiles = [];
@@ -1093,6 +1091,13 @@ let movable;
 async function dropAllow(e) {
     e.preventDefault();
 
+
+    if(cannotBlock.includes(`${piece}-${homeTile[0]}`)){
+        e.target.removeAttribute("ondragstart")
+        e.target.removeAttribute("draggable");
+        e.target.setAttribute("ondragover", "removeDrop(e)");
+    }
+
     // Can King castles ?
     if (piece === "K" || piece === "k") {
         if (piece === "K") {
@@ -1155,6 +1160,9 @@ async function dropAllow(e) {
     // console.log("parent: ", e.target.parentElement.getAttribute("data-tilenumber")); //Information on the home tile of the piece being lifted
     // homeTile = e.target.parentElement.getAttribute("data-tilenumber") ? e.target.parentElement.getAttribute("data-tilenumber") : homeTile;
 
+    
+
+
     lifted = e.target.parentElement.getAttribute("data-tilenumber");
     if(lifted){
         homeTile.push(lifted);
@@ -1162,7 +1170,13 @@ async function dropAllow(e) {
         let pieceClass = new Piece();
         let movement = pieceClass.generatePiece(piece).movement;
         let sliding = pieceClass.generatePiece(piece).sliding;
-        highlightTiles(homeTile[0], movement, sliding, piece);
+        if(!(cannotBlock.includes(`${piece}-${homeTile[0]}`))){
+            highlightTiles(homeTile[0], movement, sliding, piece);
+        }else{
+            e.target.removeAttribute("ondragstart")
+            e.target.removeAttribute("draggable");
+            e.target.setAttribute("ondragover", "removeDrop(e)");
+        }
         movable = true;
     }
     // console.log("lifted: ", lifted);
@@ -1172,6 +1186,8 @@ async function dropAllow(e) {
 
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
+
+
 
     console.log(e.target);
 
@@ -2049,7 +2065,7 @@ async function drop(e) {
             }
 
             // check if there is a sliding piece that has only one piece between it and the king
-            let cannotBlock = [];
+            // let cannotBlock = [];
 
             direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
             // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
