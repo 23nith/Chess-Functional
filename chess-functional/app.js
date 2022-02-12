@@ -1,6 +1,14 @@
+document.body.style.zoom=.75
 let highlightColor =  "rgba(66, 245, 72, .5)";
 let piecesHeight = "80px"
 
+let winnerMsg = document.querySelector(".winner-msg");
+winnerMsg.style.display = "none";
+let whiteWin = document.querySelector("#white-win");
+whiteWin.style.display = "none";
+let blackWin = document.querySelector("#black-win");
+blackWin.style.display = "none";
+// winnerMsg.style.display = "block";
 
 const threatDirection = {
     0 : "North",
@@ -215,7 +223,7 @@ function getFEN(){
 }
 
 function displayFEN(){
-    document.querySelector("p").innerHTML = `Current FEN: <br>${fenArray[fenArray.length-1]}`;
+    document.querySelector("p").innerHTML = `<span style="user-select: none">Current FEN: </span> ${fenArray[fenArray.length-1]}`;
 }
 
 // Initiate default chessboard
@@ -233,6 +241,10 @@ function reset(){
     // document.querySelector(".container").innerHTML = "";
     // document.querySelector(".turn").innerHTML = `White's turn`
     // drawGrid(8,8, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+}
+
+function inspectBoard(){
+    winnerMsg.style.display = "none";
 }
 
 //************************************************************************************** Drag and drop feature **************************************************************************************
@@ -1541,7 +1553,17 @@ async function drop(e) {
         let thisTileID;
         // Capture pieces
          if(!e.target.children[0].parentElement.classList.contains("tile")){
+            let thereIsWinner = false;
             let thisTile = e.target.children[0].parentElement.parentElement;
+            if(e.target.children[0].parentElement.id[0] == "k"){
+                console.log("White wins");
+                whiteWin.style.display = "block";
+                thereIsWinner = true;
+            }else if(e.target.children[0].parentElement.id[0] == "K"){
+                console.log("Black wins");
+                blackWin.style.display = "block";
+                thereIsWinner = true;
+            }
             thisTileID = thisTile.id;
             thisTile.appendChild(e.target.children[0]);
             thisTile = document.getElementById(`${thisTileID}`);
@@ -1560,9 +1582,24 @@ async function drop(e) {
                     blackCapturedHistory.push("");
                 }
             }
+
+            if(thereIsWinner){
+                winnerMsg.style.display = "flex";
+            }
+
         }else{
             if(e.target.children[1]){
+                let thereIsWinner = false;
                 console.log("capture");
+                if(e.target.children[0].id[0] == "k"){
+                    console.log("White wins");
+                    whiteWin.style.display = "block";
+                    thereIsWinner = true;
+                }else if(e.target.children[0].id[0] == "K"){
+                    console.log("Black wins");
+                    blackWin.style.display = "block";
+                    thereIsWinner = true;
+                }
                 let container = document.createElement("div");
                 if(e.target.children[0].classList.contains("lightPiece")){
                     blackCapturedHistory.push(e.target.children[0].id[0]);
@@ -1576,6 +1613,9 @@ async function drop(e) {
                     blackCapturedHistory.push("");
                 }
                 // e.target.children[0].remove();
+                if(thereIsWinner){
+                    winnerMsg.style.display = "flex";
+                }
             }
             else{
                 whiteCapturedHistory.push("");
@@ -1866,7 +1906,8 @@ async function drop(e) {
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `Black king has been checkmated`;
                 checked = true;
-                
+                winnerMsg.style.display = "flex";
+                whiteWin.style.display = "block";
             }else{
                 kingNextMovements.forEach(allMovesCheck);
                 noDuplicateSafeTiles = [...new Set(safeTiles)];
@@ -1889,6 +1930,8 @@ async function drop(e) {
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king has been checkmated`;
                     checked = true;
+                    winnerMsg.style.display = "flex";
+                    whiteWin.style.display = "block";
                 }
                 
             }
@@ -2142,7 +2185,9 @@ async function drop(e) {
                 let checkInfo = document.querySelector(".checkInfo")
                 checkInfo.innerHTML = `White king has been checkmated`;
                 checked = true;
-                
+                winnerMsg.style.display = "flex";
+                blackWin.style.display = "block";
+
             }else{
                 kingNextMovements.forEach(allMovesCheck);
                 noDuplicateSafeTiles = [...new Set(safeTiles)];
@@ -2165,6 +2210,8 @@ async function drop(e) {
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king has been checkmated`;
                     checked = true;
+                    winnerMsg.style.display = "flex";
+                    blackWin.style.display = "block";
                 }
             }
 
