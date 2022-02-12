@@ -1532,7 +1532,7 @@ async function drop(e) {
     // console.log("pieceColor: ", pieceColor);
     // console.log("lifted at end: ", lifted);
     // getFEN();
-    fenArray.push(getFEN());
+    // fenArray.push(getFEN());
 
     displayFEN()
     // console.log("drop", e.target); //Information on the tile where the piece landed
@@ -1624,7 +1624,7 @@ async function drop(e) {
         }
 
 
-
+    fenArray.push(getFEN());
 
 
 
