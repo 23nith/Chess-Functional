@@ -1743,7 +1743,7 @@ async function drop(e) {
         for(item in currentTilesOnThreat){
             // compare against possible capture of darkpieces
             if(item != item.toUpperCase()){
-                if(currentTilesOnThreat[item].includes(parseInt(tileOfKingBlack))){
+                if(currentTilesOnThreat[item].includes(parseInt(tileOfKingWhite))){
                     // console.log("check");
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `White king is checked`;
@@ -1879,6 +1879,8 @@ async function drop(e) {
                             }
                             if(kingAlliesBetweenThisPiece.length == 1){
                                 cannotBlock.push(kingAlliesBetweenThisPiece[0]);
+                            }else{
+                                console.log("test");
                             }
                         }
                     }
@@ -2172,44 +2174,47 @@ async function drop(e) {
     
     
                 // check if sliding moves directed at king can be blocked
+
                 let blockedThreat = [];
-                for(item in threateningPiece){
-                    // loop1:
-                    if(item[0] != item[0].toUpperCase()){
-                        if(threateningPiece[item].includes(parseInt(tileOfKingBlack))){
-                            for(value of threateningPiece[item]){
-                                for(object in currentTilesOnThreat){
-                                    if(object[0] == object[0].toUpperCase()){
-                                        if(object[0] == "P"){
-                                            if(pawnNonCaptureMoves["P"].includes(value)){
-                                                // blockedThreat += 1;
-                                                blockedThreat.push(item);
-                                                // blockedThreat = [...new Set(blockedThreat)];
-                                                for(element of cannotBlock){
-                                                    if(element == object){
-                                                        // blockedThreat -= 1;
-                                                        // blockedThreat = [...new Set(blockedThreat)];
-                                                        let itemIndex = blockedThreat.indexOf(item);
-                                                        blockedThreat.splice(itemIndex, 1);
+                function getcannotblock(){
+                    for(item in threateningPiece){
+                        // loop1:
+                        if(item[0] != item[0].toUpperCase()){
+                            if(threateningPiece[item].includes(parseInt(tileOfKingBlack))){
+                                for(value of threateningPiece[item]){
+                                    for(object in currentTilesOnThreat){
+                                        if(object[0] == object[0].toUpperCase()){
+                                            if(object[0] == "P"){
+                                                if(pawnNonCaptureMoves["P"].includes(value)){
+                                                    // blockedThreat += 1;
+                                                    blockedThreat.push(item);
+                                                    // blockedThreat = [...new Set(blockedThreat)];
+                                                    for(element of cannotBlock){
+                                                        if(element == object){
+                                                            // blockedThreat -= 1;
+                                                            // blockedThreat = [...new Set(blockedThreat)];
+                                                            let itemIndex = blockedThreat.indexOf(item);
+                                                            blockedThreat.splice(itemIndex, 1);
+                                                        }
                                                     }
+                                                    // break loop1;
                                                 }
-                                                // break loop1;
-                                            }
-                                            
-                                        }else{
-                                            if(currentTilesOnThreat[object].includes(value) && object[0] != "K"){
-                                                // blockedThreat += 1;
-                                                blockedThreat.push(item);
-                                                // blockedThreat = [...new Set(blockedThreat)];
-                                                for(element of cannotBlock){
-                                                    if(element == object){
-                                                        // blockedThreat -= 1;
-                                                        // blockedThreat = [...new Set(blockedThreat)];
-                                                        let itemIndex = blockedThreat.indexOf(item);
-                                                        blockedThreat.splice(itemIndex, 1);
+                                                
+                                            }else{
+                                                if(currentTilesOnThreat[object].includes(value) && object[0] != "K"){
+                                                    // blockedThreat += 1;
+                                                    blockedThreat.push(item);
+                                                    // blockedThreat = [...new Set(blockedThreat)];
+                                                    for(element of cannotBlock){
+                                                        if(element == object){
+                                                            // blockedThreat -= 1;
+                                                            // blockedThreat = [...new Set(blockedThreat)];
+                                                            let itemIndex = blockedThreat.indexOf(item);
+                                                            blockedThreat.splice(itemIndex, 1);
+                                                        }
                                                     }
+                                                    // break loop1;
                                                 }
-                                                // break loop1;
                                             }
                                         }
                                     }
@@ -2218,6 +2223,7 @@ async function drop(e) {
                         }
                     }
                 }
+                getcannotblock();
     
                 let canBeCaptured = [];
                 
