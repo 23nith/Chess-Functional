@@ -721,10 +721,30 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     if((piece == "k" || piece == "K" ) && (unsafeTiles.length != 0) && (unsafeTiles.includes(validMove)) ){
                         tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
                         tiles[validMove].style.backgroundColor = highlightCheckMove;
+
                     }else{
                         tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
                         // tiles[validMove].style.backgroundColor = "#F91F15";
                         tiles[validMove].style.backgroundColor = highlightColor;
+
+                    }
+                    if(piece == "K"){
+                        for(object in threateningPiece){
+                            if(threateningPiece[object].includes(parseInt(validMove)) && (object[0] != object[0].toUpperCase())){
+                                tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
+                                tiles[validMove].style.backgroundColor = highlightCheckMove;
+                                break;
+                            }
+                        }
+
+                    }else if(piece == "k"){
+                        for(object in threateningPiece){
+                            if(threateningPiece[object].includes(parseInt(validMove)) && (object[0] == object[0].toUpperCase())){
+                                tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
+                                tiles[validMove].style.backgroundColor = highlightCheckMove;
+                                break;
+                            }
+                        }
                     }
                     
                 }
