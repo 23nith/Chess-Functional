@@ -681,6 +681,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                 continue;
             }
             let validMove = parseInt(_homeTile)+pieceMovement[j];
+            
             if(piece == "k" ){
                 if(canCapture.includes(`${piece}-${_homeTile}`)){
                     for(object in threateningPiece){
@@ -693,7 +694,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                             continue;
                         }
                     }
-                    // continue;
                 }
             }else if(piece == "K"){
                 if(canCapture.includes(`${piece}-${_homeTile}`)){
@@ -709,12 +709,26 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     }
                     // continue;
                 }
+            }else{
+                if(canCapture.includes(`${piece}-${_homeTile}`)){
+                    for(object in threateningPiece){
+                        let objectString = object.split("-");
+                        if(parseInt(objectString[1]) == validMove && object[0] != object[0].toUpperCase()){
+                            tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
+                            tiles[validMove].style.backgroundColor = highlightColor;
+                            continue;
+                        }else{
+                            continue;
+                        }
+                    }
+                    continue;
+                }
             }
 
             if(canBlock.includes(_homeTile)){
                 for(object of blockedThreat){
                     
-                    if(Object.keys(threateningPiece).length != 0 && threateningPiece[object].includes(validMove)){
+                    if(threateningPiece[object] != undefined && Object.keys(threateningPiece).length != 0 && threateningPiece[object].includes(validMove)){
                         tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
                         tiles[validMove].style.backgroundColor = highlightColor;
                         break;
