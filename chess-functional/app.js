@@ -736,10 +736,36 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                                 break;
                             }
                         }
+                        let threatDirection;
+                        for(object in threateningPiece){
+                            if(threateningPiece[object].includes(parseInt(_homeTile))){
+                                threatDirection = object;
+                            }
+                        }
+                        for(object in slidingBeyondPieces){
+                            if(slidingBeyondPieces[object].includes(parseInt(validMove)) && (object == threatDirection)){
+                                tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
+                                tiles[validMove].style.backgroundColor = highlightCheckMove;
+                                break;
+                            }
+                        }
 
                     }else if(piece == "k"){
                         for(object in threateningPiece){
                             if(threateningPiece[object].includes(parseInt(validMove)) && (object[0] == object[0].toUpperCase())){
+                                tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
+                                tiles[validMove].style.backgroundColor = highlightCheckMove;
+                                break;
+                            }
+                        }
+                        let threatDirection;
+                        for(object in threateningPiece){
+                            if(threateningPiece[object].includes(parseInt(_homeTile))){
+                                threatDirection = object;
+                            }
+                        }
+                        for(object in slidingBeyondPieces){
+                            if(slidingBeyondPieces[object].includes(parseInt(validMove)) && (object == threatDirection)){
                                 tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
                                 tiles[validMove].style.backgroundColor = highlightCheckMove;
                                 break;
