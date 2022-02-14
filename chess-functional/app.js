@@ -710,7 +710,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     // continue;
                 }
             }else{
-                if(piece != "P" && piece != "p"){
+                // if(piece != "P" && piece != "p"){
                     if(canCapture.includes(`${piece}-${_homeTile}`)){
                         for(object in threateningPiece){
                             let objectString = object.split("-");
@@ -727,7 +727,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                         continue;
                     }
 
-                }
+                // }
             }
 
             if(canBlock.includes(_homeTile)){
