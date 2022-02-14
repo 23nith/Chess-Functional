@@ -1247,6 +1247,99 @@ function fillUpTilesOnThreat(){
     }
 }
 
+function getCannotBlockDark(){
+    direction1 = ["South", "East", "SouthEast", "SouthWest"]
+    for(item in slidingBeyondPieces){
+        loop2:
+        if(item[0] == item[0].toUpperCase()){
+            slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
+            if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack))){
+                let thisString = item.split("-");
+                let myString = `${thisString[0]}-${thisString[1]}`
+                for(object of currentThreatOnKing){
+                    if(object == myString){
+                        break loop2;
+                    }
+                }
+                let kingAlliesBetweenThisPiece = [];
+                
+                for(element of slidingBeyondPieces[item]){
+                    // if(element == parseInt(tileOfKingBlack)) break;
+                    if(direction1.includes(thisString[2])){
+                        if(element < parseInt(tileOfKingBlack)){
+                            let thisTile = document.getElementById(`${element}`);
+                            let child = thisTile.children[0];
+                            if(child != undefined && child.classList.contains('darkPiece')){
+                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                            }
+                        }
+                    }else{
+                        if(element > parseInt(tileOfKingBlack)){
+                            let thisTile = document.getElementById(`${element}`);
+                            let child = thisTile.children[0];
+                            if(child != undefined && child.classList.contains('darkPiece')){
+                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                            }
+                        }
+                    }
+                }
+                if(kingAlliesBetweenThisPiece.length == 1){
+                    cannotBlock.push(kingAlliesBetweenThisPiece[0]);
+                }else{
+                    console.log("test");
+                }
+            }
+        }
+    }
+}
+
+function getcannotblockLight(){
+    direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
+                // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
+    
+    for(item in slidingBeyondPieces){
+        loop2:
+        if(item[0] != item[0].toUpperCase()){
+            slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
+            if(slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite))){
+                let thisString = item.split("-");
+                let myString = `${thisString[0]}-${thisString[1]}`
+                for(object of currentThreatOnKing){
+                    if(object == myString){
+                        break loop2;
+                    }
+                }
+                let kingAlliesBetweenThisPiece = [];
+
+                for(element of slidingBeyondPieces[item]){
+                    // if(element == parseInt(tileOfKingWhite)) break;
+                    if(direction1.includes(thisString[2])){
+                        if(element < parseInt(tileOfKingWhite)){
+                            let thisTile = document.getElementById(`${element}`);
+                            let child = thisTile.children[0];
+                            if(child != undefined && child.classList.contains('lightPiece')){
+                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                            }
+                        }
+                    }else{
+                        if(element > parseInt(tileOfKingWhite)){
+                            let thisTile = document.getElementById(`${element}`);
+                            let child = thisTile.children[0];
+                            if(child != undefined && child.classList.contains('lightPiece')){
+                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                            }
+                        }
+                    }
+                }
+                if(kingAlliesBetweenThisPiece.length == 1){
+                    cannotBlock.push(kingAlliesBetweenThisPiece[0]);
+                }
+            }
+        }
+    }
+    
+}
+
 //************************************************************************************** Drag and drop events **************************************************************************************
 
 let movable;
@@ -1261,6 +1354,14 @@ async function dropAllow(e) {
         e.target.setAttribute("ondragover", "removeDrop(e)");
     }
 
+    for(item in slidingBeyondPieces){
+        if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack)) || slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite))){
+            // for(slidingBeyondPieces)
+            getCannotBlockDark();
+            getcannotblockLight();
+            console.log("test");
+        }
+    }
     
 
     // Can King castles ?
@@ -1352,7 +1453,14 @@ async function dropAllow(e) {
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
 
-
+    for(item in slidingBeyondPieces){
+        if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack)) || slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite))){
+            // for(slidingBeyondPieces)
+            getCannotBlockDark();
+            getcannotblockLight();
+            console.log("test");
+        }
+    }
 
     console.log(e.target);
 
@@ -2027,48 +2135,52 @@ async function drop(e) {
                 direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
                 // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
                 
-                for(item in slidingBeyondPieces){
-                    loop2:
-                    if(item[0] == item[0].toUpperCase()){
-                        slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
-                        if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack))){
-                            let thisString = item.split("-");
-                            let myString = `${thisString[0]}-${thisString[1]}`
-                            for(object of currentThreatOnKing){
-                                if(object == myString){
-                                    break loop2;
-                                }
-                            }
-                            let kingAlliesBetweenThisPiece = [];
-                            
-                            for(element of slidingBeyondPieces[item]){
-                                // if(element == parseInt(tileOfKingBlack)) break;
-                                if(direction1.includes(thisString[2])){
-                                    if(element < parseInt(tileOfKingBlack)){
-                                        let thisTile = document.getElementById(`${element}`);
-                                        let child = thisTile.children[0];
-                                        if(child != undefined && child.classList.contains('darkPiece')){
-                                            kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                        }
-                                    }
-                                }else{
-                                    if(element > parseInt(tileOfKingBlack)){
-                                        let thisTile = document.getElementById(`${element}`);
-                                        let child = thisTile.children[0];
-                                        if(child != undefined && child.classList.contains('darkPiece')){
-                                            kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                        }
-                                    }
-                                }
-                            }
-                            if(kingAlliesBetweenThisPiece.length == 1){
-                                cannotBlock.push(kingAlliesBetweenThisPiece[0]);
-                            }else{
-                                console.log("test");
-                            }
-                        }
-                    }
-                }
+                // function getCannotBlock(){
+                //     for(item in slidingBeyondPieces){
+                //         loop2:
+                //         if(item[0] == item[0].toUpperCase()){
+                //             slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
+                //             if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack))){
+                //                 let thisString = item.split("-");
+                //                 let myString = `${thisString[0]}-${thisString[1]}`
+                //                 for(object of currentThreatOnKing){
+                //                     if(object == myString){
+                //                         break loop2;
+                //                     }
+                //                 }
+                //                 let kingAlliesBetweenThisPiece = [];
+                                
+                //                 for(element of slidingBeyondPieces[item]){
+                //                     // if(element == parseInt(tileOfKingBlack)) break;
+                //                     if(direction1.includes(thisString[2])){
+                //                         if(element < parseInt(tileOfKingBlack)){
+                //                             let thisTile = document.getElementById(`${element}`);
+                //                             let child = thisTile.children[0];
+                //                             if(child != undefined && child.classList.contains('darkPiece')){
+                //                                 kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                //                             }
+                //                         }
+                //                     }else{
+                //                         if(element > parseInt(tileOfKingBlack)){
+                //                             let thisTile = document.getElementById(`${element}`);
+                //                             let child = thisTile.children[0];
+                //                             if(child != undefined && child.classList.contains('darkPiece')){
+                //                                 kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                //                             }
+                //                         }
+                //                     }
+                //                 }
+                //                 if(kingAlliesBetweenThisPiece.length == 1){
+                //                     cannotBlock.push(kingAlliesBetweenThisPiece[0]);
+                //                 }else{
+                //                     console.log("test");
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+
+                getCannotBlockDark();
     
                 // check if sliding moves directed at king can be blocked
                 // let blockedThreat = [];
@@ -2364,57 +2476,57 @@ async function drop(e) {
                 // check if sliding moves directed at king can be blocked
 
                 // let blockedThreat = [];
-                // function getcannotblock(){
-                    for(item in threateningPiece){
-                        // loop1:
-                        if(item[0] != item[0].toUpperCase()){
-                            if(threateningPiece[item].includes(parseInt(tileOfKingWhite))){
-                                for(value of threateningPiece[item]){
-                                    for(object in currentTilesOnThreat){
-                                        let objectString = object.split("-");
-                                        if(object[0] == object[0].toUpperCase()){
-                                            if(object[0] == "P"){
-                                                if(pawnNonCaptureMoves["P"].includes(value)){
-                                                    // blockedThreat += 1;
-                                                    blockedThreat.push(item);
-                                                    canBlock.push(`${parseInt(value)+8}`);
-                                                    // blockedThreat = [...new Set(blockedThreat)];
-                                                    for(element of cannotBlock){
-                                                        if(element == object){
-                                                            // blockedThreat -= 1;
-                                                            // blockedThreat = [...new Set(blockedThreat)];
-                                                            let itemIndex = blockedThreat.indexOf(item);
-                                                            blockedThreat.splice(itemIndex, 1);
-                                                        }
-                                                    }
-                                                    // break loop1;
-                                                }
+                // function getcannotblockLight(){
+                //     for(item in threateningPiece){
+                //         // loop1:
+                //         if(item[0] != item[0].toUpperCase()){
+                //             if(threateningPiece[item].includes(parseInt(tileOfKingWhite))){
+                //                 for(value of threateningPiece[item]){
+                //                     for(object in currentTilesOnThreat){
+                //                         let objectString = object.split("-");
+                //                         if(object[0] == object[0].toUpperCase()){
+                //                             if(object[0] == "P"){
+                //                                 if(pawnNonCaptureMoves["P"].includes(value)){
+                //                                     // blockedThreat += 1;
+                //                                     blockedThreat.push(item);
+                //                                     canBlock.push(`${parseInt(value)+8}`);
+                //                                     // blockedThreat = [...new Set(blockedThreat)];
+                //                                     for(element of cannotBlock){
+                //                                         if(element == object){
+                //                                             // blockedThreat -= 1;
+                //                                             // blockedThreat = [...new Set(blockedThreat)];
+                //                                             let itemIndex = blockedThreat.indexOf(item);
+                //                                             blockedThreat.splice(itemIndex, 1);
+                //                                         }
+                //                                     }
+                //                                     // break loop1;
+                //                                 }
                                                 
-                                            }else{
-                                                if(currentTilesOnThreat[object].includes(value) && object[0] != "K"){
-                                                    // blockedThreat += 1;
-                                                    blockedThreat.push(item);
-                                                    canBlock.push(objectString[1]);
-                                                    // blockedThreat = [...new Set(blockedThreat)];
-                                                    for(element of cannotBlock){
-                                                        if(element == object){
-                                                            // blockedThreat -= 1;
-                                                            // blockedThreat = [...new Set(blockedThreat)];
-                                                            let itemIndex = blockedThreat.indexOf(item);
-                                                            blockedThreat.splice(itemIndex, 1);
-                                                        }
-                                                    }
-                                                    // break loop1;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    // }
-                }
-                // getcannotblock();
+                //                             }else{
+                //                                 if(currentTilesOnThreat[object].includes(value) && object[0] != "K"){
+                //                                     // blockedThreat += 1;
+                //                                     blockedThreat.push(item);
+                //                                     canBlock.push(objectString[1]);
+                //                                     // blockedThreat = [...new Set(blockedThreat)];
+                //                                     for(element of cannotBlock){
+                //                                         if(element == object){
+                //                                             // blockedThreat -= 1;
+                //                                             // blockedThreat = [...new Set(blockedThreat)];
+                //                                             let itemIndex = blockedThreat.indexOf(item);
+                //                                             blockedThreat.splice(itemIndex, 1);
+                //                                         }
+                //                                     }
+                //                                     // break loop1;
+                //                                 }
+                //                             }
+                //                         }
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     // }
+                // }
+                getcannotblockLight();
     
                 let canBeCaptured = [];
                 
