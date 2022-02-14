@@ -389,6 +389,8 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
     // let bottomEdge = [1, 6, 7];
     // let leftEdge = [3, 5, 7, 9];
     let descending = [0,3,5,4];
+
+    
     
     
     // highlight legal moves
@@ -640,6 +642,7 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
             }
         }
 
+        
         for(j = 0; j < pieceMovement.length; j++){
             if(checking && piece == "K"){
                 // console.log('test')
@@ -649,6 +652,19 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                 continue;
             }
             let validMove = parseInt(_homeTile)+pieceMovement[j];
+            if(canCapture.includes(`${piece}-${_homeTile}`)){
+                for(object in threateningPiece){
+                    let objectString = object.split("-");
+                    if(parseInt(objectString[1]) == validMove){
+                        tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
+                        tiles[validMove].style.backgroundColor = highlightColor;
+                        continue;
+                    }else{
+                        continue;
+                    }
+                }
+                continue;
+            }
 
             if(validMove < 0){
                 continue;
