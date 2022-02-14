@@ -304,6 +304,10 @@ let canCapture = [];
 
 let canCaptureTile = [];
 
+let blockedThreat = [];
+
+let canBlock = [];
+
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -1729,7 +1733,6 @@ async function drop(e) {
                     }
 
                     
-                    
                     checked = true;
                     checkedColor = "Black";
                 }
@@ -1887,7 +1890,7 @@ async function drop(e) {
                 }
     
                 // check if sliding moves directed at king can be blocked
-                let blockedThreat = [];
+                // let blockedThreat = [];
                 for(item in threateningPiece){
                     // loop1:
                     if(item[0] == item[0].toUpperCase()){
@@ -1895,11 +1898,13 @@ async function drop(e) {
                             for(value of threateningPiece[item]){
                                 // loop1:
                                 for(object in currentTilesOnThreat){
+                                    let objectString = object.split("-");
                                     if(object[0] != object[0].toUpperCase()){
                                         if(object[0] == "p"){
                                             if(pawnNonCaptureMoves["p"].includes(value)){
                                                 // blockedThreat += 1;
                                                 blockedThreat.push(item);
+                                                canBlock.push(`${parseInt(value)-8}`);
                                                 // blockedThreat = [...new Set(blockedThreat)];
                                                 for(element of cannotBlock){
                                                     if(element == object){
@@ -1916,6 +1921,7 @@ async function drop(e) {
                                             if(currentTilesOnThreat[object].includes(value) && object[0] != "k"){
                                                 // blockedThreat += 1;
                                                 blockedThreat.push(item);
+                                                canBlock.push(objectString[1]);
                                                 // blockedThreat = [...new Set(blockedThreat)];
                                                 for(element of cannotBlock){
                                                     if(element == object){
@@ -1991,7 +1997,7 @@ async function drop(e) {
                 //     }
                 // }
                 kingNextMovements.forEach(allMovesCheck);
-                
+                breakme:
                 if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                     console.log("test")
     
@@ -2001,13 +2007,14 @@ async function drop(e) {
                     blockedThreat = [...new Set(blockedThreat)];
                     canBeCaptured = [...new Set(canBeCaptured)];
     
-                    if(threatsOnKing == blockedThreat.length) return;
-                    if(threatsOnKing == canBeCaptured.length) return;
+                    if(threatsOnKing == blockedThreat.length) break breakme;
+                    if(threatsOnKing == canBeCaptured.length) break breakme;
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king has been checkmated`;
                     checked = true;
                     winnerMsg.style.display = "flex";
                     whiteWin.style.display = "block";
+                   
                 }else{
                     // kingNextMovements.forEach(allMovesCheck);
                     noDuplicateSafeTiles = [...new Set(safeTiles)];
@@ -2025,8 +2032,8 @@ async function drop(e) {
                     canBeCaptured = [...new Set(canBeCaptured)];
     
                     if(noDuplicateSafeTiles.length == 0){
-                        if(threatsOnKing == blockedThreat.length) return;
-                        if(threatsOnKing == canBeCaptured.length) return;
+                        if(threatsOnKing == blockedThreat.length) break breakme;
+                        if(threatsOnKing == canBeCaptured.length) break breakme;
                         let checkInfo = document.querySelector(".checkInfo")
                         checkInfo.innerHTML = `Black king has been checkmated`;
                         checked = true;
@@ -2040,12 +2047,11 @@ async function drop(e) {
                     let tile = darkPieces[i].parentElement.id;
                     // darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
                     
-                    if(canCaptureTile.includes(tile)){
+                    if(canCaptureTile.includes(tile) || canBlock.includes(tile)){
                         darkPieces[i].setAttribute("draggable", "true");
                         darkPieces[i].setAttribute("ondragstart", "drag(event)");
                         darkPieces[i].setAttribute("ondragover", "dropAllow(event)");
                     }
-    
                 }
             }
         }else{
@@ -2333,6 +2339,7 @@ async function drop(e) {
             unsafeTiles = [];
             canCapture = [];
             canCaptureTile = [];
+            canBlock = [];
             console.log("!checked");
     }
 }
