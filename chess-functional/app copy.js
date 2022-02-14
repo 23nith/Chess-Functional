@@ -182,12 +182,6 @@ async function undo(){
     } else {
         throw new Error(`Invalid Color Value:`, ERROR_TRACE);
     }
-    if(typeof fillUpTilesOnThreat == 'function'){
-        fillUpTilesOnThreat();
-    }
-    if(typeof checkIfCheckmate == 'function'){
-        checkIfCheckmate(turn);
-    }
 }
 
 function getFEN(){
@@ -310,13 +304,6 @@ let canCapture = [];
 
 let canCaptureTile = [];
 
-let blockedThreat = [];
-
-let canBlock = [];
-
-let tileOfKingBlack;
-let tileOfKingWhite;
-
 const boardTopEdge = [0, 1, 2, 3, 4 , 5, 6, 7];
 const boardRightEdge = [7, 15, 23, 31, 39, 47, 55, 63];
 const boardBottomEdge = [56, 57, 58, 59, 60, 61, 62, 63];
@@ -398,13 +385,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
     // let bottomEdge = [1, 6, 7];
     // let leftEdge = [3, 5, 7, 9];
     let descending = [0,3,5,4];
-
-    if(checkedColor == "Black" && unsafeTiles.length != 0){
-        document.getElementById(tileOfKingBlack).style.backgroundColor = highlightCheckMove;
-    }
-    if(checkedColor == "White" && unsafeTiles.length != 0){
-        document.getElementById(tileOfKingWhite).style.backgroundColor = highlightCheckMove;
-    }
     
     
     // highlight legal moves
@@ -423,20 +403,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
         // Pawn pieces variouss behavior
         if(piece == "P" || piece == "p"){
-
-            if(canBlock.includes(_homeTile)){
-                if(piece == "p"){
-                    let validMove = parseInt(_homeTile) + 8;
-                    tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                    tiles[validMove].style.backgroundColor = highlightColor;
-                    return;
-                }else if(piece == "P"){
-                    let validMove = parseInt(_homeTile) - 8;
-                    tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                    tiles[validMove].style.backgroundColor = highlightColor;
-                }
-            }
-
             let pieceClass = new Piece();
 
             
@@ -536,7 +502,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
         // King's highlight for castling
         if (piece === "K" || piece === "k") {
-            console.log("test");
 
             if (piece === "K") {
                 // White's king
@@ -671,7 +636,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
             }
         }
 
-        
         for(j = 0; j < pieceMovement.length; j++){
             if(checking && piece == "K"){
                 // console.log('test')
@@ -681,67 +645,6 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                 continue;
             }
             let validMove = parseInt(_homeTile)+pieceMovement[j];
-            
-            if(piece == "k" ){
-                if(canCapture.includes(`${piece}-${_homeTile}`)){
-                    for(object in threateningPiece){
-                        let objectString = object.split("-");
-                        if(parseInt(objectString[1]) == validMove && object[0] == object[0].toUpperCase()){
-                            tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                            tiles[validMove].style.backgroundColor = highlightColor;
-                            // continue;
-                        }else{
-                            continue;
-                        }
-                    }
-                }
-            }else if(piece == "K"){
-                if(canCapture.includes(`${piece}-${_homeTile}`)){
-                    for(object in threateningPiece){
-                        let objectString = object.split("-");
-                        if(parseInt(objectString[1]) == validMove && object[0] != object[0].toUpperCase()){
-                            tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                            tiles[validMove].style.backgroundColor = highlightColor;
-                            // continue;
-                        }else{
-                            continue;
-                        }
-                    }
-                    // continue;
-                }
-            }else{
-                // if(piece != "P" && piece != "p"){
-                    if(canCapture.includes(`${piece}-${_homeTile}`)){
-                        for(object in threateningPiece){
-                            let objectString = object.split("-");
-                            // if(currentThreatOnKing.includes(`${objectString[0]}-${objectString[1]}`))
-                            // if(parseInt(objectString[1]) == validMove && object[0] != object[0].toUpperCase()){
-                            if(parseInt(objectString[1]) == validMove && currentThreatOnKing.includes(`${objectString[0]}-${objectString[1]}`)){
-                                tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                                tiles[validMove].style.backgroundColor = highlightColor;
-                                continue;
-                            }else{
-                                continue;
-                            }
-                        }
-                        continue;
-                    }
-
-                // }
-            }
-
-            if(canBlock.includes(_homeTile)){
-                for(object of blockedThreat){
-                    
-                    if(threateningPiece[object] != undefined && Object.keys(threateningPiece).length != 0 && threateningPiece[object].includes(validMove)){
-                        tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                        tiles[validMove].style.backgroundColor = highlightColor;
-                        break;
-                    }
-                    
-                }
-                continue;
-            }
 
             if(validMove < 0){
                 continue;
@@ -814,56 +717,10 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     if((piece == "k" || piece == "K" ) && (unsafeTiles.length != 0) && (unsafeTiles.includes(validMove)) ){
                         tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
                         tiles[validMove].style.backgroundColor = highlightCheckMove;
-
                     }else{
                         tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
                         // tiles[validMove].style.backgroundColor = "#F91F15";
                         tiles[validMove].style.backgroundColor = highlightColor;
-
-                    }
-                    if(piece == "K"){
-                        for(object in threateningPiece){
-                            if(threateningPiece[object].includes(parseInt(validMove)) && (object[0] != object[0].toUpperCase())){
-                                tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
-                                tiles[validMove].style.backgroundColor = highlightCheckMove;
-                                break;
-                            }
-                        }
-                        let threatDirection;
-                        for(object in threateningPiece){
-                            if(threateningPiece[object].includes(parseInt(_homeTile))){
-                                threatDirection = object;
-                            }
-                        }
-                        for(object in slidingBeyondPieces){
-                            if(slidingBeyondPieces[object].includes(parseInt(validMove)) && (object == threatDirection)){
-                                tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
-                                tiles[validMove].style.backgroundColor = highlightCheckMove;
-                                break;
-                            }
-                        }
-
-                    }else if(piece == "k"){
-                        for(object in threateningPiece){
-                            if(threateningPiece[object].includes(parseInt(validMove)) && (object[0] == object[0].toUpperCase())){
-                                tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
-                                tiles[validMove].style.backgroundColor = highlightCheckMove;
-                                break;
-                            }
-                        }
-                        let threatDirection;
-                        for(object in threateningPiece){
-                            if(threateningPiece[object].includes(parseInt(_homeTile))){
-                                threatDirection = object;
-                            }
-                        }
-                        for(object in slidingBeyondPieces){
-                            if(slidingBeyondPieces[object].includes(parseInt(validMove)) && (object == threatDirection)){
-                                tiles[validMove].setAttribute("ondragover", "removeDrop(event)");
-                                tiles[validMove].style.backgroundColor = highlightCheckMove;
-                                break;
-                            }
-                        }
                     }
                     
                 }
@@ -1233,113 +1090,6 @@ function addDragFeatureLight(someNodeList){
     }
 }
 
-function fillUpTilesOnThreat(){
-    currentTilesOnThreat = [];
-    tiles = document.querySelectorAll(".container div");
-    for(x = 0; x < 64; x++){
-        if(tiles[x].children[0]){
-            let currentPieceToEvaluate = tiles[x].children[0].id[0];
-            let pieceObj = new Piece();
-            let currentPiece = pieceObj.generatePiece(currentPieceToEvaluate);
-            highlightTiles(tiles[x].id, currentPiece.movement, currentPiece.sliding, currentPiece.code, true);
-            // console.log("stop")
-        }
-    }
-}
-
-function getCannotBlockDark(){
-    direction1 = ["South", "East", "SouthEast", "SouthWest"]
-    for(item in slidingBeyondPieces){
-        loop2:
-        if(item[0] == item[0].toUpperCase()){
-            slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
-            if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack))){
-                let thisString = item.split("-");
-                let myString = `${thisString[0]}-${thisString[1]}`
-                for(object of currentThreatOnKing){
-                    if(object == myString){
-                        break loop2;
-                    }
-                }
-                let kingAlliesBetweenThisPiece = [];
-                
-                for(element of slidingBeyondPieces[item]){
-                    // if(element == parseInt(tileOfKingBlack)) break;
-                    if(direction1.includes(thisString[2])){
-                        if(element < parseInt(tileOfKingBlack)){
-                            let thisTile = document.getElementById(`${element}`);
-                            let child = thisTile.children[0];
-                            if(child != undefined && child.classList.contains('darkPiece')){
-                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                            }
-                        }
-                    }else{
-                        if(element > parseInt(tileOfKingBlack)){
-                            let thisTile = document.getElementById(`${element}`);
-                            let child = thisTile.children[0];
-                            if(child != undefined && child.classList.contains('darkPiece')){
-                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                            }
-                        }
-                    }
-                }
-                if(kingAlliesBetweenThisPiece.length == 1){
-                    cannotBlock.push(kingAlliesBetweenThisPiece[0]);
-                }else{
-                    console.log("test");
-                }
-            }
-        }
-    }
-}
-
-function getcannotblockLight(){
-    direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
-                // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
-    
-    for(item in slidingBeyondPieces){
-        loop2:
-        if(item[0] != item[0].toUpperCase()){
-            slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
-            if(slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite))){
-                let thisString = item.split("-");
-                let myString = `${thisString[0]}-${thisString[1]}`
-                for(object of currentThreatOnKing){
-                    if(object == myString){
-                        break loop2;
-                    }
-                }
-                let kingAlliesBetweenThisPiece = [];
-
-                for(element of slidingBeyondPieces[item]){
-                    // if(element == parseInt(tileOfKingWhite)) break;
-                    if(direction1.includes(thisString[2])){
-                        if(element < parseInt(tileOfKingWhite)){
-                            let thisTile = document.getElementById(`${element}`);
-                            let child = thisTile.children[0];
-                            if(child != undefined && child.classList.contains('lightPiece')){
-                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                            }
-                        }
-                    }else{
-                        if(element > parseInt(tileOfKingWhite)){
-                            let thisTile = document.getElementById(`${element}`);
-                            let child = thisTile.children[0];
-                            if(child != undefined && child.classList.contains('lightPiece')){
-                                kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                            }
-                        }
-                    }
-                }
-                if(kingAlliesBetweenThisPiece.length == 1){
-                    cannotBlock.push(kingAlliesBetweenThisPiece[0]);
-                }
-            }
-        }
-    }
-    
-}
-
 //************************************************************************************** Drag and drop events **************************************************************************************
 
 let movable;
@@ -1354,14 +1104,6 @@ async function dropAllow(e) {
         e.target.setAttribute("ondragover", "removeDrop(e)");
     }
 
-    for(item in slidingBeyondPieces){
-        if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack)) || slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite))){
-            // for(slidingBeyondPieces)
-            getCannotBlockDark();
-            getcannotblockLight();
-            console.log("test");
-        }
-    }
     
 
     // Can King castles ?
@@ -1453,14 +1195,7 @@ async function dropAllow(e) {
 function drag(e) {
     e.dataTransfer.setData("text", e.target.id);
 
-    for(item in slidingBeyondPieces){
-        if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack)) || slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite))){
-            // for(slidingBeyondPieces)
-            getCannotBlockDark();
-            getcannotblockLight();
-            console.log("test");
-        }
-    }
+
 
     console.log(e.target);
 
@@ -1496,8 +1231,6 @@ async function drop(e) {
         return;
     }
     landed = e.target;
-
-    
 
     if (piece === "P" || piece === "p") {
         // Whites' pawn
@@ -1876,6 +1609,7 @@ async function drop(e) {
             thisTile.appendChild(e.target.children[0]);
             thisTile = document.getElementById(`${thisTileID}`);
             if(thisTile.children[1]){
+                console.log("test");
                 let container = document.createElement("div");
                 if(thisTile.children[0].classList.contains("lightPiece")){
                     blackCapturedHistory.push(thisTile.children[0].id[0]);
@@ -1952,7 +1686,6 @@ async function drop(e) {
         }
         slidingBeyondPieces = {};
     // fill up currentTilesOnThreat
-    function fillUpCurrentTilesOnThreat(){
         for(x = 0; x < 64; x++){
             if(tiles[x].children[0]){
                 let currentPieceToEvaluate = tiles[x].children[0].id[0];
@@ -1962,117 +1695,67 @@ async function drop(e) {
                 // console.log("stop")
             }
         }
-    }
-    fillUpCurrentTilesOnThreat();
     // console.log("currentTilesOnThreat: ", currentTilesOnThreat);
     let checked = false;
 
-    function checkIfCheckmate(whoseTurn){
-        
-        
-        let darkKing = document.querySelector("#k");
-        tileOfKingBlack = darkKing.parentElement.id;
-            // iterate thru currentTilesOnThreat
-        for(item in currentTilesOnThreat){
-            // compare against possible capture of lightpieces
-            if(item == item.toUpperCase()){
-                if(currentTilesOnThreat[item].includes(parseInt(tileOfKingBlack))){
-                    // console.log("check");
-                    let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `Black king is checked`;
-
-                    document.getElementById(tileOfKingBlack).style.backgroundColor = highlightCheckMove;
-                    
-                    darkPieces = document.querySelectorAll(".darkPiece");
-                    removeDragFeatureDark(darkPieces)
-
-                    document.getElementById(`${tileOfKingBlack}`).children[0].setAttribute("draggable", "true");
-                    document.getElementById(`${tileOfKingBlack}`).children[0].setAttribute("ondragstart", "drag(event)");
-                    document.getElementById(`${tileOfKingBlack}`).children[0].setAttribute("ondragover", "dropAllow(event)");
-
-                    
-                    for(i = 0; i < darkPieces.length; i++){
-                        darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                    }
-
-                    for(i = 0; i < lightPieces.length; i++){
-                        lightPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                    }
-
-                    
-                    checked = true;
-                    checkedColor = "Black";
-                }
-            }
-        }
-
-
-        let lightKing = document.querySelector("#K");
-        tileOfKingWhite = lightKing.parentElement.id;
-        // iterate thru currentTilesOnThreat
-        for(item in currentTilesOnThreat){
-            // compare against possible capture of darkpieces
-            if(item != item.toUpperCase()){
-                if(currentTilesOnThreat[item].includes(parseInt(tileOfKingWhite))){
-                    // console.log("check");
-                    let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `White king is checked`;
-
-                    //
-                    document.getElementById(tileOfKingWhite).style.backgroundColor = highlightCheckMove;
-                    
-                    lightPieces = document.querySelectorAll(".lightPiece");
-                    removeDragFeatureLight(lightPieces)
-
-                    document.getElementById(`${tileOfKingWhite}`).children[0].setAttribute("draggable", "true");
-                    document.getElementById(`${tileOfKingWhite}`).children[0].setAttribute("ondragstart", "drag(event)");
-                    document.getElementById(`${tileOfKingWhite}`).children[0].setAttribute("ondragover", "dropAllow(event)");
-
-                    
-                    for(i = 0; i < lightPieces.length; i++){
-                        lightPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                    }
-
-                    for(i = 0; i < lightPieces.length; i++){
-                        darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                    }
-                    //
-
-
-                    checked = true;
-                    checkedColor = "White";
-                    break;
-                }
-            }
-        }
-        
-        
-        
+    function checkIfCheckmate(){
         // if piece is lightpiece
-        // if(piece == piece.toUpperCase()){
-        if(checkedColor == "Black" || whoseTurn == "darkPiece"){
+        if(piece == piece.toUpperCase()){
             // lightpiece
             // console.log("lightpiece moved");
             // get tile of darkpiece king
-            
+            let darkKing = document.querySelector("#k");
+            let tileOfKing = darkKing.parentElement.id;
+            // iterate thru currentTilesOnThreat
+            for(item in currentTilesOnThreat){
+                // compare against possible capture of lightpieces
+                if(item == item.toUpperCase()){
+                    if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
+                        // console.log("check");
+                        let checkInfo = document.querySelector(".checkInfo")
+                        checkInfo.innerHTML = `Black king is checked`;
+                        
+                        darkPieces = document.querySelectorAll(".darkPiece");
+                        removeDragFeatureDark(darkPieces)
     
-            if(checked == true || whoseTurn == "darkPieces"){
+                        document.getElementById(`${tileOfKing}`).children[0].setAttribute("draggable", "true");
+                        document.getElementById(`${tileOfKing}`).children[0].setAttribute("ondragstart", "drag(event)");
+                        document.getElementById(`${tileOfKing}`).children[0].setAttribute("ondragover", "dropAllow(event)");
+    
+                        
+                        for(i = 0; i < darkPieces.length; i++){
+                            darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
+                        }
+    
+                        for(i = 0; i < lightPieces.length; i++){
+                            lightPieces[i].setAttribute("ondragover", "removeDrop(e)");
+                        }
+    
+                        
+                        
+                        checked = true;
+                        checkedColor = "Black";
+                    }
+                }
+            }
+    
+            if(checked == true){
                 
             
                 // check if king is at one of the board edges
                 let movements = [-8, 8, 1, -1, -7, -9, 9, 7]
                 let exemption = [];
-                if(boardEdges.includes(parseInt(tileOfKingBlack))){
-                    if(boardTopEdge.includes(parseInt(tileOfKingBlack))){
+                if(boardEdges.includes(parseInt(tileOfKing))){
+                    if(boardTopEdge.includes(parseInt(tileOfKing))){
                         exemption.push(...topEdge);
                     }
-                    if(boardRightEdge.includes(parseInt(tileOfKingBlack))){
+                    if(boardRightEdge.includes(parseInt(tileOfKing))){
                         exemption.push(...rightEdge);
                     }
-                    if(boardBottomEdge.includes(parseInt(tileOfKingBlack))){
+                    if(boardBottomEdge.includes(parseInt(tileOfKing))){
                         exemption.push(...bottomEdge);
                     }
-                    if(boardLeftEdge.includes(parseInt(tileOfKingBlack))){
+                    if(boardLeftEdge.includes(parseInt(tileOfKing))){
                         exemption.push(...leftEdge);
                     }
                 }
@@ -2080,10 +1763,10 @@ async function drop(e) {
                 // get the actual tile numbers of kings next movement relative to its hometile
                 let kingNextMovements = movements.map((item)=>{
                     // console.log("movement item: ", item);
-                    // console.log("new item: ", parseInt(tileOfKingBlack) + item);
-                    let tileNumber = parseInt(tileOfKingBlack) + item;
+                    // console.log("new item: ", parseInt(tileOfKing) + item);
+                    let tileNumber = parseInt(tileOfKing) + item;
                     if((tileNumber >= 0) && (tileNumber < 64)){
-                        return parseInt(tileOfKingBlack) + item;
+                        return parseInt(tileOfKing) + item;
                     }else{
                         return
                     }
@@ -2122,7 +1805,7 @@ async function drop(e) {
                 let threatsOnKing = 0;
                 for(item in currentTilesOnThreat){
                     if(item[0] == item[0].toUpperCase()){
-                        if(currentTilesOnThreat[item].includes(parseInt(tileOfKingBlack))){
+                        if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
                             threatsOnKing += 1;
                             currentThreatOnKing.push(item);
                         }
@@ -2135,69 +1818,61 @@ async function drop(e) {
                 direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
                 // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
                 
-                // function getCannotBlock(){
-                //     for(item in slidingBeyondPieces){
-                //         loop2:
-                //         if(item[0] == item[0].toUpperCase()){
-                //             slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
-                //             if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack))){
-                //                 let thisString = item.split("-");
-                //                 let myString = `${thisString[0]}-${thisString[1]}`
-                //                 for(object of currentThreatOnKing){
-                //                     if(object == myString){
-                //                         break loop2;
-                //                     }
-                //                 }
-                //                 let kingAlliesBetweenThisPiece = [];
-                                
-                //                 for(element of slidingBeyondPieces[item]){
-                //                     // if(element == parseInt(tileOfKingBlack)) break;
-                //                     if(direction1.includes(thisString[2])){
-                //                         if(element < parseInt(tileOfKingBlack)){
-                //                             let thisTile = document.getElementById(`${element}`);
-                //                             let child = thisTile.children[0];
-                //                             if(child != undefined && child.classList.contains('darkPiece')){
-                //                                 kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                //                             }
-                //                         }
-                //                     }else{
-                //                         if(element > parseInt(tileOfKingBlack)){
-                //                             let thisTile = document.getElementById(`${element}`);
-                //                             let child = thisTile.children[0];
-                //                             if(child != undefined && child.classList.contains('darkPiece')){
-                //                                 kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                //                             }
-                //                         }
-                //                     }
-                //                 }
-                //                 if(kingAlliesBetweenThisPiece.length == 1){
-                //                     cannotBlock.push(kingAlliesBetweenThisPiece[0]);
-                //                 }else{
-                //                     console.log("test");
-                //                 }
-                //             }
-                //         }
-                //     }
-                // }
-
-                getCannotBlockDark();
+                for(item in slidingBeyondPieces){
+                    loop2:
+                    if(item[0] == item[0].toUpperCase()){
+                        slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
+                        if(slidingBeyondPieces[item].includes(parseInt(tileOfKing))){
+                            let thisString = item.split("-");
+                            let myString = `${thisString[0]}-${thisString[1]}`
+                            for(object of currentThreatOnKing){
+                                if(object == myString){
+                                    break loop2;
+                                }
+                            }
+                            let kingAlliesBetweenThisPiece = [];
+                            
+                            for(element of slidingBeyondPieces[item]){
+                                // if(element == parseInt(tileOfKing)) break;
+                                if(direction1.includes(thisString[2])){
+                                    if(element < parseInt(tileOfKing)){
+                                        let thisTile = document.getElementById(`${element}`);
+                                        let child = thisTile.children[0];
+                                        if(child != undefined && child.classList.contains('darkPiece')){
+                                            kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                                        }
+                                    }
+                                }else{
+                                    if(element > parseInt(tileOfKing)){
+                                        let thisTile = document.getElementById(`${element}`);
+                                        let child = thisTile.children[0];
+                                        if(child != undefined && child.classList.contains('darkPiece')){
+                                            kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
+                                        }
+                                    }
+                                }
+                            }
+                            if(kingAlliesBetweenThisPiece.length == 1){
+                                cannotBlock.push(kingAlliesBetweenThisPiece[0]);
+                            }
+                        }
+                    }
+                }
     
                 // check if sliding moves directed at king can be blocked
-                // let blockedThreat = [];
+                let blockedThreat = [];
                 for(item in threateningPiece){
                     // loop1:
                     if(item[0] == item[0].toUpperCase()){
-                        if(threateningPiece[item].includes(parseInt(tileOfKingBlack))){
+                        if(threateningPiece[item].includes(parseInt(tileOfKing))){
                             for(value of threateningPiece[item]){
                                 // loop1:
                                 for(object in currentTilesOnThreat){
-                                    let objectString = object.split("-");
                                     if(object[0] != object[0].toUpperCase()){
                                         if(object[0] == "p"){
                                             if(pawnNonCaptureMoves["p"].includes(value)){
                                                 // blockedThreat += 1;
                                                 blockedThreat.push(item);
-                                                canBlock.push(`${parseInt(value)-8}`);
                                                 // blockedThreat = [...new Set(blockedThreat)];
                                                 for(element of cannotBlock){
                                                     if(element == object){
@@ -2214,7 +1889,6 @@ async function drop(e) {
                                             if(currentTilesOnThreat[object].includes(value) && object[0] != "k"){
                                                 // blockedThreat += 1;
                                                 blockedThreat.push(item);
-                                                canBlock.push(objectString[1]);
                                                 // blockedThreat = [...new Set(blockedThreat)];
                                                 for(element of cannotBlock){
                                                     if(element == object){
@@ -2290,31 +1964,30 @@ async function drop(e) {
                 //     }
                 // }
                 kingNextMovements.forEach(allMovesCheck);
-                breakme:
+                
                 if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
                     console.log("test")
     
                     unsafeTiles = [...new Set(unsafeTiles)];
-                    // console.log(unsafeTiles);
+                    console.log(unsafeTiles);
     
                     blockedThreat = [...new Set(blockedThreat)];
                     canBeCaptured = [...new Set(canBeCaptured)];
     
-                    if(threatsOnKing == blockedThreat.length) break breakme;
-                    if(threatsOnKing == canBeCaptured.length) break breakme;
+                    if(threatsOnKing == blockedThreat.length) return;
+                    if(threatsOnKing == canBeCaptured.length) return;
                     let checkInfo = document.querySelector(".checkInfo")
                     checkInfo.innerHTML = `Black king has been checkmated`;
                     checked = true;
                     winnerMsg.style.display = "flex";
                     whiteWin.style.display = "block";
-                   
                 }else{
                     // kingNextMovements.forEach(allMovesCheck);
                     noDuplicateSafeTiles = [...new Set(safeTiles)];
                     for([index, tile] of noDuplicateSafeTiles.entries()){
                         for(item in slidingBeyondPieces){
                             if(item[0] == item[0].toUpperCase()){
-                                if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack)) && slidingBeyondPieces[item].includes(tile)){
+                                if(slidingBeyondPieces[item].includes(parseInt(tileOfKing)) && slidingBeyondPieces[item].includes(tile)){
                                     noDuplicateSafeTiles.splice(index, 1);
                                 }
                             }
@@ -2325,8 +1998,8 @@ async function drop(e) {
                     canBeCaptured = [...new Set(canBeCaptured)];
     
                     if(noDuplicateSafeTiles.length == 0){
-                        if(threatsOnKing == blockedThreat.length) break breakme;
-                        if(threatsOnKing == canBeCaptured.length) break breakme;
+                        if(threatsOnKing == blockedThreat.length) return;
+                        if(threatsOnKing == canBeCaptured.length) return;
                         let checkInfo = document.querySelector(".checkInfo")
                         checkInfo.innerHTML = `Black king has been checkmated`;
                         checked = true;
@@ -2340,36 +2013,54 @@ async function drop(e) {
                     let tile = darkPieces[i].parentElement.id;
                     // darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
                     
-                    if(canCaptureTile.includes(tile) || canBlock.includes(tile)){
+                    if(canCaptureTile.includes(tile)){
                         darkPieces[i].setAttribute("draggable", "true");
                         darkPieces[i].setAttribute("ondragstart", "drag(event)");
                         darkPieces[i].setAttribute("ondragover", "dropAllow(event)");
                     }
+    
                 }
             }
-        }else if(checkedColor == "White" || whoseTurn == "lightPiece"){
+        }else{
             // let checked = false;
             // darkpiece
             // console.log("darkpiece moved");
             // get tile of darkpiece king
 
-
+            
+            let lightKing = document.querySelector("#K");
+            let tileOfKing = lightKing.parentElement.id;
+            // iterate thru currentTilesOnThreat
+            for(item in currentTilesOnThreat){
+                // compare against possible capture of darkpieces
+                if(item != item.toUpperCase()){
+                    if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
+                        // console.log("check");
+                        let checkInfo = document.querySelector(".checkInfo")
+                        checkInfo.innerHTML = `White king is checked`;
+                        checked = true;
+                        checkedColor = "White";
+                        break;
+                    }
+                }
+            }
+    
             if(checked == true){
     
                 // check if king is at one of the board edges
                 let movements = [-8, 8, 1, -1, -7, -9, 9, 7]
                 let exemption = [];
-                if(boardEdges.includes(parseInt(tileOfKingWhite))){
-                    if(boardTopEdge.includes(parseInt(tileOfKingWhite))){
+                if(boardEdges.includes(parseInt(tileOfKing))){
+                    if(boardTopEdge.includes(parseInt(tileOfKing))){
                         exemption.push(...topEdge);
                     }
-                    if(boardRightEdge.includes(parseInt(tileOfKingWhite))){
+                    if(boardRightEdge.includes(parseInt(tileOfKing))){
                         exemption.push(...rightEdge);
                     }
-                    if(boardBottomEdge.includes(parseInt(tileOfKingWhite))){
+                    if(boardBottomEdge.includes(parseInt(tileOfKing))){
                         exemption.push(...bottomEdge);
                     }
-                    if(boardLeftEdge.includes(parseInt(tileOfKingWhite))){
+                    if(boardLeftEdge.includes(parseInt(tileOfKing))){
                         exemption.push(...leftEdge);
                     }
                 }
@@ -2377,10 +2068,10 @@ async function drop(e) {
                 // get the actual tile numbers of kings next movement relative to its hometile
                 let kingNextMovements = movements.map((item)=>{
                     // console.log("movement item: ", item);
-                    // console.log("new item: ", parseInt(tileOfKingWhite) + item);
-                    let tileNumber = parseInt(tileOfKingWhite) + item;
+                    // console.log("new item: ", parseInt(tileOfKing) + item);
+                    let tileNumber = parseInt(tileOfKing) + item;
                     if((tileNumber >= 0) && (tileNumber < 64)){
-                        return parseInt(tileOfKingWhite) + item;
+                        return parseInt(tileOfKing) + item;
                     }else{
                         return
                     }
@@ -2418,7 +2109,7 @@ async function drop(e) {
                 let threatsOnKing = 0;
                 for(item in currentTilesOnThreat){
                     if(item[0] != item[0].toUpperCase()){
-                        if(currentTilesOnThreat[item].includes(parseInt(tileOfKingWhite))){
+                        if(currentTilesOnThreat[item].includes(parseInt(tileOfKing))){
                             threatsOnKing += 1;
                             currentThreatOnKing.push(item);
                         }
@@ -2434,8 +2125,7 @@ async function drop(e) {
                 for(item in slidingBeyondPieces){
                     loop2:
                     if(item[0] != item[0].toUpperCase()){
-                        slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
-                        if(slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite))){
+                        if(slidingBeyondPieces[item].includes(parseInt(tileOfKing))){
                             let thisString = item.split("-");
                             let myString = `${thisString[0]}-${thisString[1]}`
                             for(object of currentThreatOnKing){
@@ -2446,9 +2136,9 @@ async function drop(e) {
                             let kingAlliesBetweenThisPiece = [];
     
                             for(element of slidingBeyondPieces[item]){
-                                // if(element == parseInt(tileOfKingWhite)) break;
+                                // if(element == parseInt(tileOfKing)) break;
                                 if(direction1.includes(thisString[2])){
-                                    if(element < parseInt(tileOfKingWhite)){
+                                    if(element < parseInt(tileOfKing)){
                                         let thisTile = document.getElementById(`${element}`);
                                         let child = thisTile.children[0];
                                         if(child != undefined && child.classList.contains('lightPiece')){
@@ -2456,7 +2146,7 @@ async function drop(e) {
                                         }
                                     }
                                 }else{
-                                    if(element > parseInt(tileOfKingWhite)){
+                                    if(element > parseInt(tileOfKing)){
                                         let thisTile = document.getElementById(`${element}`);
                                         let child = thisTile.children[0];
                                         if(child != undefined && child.classList.contains('lightPiece')){
@@ -2474,705 +2164,11 @@ async function drop(e) {
     
     
                 // check if sliding moves directed at king can be blocked
-
-                // let blockedThreat = [];
-                // function getcannotblockLight(){
-                //     for(item in threateningPiece){
-                //         // loop1:
-                //         if(item[0] != item[0].toUpperCase()){
-                //             if(threateningPiece[item].includes(parseInt(tileOfKingWhite))){
-                //                 for(value of threateningPiece[item]){
-                //                     for(object in currentTilesOnThreat){
-                //                         let objectString = object.split("-");
-                //                         if(object[0] == object[0].toUpperCase()){
-                //                             if(object[0] == "P"){
-                //                                 if(pawnNonCaptureMoves["P"].includes(value)){
-                //                                     // blockedThreat += 1;
-                //                                     blockedThreat.push(item);
-                //                                     canBlock.push(`${parseInt(value)+8}`);
-                //                                     // blockedThreat = [...new Set(blockedThreat)];
-                //                                     for(element of cannotBlock){
-                //                                         if(element == object){
-                //                                             // blockedThreat -= 1;
-                //                                             // blockedThreat = [...new Set(blockedThreat)];
-                //                                             let itemIndex = blockedThreat.indexOf(item);
-                //                                             blockedThreat.splice(itemIndex, 1);
-                //                                         }
-                //                                     }
-                //                                     // break loop1;
-                //                                 }
-                                                
-                //                             }else{
-                //                                 if(currentTilesOnThreat[object].includes(value) && object[0] != "K"){
-                //                                     // blockedThreat += 1;
-                //                                     blockedThreat.push(item);
-                //                                     canBlock.push(objectString[1]);
-                //                                     // blockedThreat = [...new Set(blockedThreat)];
-                //                                     for(element of cannotBlock){
-                //                                         if(element == object){
-                //                                             // blockedThreat -= 1;
-                //                                             // blockedThreat = [...new Set(blockedThreat)];
-                //                                             let itemIndex = blockedThreat.indexOf(item);
-                //                                             blockedThreat.splice(itemIndex, 1);
-                //                                         }
-                //                                     }
-                //                                     // break loop1;
-                //                                 }
-                //                             }
-                //                         }
-                //                     }
-                //                 }
-                //             }
-                //         }
-                //     // }
-                // }
-                getcannotblockLight();
-    
-                let canBeCaptured = [];
-                
-    
-                // check if all threats can be captured by the defender
-                // loop1:
-                for(item of currentThreatOnKing){
-                    console.log(item);
-                    let arr = item.split("-");
-                    let newArr = arr.filter((item)=>{
-                        return !Number.isNaN(parseInt(item));
-                    })
-                    console.log(newArr);
-                    for(object in currentTilesOnThreat){
-                        if(object[0] == object[0].toUpperCase()){
-                            // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "K")){
-                            if(currentTilesOnThreat[object].includes(parseInt(newArr))){
-                                // canBeCaptured += 1;
-                                canBeCaptured.push(item);
-                                canCapture.push(object);
-                                let objectString = object.split("-");
-                                canCaptureTile.push(objectString[1]);
-                                // canBeCaptured = [...new Set(canBeCaptured)];
-                                if(object[0] == "K"){
-                                    for(thing in currentTilesOnThreat){
-                                        if(thing[0] != thing[0].toUpperCase()){
-                                            if(currentTilesOnThreat[thing].includes(parseInt(newArr))){ //check if king will be counter captured if it captured this piece
-                                                // canBeCaptured -= 1;
-                                                // canBeCaptured = [...new Set(canBeCaptured)];
-                                                let itemIndex = canBeCaptured.indexOf(item);
-                                                canBeCaptured.splice(itemIndex, 1);
-                                                // break loop1;
-                                            }
-                                        }
-                                    }
-                                }
-                                for(element of cannotBlock){
-                                    if(element == object){
-                                        // canBeCaptured = [...new Set(canBeCaptured)];
-                                        let itemIndex = canBeCaptured.indexOf(item);
-                                        canBeCaptured.splice(itemIndex, 1);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-    
-                // for(element of cannotBlock){
-                //     if(element == object){
-                //         // canBeCaptured = [...new Set(canBeCaptured)];
-                //         let itemIndex = canBeCaptured.indexOf(item);
-                //         canBeCaptured.splice(itemIndex, 1);
-                //     }
-                // }
-                kingNextMovements.forEach(allMovesCheck);
-                breakme:
-                if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
-                    console.log("test")
-                    // count the number of threats to the king
-                    unsafeTiles = [...new Set(unsafeTiles)];
-
-                    blockedThreat = [...new Set(blockedThreat)];
-                    canBeCaptured = [...new Set(canBeCaptured)];
-    
-                    if(threatsOnKing == blockedThreat.length) break breakme;
-                    if(threatsOnKing == canBeCaptured.length) break breakme;
-                    let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `White king has been checkmated`;
-                    checked = true;
-                    winnerMsg.style.display = "flex";
-                    blackWin.style.display = "block";
-    
-                }else{
-                    // kingNextMovements.forEach(allMovesCheck);
-                    noDuplicateSafeTiles = [...new Set(safeTiles)];
-                    for([index, tile] of noDuplicateSafeTiles.entries()){
-                        for(item in slidingBeyondPieces){
-                            if(item[0] != item[0].toUpperCase()){
-                                if(slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite)) && slidingBeyondPieces[item].includes(tile)){
-                                    noDuplicateSafeTiles.splice(index, 1);
-                                }
-                            }
-                        }
-                    }
-    
-                    blockedThreat = [...new Set(blockedThreat)];
-                    canBeCaptured = [...new Set(canBeCaptured)];
-    
-                    if(noDuplicateSafeTiles.length == 0){
-                        if(threatsOnKing == blockedThreat.length) break breakme;
-                        if(threatsOnKing == canBeCaptured.length) break breakme;
-                        let checkInfo = document.querySelector(".checkInfo")
-                        checkInfo.innerHTML = `White king has been checkmated`;
-                        checked = true;
-                        winnerMsg.style.display = "flex";
-                        blackWin.style.display = "block";
-                    }
-                }
-    
-                for(i = 0; i < lightPieces.length; i++){
-                    let tile = lightPieces[i].parentElement.id;
-                    // lightPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                    
-                    if(canCaptureTile.includes(tile) || canBlock.includes(tile)){
-                        lightPieces[i].setAttribute("draggable", "true");
-                        lightPieces[i].setAttribute("ondragstart", "drag(event)");
-                        lightPieces[i].setAttribute("ondragover", "dropAllow(event)");
-                    }
-                }
-            }
-        }
-    }
-
-    checkIfCheckmate();
-
-
-    if(!checked){
-            document.querySelector(".checkInfo").innerHTML = "";
-            unsafeTiles = [];
-            canCapture = [];
-            canCaptureTile = [];
-            canBlock = [];
-            console.log("!checked");
-            if(checkedColor == "Black"){
-                document.getElementById(tileOfKingBlack).style.backgroundColor = "rgba(0,0,0,0)";
-            }else if(checkedColor == "White"){
-                document.getElementById(tileOfKingWhite).style.backgroundColor = "rgba(0,0,0,0)";
-            }
-            checkedColor = "none";
-            returnTileColors()
-    }
-
-    
-}
-
-
-
-function checkIfCheckmate(whoseTurn){
-        
-        
-    let darkKing = document.querySelector("#k");
-    tileOfKingBlack = darkKing.parentElement.id;
-        // iterate thru currentTilesOnThreat
-    for(item in currentTilesOnThreat){
-        // compare against possible capture of lightpieces
-        if(item == item.toUpperCase()){
-            if(currentTilesOnThreat[item].includes(parseInt(tileOfKingBlack))){
-                // console.log("check");
-                let checkInfo = document.querySelector(".checkInfo")
-                checkInfo.innerHTML = `Black king is checked`;
-
-                document.getElementById(tileOfKingBlack).style.backgroundColor = highlightCheckMove;
-                
-                darkPieces = document.querySelectorAll(".darkPiece");
-                removeDragFeatureDark(darkPieces)
-
-                document.getElementById(`${tileOfKingBlack}`).children[0].setAttribute("draggable", "true");
-                document.getElementById(`${tileOfKingBlack}`).children[0].setAttribute("ondragstart", "drag(event)");
-                document.getElementById(`${tileOfKingBlack}`).children[0].setAttribute("ondragover", "dropAllow(event)");
-
-                
-                for(i = 0; i < darkPieces.length; i++){
-                    darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                }
-
-                for(i = 0; i < lightPieces.length; i++){
-                    lightPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                }
-
-                
-                checked = true;
-                checkedColor = "Black";
-            }
-        }
-    }
-
-
-    let lightKing = document.querySelector("#K");
-    tileOfKingWhite = lightKing.parentElement.id;
-    // iterate thru currentTilesOnThreat
-    for(item in currentTilesOnThreat){
-        // compare against possible capture of darkpieces
-        if(item != item.toUpperCase()){
-            if(currentTilesOnThreat[item].includes(parseInt(tileOfKingWhite))){
-                // console.log("check");
-                let checkInfo = document.querySelector(".checkInfo")
-                checkInfo.innerHTML = `White king is checked`;
-
-                //
-                document.getElementById(tileOfKingWhite).style.backgroundColor = highlightCheckMove;
-                    
-                lightPieces = document.querySelectorAll(".lightPiece");
-                removeDragFeatureLight(lightPieces)
-
-                document.getElementById(`${tileOfKingWhite}`).children[0].setAttribute("draggable", "true");
-                document.getElementById(`${tileOfKingWhite}`).children[0].setAttribute("ondragstart", "drag(event)");
-                document.getElementById(`${tileOfKingWhite}`).children[0].setAttribute("ondragover", "dropAllow(event)");
-
-                
-                for(i = 0; i < lightPieces.length; i++){
-                    lightPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                }
-
-                for(i = 0; i < darkPieces.length; i++){
-                    darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                }
-                //
-
-                checked = true;
-                checkedColor = "White";
-                break;
-            }
-        }
-    }
-    
-    
-    
-    // if piece is lightpiece
-    // if(piece == piece.toUpperCase()){
-    if(checkedColor == "Black" || whoseTurn == "darkPiece"){
-        // lightpiece
-        // console.log("lightpiece moved");
-        // get tile of darkpiece king
-        
-
-        if(checked == true || whoseTurn == "darkPieces"){
-            
-        
-            // check if king is at one of the board edges
-            let movements = [-8, 8, 1, -1, -7, -9, 9, 7]
-            let exemption = [];
-            if(boardEdges.includes(parseInt(tileOfKingBlack))){
-                if(boardTopEdge.includes(parseInt(tileOfKingBlack))){
-                    exemption.push(...topEdge);
-                }
-                if(boardRightEdge.includes(parseInt(tileOfKingBlack))){
-                    exemption.push(...rightEdge);
-                }
-                if(boardBottomEdge.includes(parseInt(tileOfKingBlack))){
-                    exemption.push(...bottomEdge);
-                }
-                if(boardLeftEdge.includes(parseInt(tileOfKingBlack))){
-                    exemption.push(...leftEdge);
-                }
-            }
-            
-            // get the actual tile numbers of kings next movement relative to its hometile
-            let kingNextMovements = movements.map((item)=>{
-                // console.log("movement item: ", item);
-                // console.log("new item: ", parseInt(tileOfKingBlack) + item);
-                let tileNumber = parseInt(tileOfKingBlack) + item;
-                if((tileNumber >= 0) && (tileNumber < 64)){
-                    return parseInt(tileOfKingBlack) + item;
-                }else{
-                    return
-                }
-            });
-
-            // check if all king's possible next move will be a potential capture by opponent
-            let safeTiles = []
-            
-            function allMovesCheck(nextMove, index){
-                if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
-                    for(item in currentTilesOnThreat){
-                        if(item[0] == item[0].toUpperCase()){
-                            if(currentTilesOnThreat[item].includes(nextMove)){
-                                unsafeTiles.push(nextMove);
-                                return true;
-                            }
-                        }
-                    }
-                    safeTiles.push(nextMove);
-                }else if(!exemption.includes(index) && tiles[nextMove].children[0].classList.contains("lightPiece")){ // if tile has ally piece
-                    for(item in currentTilesOnThreat){
-                        if(item[0] == item[0].toUpperCase()){
-                            if(currentTilesOnThreat[item].includes(nextMove)){
-                                unsafeTiles.push(nextMove);
-                                return true;
-                            }
-                        }
-                    }
-                    safeTiles.push(nextMove);
-                }else{
-                    return true; // if tile has foe piece it will not be part of the evaluation thus will always return true (not safe)
-                }
-            };
-
-            // count the number of threats to the king
-            let threatsOnKing = 0;
-            for(item in currentTilesOnThreat){
-                if(item[0] == item[0].toUpperCase()){
-                    if(currentTilesOnThreat[item].includes(parseInt(tileOfKingBlack))){
-                        threatsOnKing += 1;
-                        currentThreatOnKing.push(item);
-                    }
-                }
-            }
-            
-            // check if there is a sliding piece that has only one piece between it and the king
-            // let cannotBlock = [];
-
-            direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
-            // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
-            
-            for(item in slidingBeyondPieces){
-                loop2:
-                if(item[0] == item[0].toUpperCase()){
-                    slidingBeyondPieces[item] = [...new Set(slidingBeyondPieces[item])]
-                    if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack))){
-                        let thisString = item.split("-");
-                        let myString = `${thisString[0]}-${thisString[1]}`
-                        for(object of currentThreatOnKing){
-                            if(object == myString){
-                                break loop2;
-                            }
-                        }
-                        let kingAlliesBetweenThisPiece = [];
-                        
-                        for(element of slidingBeyondPieces[item]){
-                            // if(element == parseInt(tileOfKingBlack)) break;
-                            if(direction1.includes(thisString[2])){
-                                if(element < parseInt(tileOfKingBlack)){
-                                    let thisTile = document.getElementById(`${element}`);
-                                    let child = thisTile.children[0];
-                                    if(child != undefined && child.classList.contains('darkPiece')){
-                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                    }
-                                }
-                            }else{
-                                if(element > parseInt(tileOfKingBlack)){
-                                    let thisTile = document.getElementById(`${element}`);
-                                    let child = thisTile.children[0];
-                                    if(child != undefined && child.classList.contains('darkPiece')){
-                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                    }
-                                }
-                            }
-                        }
-                        if(kingAlliesBetweenThisPiece.length == 1){
-                            cannotBlock.push(kingAlliesBetweenThisPiece[0]);
-                        }else{
-                            console.log("test");
-                        }
-                    }
-                }
-            }
-
-            // check if sliding moves directed at king can be blocked
-            // let blockedThreat = [];
-            for(item in threateningPiece){
-                // loop1:
-                if(item[0] == item[0].toUpperCase()){
-                    if(threateningPiece[item].includes(parseInt(tileOfKingBlack))){
-                        for(value of threateningPiece[item]){
-                            // loop1:
-                            for(object in currentTilesOnThreat){
-                                let objectString = object.split("-");
-                                if(object[0] != object[0].toUpperCase()){
-                                    if(object[0] == "p"){
-                                        if(pawnNonCaptureMoves["p"].includes(value)){
-                                            // blockedThreat += 1;
-                                            blockedThreat.push(item);
-                                            canBlock.push(`${parseInt(value)-8}`);
-                                            // blockedThreat = [...new Set(blockedThreat)];
-                                            for(element of cannotBlock){
-                                                if(element == object){
-                                                    // blockedThreat -= 1;
-                                                    // blockedThreat = [...new Set(blockedThreat)];
-                                                    let itemIndex = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(itemIndex, 1);
-                                                }
-                                            }
-                                            // break loop1;
-                                        }
-                                        
-                                    }else{
-                                        if(currentTilesOnThreat[object].includes(value) && object[0] != "k"){
-                                            // blockedThreat += 1;
-                                            blockedThreat.push(item);
-                                            canBlock.push(objectString[1]);
-                                            // blockedThreat = [...new Set(blockedThreat)];
-                                            for(element of cannotBlock){
-                                                if(element == object){
-                                                    // blockedThreat -= 1;
-                                                    // blockedThreat = [...new Set(blockedThreat)];
-                                                    let itemIndex = blockedThreat.indexOf(item);
-                                                    blockedThreat.splice(itemIndex, 1);
-                                                }
-                                            }
-                                            // break loop1;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            let canBeCaptured = [];
-            
-
-            // check if all threats can be captured by the defender
-            // loop1:
-            for(item of currentThreatOnKing){
-                console.log(item);
-                let arr = item.split("-");
-                let newArr = arr.filter((item)=>{
-                    return !Number.isNaN(parseInt(item));
-                })
-                console.log(newArr);
-                for(object in currentTilesOnThreat){
-                    if(object[0] != object[0].toUpperCase()){
-                        // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "k")){
-                        if(currentTilesOnThreat[object].includes(parseInt(newArr))){
-                            // canBeCaptured += 1;
-                            canBeCaptured.push(item);
-                            canCapture.push(object);
-                            let objectString = object.split("-");
-                            canCaptureTile.push(objectString[1]);
-                            // canBeCaptured = [...new Set(canBeCaptured)];
-                            if(object[0] == "k"){
-                                for(thing in currentTilesOnThreat){
-                                    if(thing[0] == thing[0].toUpperCase()){
-                                        if(currentTilesOnThreat[thing].includes(parseInt(newArr))){ //check if king will be counter captured if it captured this piece
-                                            // canBeCaptured -= 1;
-                                            // canBeCaptured = [...new Set(canBeCaptured)];
-                                            let itemIndex = canBeCaptured.indexOf(item);
-                                            canBeCaptured.splice(itemIndex, 1);
-                                            // break loop1;
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            for(element of cannotBlock){
-                                if(element == object){
-                                    // canBeCaptured = [...new Set(canBeCaptured)];
-                                    let itemIndex = canBeCaptured.indexOf(item);
-                                    canBeCaptured.splice(itemIndex, 1);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // for(element of cannotBlock){
-            //     if(element == object){
-            //         // canBeCaptured = [...new Set(canBeCaptured)];
-            //         let itemIndex = canBeCaptured.indexOf(item);
-            //         canBeCaptured.splice(itemIndex, 1);
-            //     }
-            // }
-            kingNextMovements.forEach(allMovesCheck);
-            breakme:
-            if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
-                console.log("test")
-
-                unsafeTiles = [...new Set(unsafeTiles)];
-                console.log(unsafeTiles);
-
-                blockedThreat = [...new Set(blockedThreat)];
-                canBeCaptured = [...new Set(canBeCaptured)];
-
-                if(threatsOnKing == blockedThreat.length) break breakme;
-                if(threatsOnKing == canBeCaptured.length) break breakme;
-                let checkInfo = document.querySelector(".checkInfo")
-                checkInfo.innerHTML = `Black king has been checkmated`;
-                checked = true;
-                winnerMsg.style.display = "flex";
-                whiteWin.style.display = "block";
-               
-            }else{
-                // kingNextMovements.forEach(allMovesCheck);
-                noDuplicateSafeTiles = [...new Set(safeTiles)];
-                for([index, tile] of noDuplicateSafeTiles.entries()){
-                    for(item in slidingBeyondPieces){
-                        if(item[0] == item[0].toUpperCase()){
-                            if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack)) && slidingBeyondPieces[item].includes(tile)){
-                                noDuplicateSafeTiles.splice(index, 1);
-                            }
-                        }
-                    }
-                }
-
-                blockedThreat = [...new Set(blockedThreat)];
-                canBeCaptured = [...new Set(canBeCaptured)];
-
-                if(noDuplicateSafeTiles.length == 0){
-                    if(threatsOnKing == blockedThreat.length) break breakme;
-                    if(threatsOnKing == canBeCaptured.length) break breakme;
-                    let checkInfo = document.querySelector(".checkInfo")
-                    checkInfo.innerHTML = `Black king has been checkmated`;
-                    checked = true;
-                    winnerMsg.style.display = "flex";
-                    whiteWin.style.display = "block";
-                }
-                
-            }
-
-            for(i = 0; i < darkPieces.length; i++){
-                let tile = darkPieces[i].parentElement.id;
-                // darkPieces[i].setAttribute("ondragover", "removeDrop(e)");
-                
-                if(canCaptureTile.includes(tile) || canBlock.includes(tile)){
-                    darkPieces[i].setAttribute("draggable", "true");
-                    darkPieces[i].setAttribute("ondragstart", "drag(event)");
-                    darkPieces[i].setAttribute("ondragover", "dropAllow(event)");
-                }
-            }
-        }
-    }else{
-        // let checked = false;
-        // darkpiece
-        // console.log("darkpiece moved");
-        // get tile of darkpiece king
-
-
-        if(checked == true){
-
-            // check if king is at one of the board edges
-            let movements = [-8, 8, 1, -1, -7, -9, 9, 7]
-            let exemption = [];
-            if(boardEdges.includes(parseInt(tileOfKingWhite))){
-                if(boardTopEdge.includes(parseInt(tileOfKingWhite))){
-                    exemption.push(...topEdge);
-                }
-                if(boardRightEdge.includes(parseInt(tileOfKingWhite))){
-                    exemption.push(...rightEdge);
-                }
-                if(boardBottomEdge.includes(parseInt(tileOfKingWhite))){
-                    exemption.push(...bottomEdge);
-                }
-                if(boardLeftEdge.includes(parseInt(tileOfKingWhite))){
-                    exemption.push(...leftEdge);
-                }
-            }
-            
-            // get the actual tile numbers of kings next movement relative to its hometile
-            let kingNextMovements = movements.map((item)=>{
-                // console.log("movement item: ", item);
-                // console.log("new item: ", parseInt(tileOfKingWhite) + item);
-                let tileNumber = parseInt(tileOfKingWhite) + item;
-                if((tileNumber >= 0) && (tileNumber < 64)){
-                    return parseInt(tileOfKingWhite) + item;
-                }else{
-                    return
-                }
-            });
-
-            // check if all king's possible next move will be a potential capture by opponent
-            let safeTiles = [];
-            function allMovesCheck(nextMove, index){
-                if(!exemption.includes(index) && tiles[nextMove].children[0] == undefined){ //*(b) //if tile has no piece
-                    for(item in currentTilesOnThreat){
-                        if(item[0] != item[0].toUpperCase()){
-                            if(currentTilesOnThreat[item].includes(nextMove)){
-                                unsafeTiles.push(nextMove);
-                                return true;
-                            }
-                        }
-                    }
-                    safeTiles.push(nextMove);
-                }else if(!exemption.includes(index) && tiles[nextMove].children[0].classList.contains("darkPiece")){ // if tile has ally piece
-                    for(item in currentTilesOnThreat){
-                        if(item[0] != item[0].toUpperCase()){
-                            if(currentTilesOnThreat[item].includes(nextMove)){
-                                unsafeTiles.push(nextMove);
-                                return true;
-                            }
-                        }
-                    }
-                    safeTiles.push(nextMove);
-                }else{
-                    return true; // if tile has foe piece it will not be part of the evaluation thus will always return true (not safe)
-                }
-            };
-        
-
-            let threatsOnKing = 0;
-            for(item in currentTilesOnThreat){
-                if(item[0] != item[0].toUpperCase()){
-                    if(currentTilesOnThreat[item].includes(parseInt(tileOfKingWhite))){
-                        threatsOnKing += 1;
-                        currentThreatOnKing.push(item);
-                    }
-                }
-            }
-
-            // check if there is a sliding piece that has only one piece between it and the king
-            // let cannotBlock = [];
-
-            direction1 = ["South", "East", "SouthEast", "SouthWest"] //not more than
-            // direction2 = ["North", "West", "NorthWest", "NorthEast"] //not less than
-
-            for(item in slidingBeyondPieces){
-                loop2:
-                if(item[0] != item[0].toUpperCase()){
-                    if(slidingBeyondPieces[item].includes(parseInt(tileOfKingWhite))){
-                        let thisString = item.split("-");
-                        let myString = `${thisString[0]}-${thisString[1]}`
-                        for(object of currentThreatOnKing){
-                            if(object == myString){
-                                break loop2;
-                            }
-                        }
-                        let kingAlliesBetweenThisPiece = [];
-
-                        for(element of slidingBeyondPieces[item]){
-                            // if(element == parseInt(tileOfKingWhite)) break;
-                            if(direction1.includes(thisString[2])){
-                                if(element < parseInt(tileOfKingWhite)){
-                                    let thisTile = document.getElementById(`${element}`);
-                                    let child = thisTile.children[0];
-                                    if(child != undefined && child.classList.contains('lightPiece')){
-                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                    }
-                                }
-                            }else{
-                                if(element > parseInt(tileOfKingBlack)){
-                                    let thisTile = document.getElementById(`${element}`);
-                                    let child = thisTile.children[0];
-                                    if(child != undefined && child.classList.contains('lightPiece')){
-                                        kingAlliesBetweenThisPiece.push(`${child.id[0]}-${thisTile.id}`);
-                                    }
-                                }
-                            }
-                        }
-                        if(kingAlliesBetweenThisPiece.length == 1){
-                            cannotBlock.push(kingAlliesBetweenThisPiece[0]);
-                        }
-                    }
-                }
-            }
-
-
-            // check if sliding moves directed at king can be blocked
-
-            let blockedThreat = [];
-            function getcannotblock(){
+                let blockedThreat = [];
                 for(item in threateningPiece){
                     // loop1:
                     if(item[0] != item[0].toUpperCase()){
-                        if(threateningPiece[item].includes(parseInt(tileOfKingWhite))){
+                        if(threateningPiece[item].includes(parseInt(tileOfKing))){
                             for(value of threateningPiece[item]){
                                 for(object in currentTilesOnThreat){
                                     if(object[0] == object[0].toUpperCase()){
@@ -3214,94 +2210,67 @@ function checkIfCheckmate(whoseTurn){
                         }
                     }
                 }
-            }
-            getcannotblock();
-
-            let canBeCaptured = [];
-            
-
-            // check if all threats can be captured by the defender
-            // loop1:
-            for(item of currentThreatOnKing){
-                console.log(item);
-                let arr = item.split("-");
-                let newArr = arr.filter((item)=>{
-                    return !Number.isNaN(parseInt(item));
-                })
-                console.log(newArr);
-                for(object in currentTilesOnThreat){
-                    if(object[0] == object[0].toUpperCase()){
-                        // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "K")){
-                        if(currentTilesOnThreat[object].includes(parseInt(newArr))){
-                            // canBeCaptured += 1;
-                            canBeCaptured.push(item);
-                            canCapture.push(object);
-                            // canBeCaptured = [...new Set(canBeCaptured)];
-                            if(object[0] == "K"){
-                                for(thing in currentTilesOnThreat){
-                                    if(thing[0] != thing[0].toUpperCase()){
-                                        if(currentTilesOnThreat[thing].includes(parseInt(newArr))){ //check if king will be counter captured if it captured this piece
-                                            // canBeCaptured -= 1;
-                                            // canBeCaptured = [...new Set(canBeCaptured)];
-                                            let itemIndex = canBeCaptured.indexOf(item);
-                                            canBeCaptured.splice(itemIndex, 1);
-                                            // break loop1;
+    
+                let canBeCaptured = [];
+                
+    
+                // check if all threats can be captured by the defender
+                // loop1:
+                for(item of currentThreatOnKing){
+                    console.log(item);
+                    let arr = item.split("-");
+                    let newArr = arr.filter((item)=>{
+                        return !Number.isNaN(parseInt(item));
+                    })
+                    console.log(newArr);
+                    for(object in currentTilesOnThreat){
+                        if(object[0] == object[0].toUpperCase()){
+                            // if(currentTilesOnThreat[object].includes(parseInt(newArr)) && (object[0] != "K")){
+                            if(currentTilesOnThreat[object].includes(parseInt(newArr))){
+                                // canBeCaptured += 1;
+                                canBeCaptured.push(item);
+                                canCapture.push(object);
+                                // canBeCaptured = [...new Set(canBeCaptured)];
+                                if(object[0] == "K"){
+                                    for(thing in currentTilesOnThreat){
+                                        if(thing[0] != thing[0].toUpperCase()){
+                                            if(currentTilesOnThreat[thing].includes(parseInt(newArr))){ //check if king will be counter captured if it captured this piece
+                                                // canBeCaptured -= 1;
+                                                // canBeCaptured = [...new Set(canBeCaptured)];
+                                                let itemIndex = canBeCaptured.indexOf(item);
+                                                canBeCaptured.splice(itemIndex, 1);
+                                                // break loop1;
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            for(element of cannotBlock){
-                                if(element == object){
-                                    // canBeCaptured = [...new Set(canBeCaptured)];
-                                    let itemIndex = canBeCaptured.indexOf(item);
-                                    canBeCaptured.splice(itemIndex, 1);
+                                for(element of cannotBlock){
+                                    if(element == object){
+                                        // canBeCaptured = [...new Set(canBeCaptured)];
+                                        let itemIndex = canBeCaptured.indexOf(item);
+                                        canBeCaptured.splice(itemIndex, 1);
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-
-            // for(element of cannotBlock){
-            //     if(element == object){
-            //         // canBeCaptured = [...new Set(canBeCaptured)];
-            //         let itemIndex = canBeCaptured.indexOf(item);
-            //         canBeCaptured.splice(itemIndex, 1);
-            //     }
-            // }
-
-            if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
-                console.log("test")
-                // count the number of threats to the king
-
-                blockedThreat = [...new Set(blockedThreat)];
-                canBeCaptured = [...new Set(canBeCaptured)];
-
-                if(threatsOnKing == blockedThreat.length) return;
-                if(threatsOnKing == canBeCaptured.length) return;
-                let checkInfo = document.querySelector(".checkInfo")
-                checkInfo.innerHTML = `White king has been checkmated`;
-                checked = true;
-                winnerMsg.style.display = "flex";
-                blackWin.style.display = "block";
-
-            }else{
-                kingNextMovements.forEach(allMovesCheck);
-                noDuplicateSafeTiles = [...new Set(safeTiles)];
-                for([index, tile] of noDuplicateSafeTiles.entries()){
-                    for(item in slidingBeyondPieces){
-                        if(item[0] != item[0].toUpperCase()){
-                            if(slidingBeyondPieces[item].includes(parseInt(tileOfKingBlack)) && slidingBeyondPieces[item].includes(tile)){
-                                noDuplicateSafeTiles.splice(index, 1);
-                            }
-                        }
-                    }
-                }
-
-                blockedThreat = [...new Set(blockedThreat)];
-                canBeCaptured = [...new Set(canBeCaptured)];
-
-                if(noDuplicateSafeTiles.length == 0){
+    
+                // for(element of cannotBlock){
+                //     if(element == object){
+                //         // canBeCaptured = [...new Set(canBeCaptured)];
+                //         let itemIndex = canBeCaptured.indexOf(item);
+                //         canBeCaptured.splice(itemIndex, 1);
+                //     }
+                // }
+    
+                if(kingNextMovements.every(allMovesCheck)){ //check if all movements are threat (true == under threat; false == safe) (considered checkmate if every movement is true)
+                    console.log("test")
+                    // count the number of threats to the king
+    
+                    blockedThreat = [...new Set(blockedThreat)];
+                    canBeCaptured = [...new Set(canBeCaptured)];
+    
                     if(threatsOnKing == blockedThreat.length) return;
                     if(threatsOnKing == canBeCaptured.length) return;
                     let checkInfo = document.querySelector(".checkInfo")
@@ -3309,10 +2278,47 @@ function checkIfCheckmate(whoseTurn){
                     checked = true;
                     winnerMsg.style.display = "flex";
                     blackWin.style.display = "block";
+    
+                }else{
+                    kingNextMovements.forEach(allMovesCheck);
+                    noDuplicateSafeTiles = [...new Set(safeTiles)];
+                    for([index, tile] of noDuplicateSafeTiles.entries()){
+                        for(item in slidingBeyondPieces){
+                            if(item[0] != item[0].toUpperCase()){
+                                if(slidingBeyondPieces[item].includes(parseInt(tileOfKing)) && slidingBeyondPieces[item].includes(tile)){
+                                    noDuplicateSafeTiles.splice(index, 1);
+                                }
+                            }
+                        }
+                    }
+    
+                    blockedThreat = [...new Set(blockedThreat)];
+                    canBeCaptured = [...new Set(canBeCaptured)];
+    
+                    if(noDuplicateSafeTiles.length == 0){
+                        if(threatsOnKing == blockedThreat.length) return;
+                        if(threatsOnKing == canBeCaptured.length) return;
+                        let checkInfo = document.querySelector(".checkInfo")
+                        checkInfo.innerHTML = `White king has been checkmated`;
+                        checked = true;
+                        winnerMsg.style.display = "flex";
+                        blackWin.style.display = "block";
+                    }
                 }
+    
+                ;
             }
-
-            ;
         }
+    }
+
+    checkIfCheckmate();
+
+
+    if(!checked){
+            document.querySelector(".checkInfo").innerHTML = "";
+            unsafeTiles = [];
+            canCapture = [];
+            canCaptureTile = [];
+            console.log("!checked");
     }
 }
