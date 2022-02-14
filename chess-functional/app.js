@@ -710,18 +710,23 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     // continue;
                 }
             }else{
-                if(canCapture.includes(`${piece}-${_homeTile}`)){
-                    for(object in threateningPiece){
-                        let objectString = object.split("-");
-                        if(parseInt(objectString[1]) == validMove && object[0] != object[0].toUpperCase()){
-                            tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
-                            tiles[validMove].style.backgroundColor = highlightColor;
-                            continue;
-                        }else{
-                            continue;
+                if(piece != "P" && piece != "p"){
+                    if(canCapture.includes(`${piece}-${_homeTile}`)){
+                        for(object in threateningPiece){
+                            let objectString = object.split("-");
+                            // if(currentThreatOnKing.includes(`${objectString[0]}-${objectString[1]}`))
+                            // if(parseInt(objectString[1]) == validMove && object[0] != object[0].toUpperCase()){
+                            if(parseInt(objectString[1]) == validMove && currentThreatOnKing.includes(`${objectString[0]}-${objectString[1]}`)){
+                                tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
+                                tiles[validMove].style.backgroundColor = highlightColor;
+                                continue;
+                            }else{
+                                continue;
+                            }
                         }
+                        continue;
                     }
-                    continue;
+
                 }
             }
 
