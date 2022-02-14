@@ -409,6 +409,16 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
 
         // Pawn pieces variouss behavior
         if(piece == "P" || piece == "p"){
+
+            if(canBlock.includes(_homeTile)){
+                if(piece == "p"){
+                    let validMove = parseInt(_homeTile) + 8;
+                    tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
+                    tiles[validMove].style.backgroundColor = highlightColor;
+                    return;
+                }
+            }
+
             let pieceClass = new Piece();
 
             
@@ -662,6 +672,18 @@ function highlightTiles(_homeTile, movement, sliding, piece, forChecking){
                     }else{
                         continue;
                     }
+                }
+                continue;
+            }
+
+            if(canBlock.includes(_homeTile)){
+                for(object of blockedThreat){
+                    if(threateningPiece[object].includes(validMove)){
+                        tiles[validMove].setAttribute("ondragover", "dropAllow(event)");
+                        tiles[validMove].style.backgroundColor = highlightColor;
+                        break;
+                    }
+                    
                 }
                 continue;
             }
